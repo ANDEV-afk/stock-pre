@@ -90,18 +90,20 @@ const HeroSection = () => {
               </p>
             </motion.div>
 
-            {/* Search Bar */}
+            {/* Search Bar - Fixed positioning and z-index */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="mb-12"
+              className="mb-12 relative z-30"
             >
-              <StockSearchBar
-                onSearch={handleStockSearch}
-                placeholder="Search any stock (e.g., AAPL, TSLA, GOOGL) to get AI predictions..."
-                className="max-w-2xl mx-auto"
-              />
+              <div className="max-w-2xl mx-auto">
+                <StockSearchBar
+                  onSearch={handleStockSearch}
+                  placeholder="Search any stock (e.g., AAPL, TSLA, GOOGL) to get AI predictions..."
+                  className="w-full"
+                />
+              </div>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -109,7 +111,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-16 relative z-20"
             >
               <Link to="/predict">
                 <motion.div
@@ -151,7 +153,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative z-10"
             >
               {[
                 {
@@ -190,7 +192,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10"
           >
             {features.map((feature, index) => {
               const Icon = feature.icon;
@@ -227,7 +229,7 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}

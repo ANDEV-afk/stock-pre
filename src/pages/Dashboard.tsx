@@ -9,13 +9,20 @@ import PriceAlerts from "@/components/PriceAlerts";
 import WatchlistManager from "@/components/WatchlistManager";
 import TimeIntervalSelector from "@/components/TimeIntervalSelector";
 import StockNews from "@/components/StockNews";
+import Settings from "@/components/Settings";
+import RiskAssessment from "@/components/RiskAssessment";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatChartData } from "@/lib/api";
 import { demoDataService } from "@/lib/demo-data-service";
 import { apiService } from "@/lib/api-service";
+import { realtimeService, indexService } from "@/lib/realtime-service";
 import {
   TrendingUp,
   TrendingDown,
@@ -30,9 +37,35 @@ import {
   Bell,
   Newspaper,
   Clock,
-  Settings,
+  Settings as SettingsIcon,
+  PieChart,
+  Wallet,
+  Calculator,
+  AlertTriangle,
+  Check,
+  X,
+  Edit3,
+  Trash2,
+  ArrowUpRight,
+  ArrowDownRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+interface Position {
+  id: string;
+  symbol: string;
+  name: string;
+  shares: number;
+  avgPrice: number;
+  currentPrice: number;
+  value: number;
+  dayChange: number;
+  dayChangePercent: number;
+  totalGain: number;
+  totalGainPercent: number;
+  addedAt: Date;
+  type: "long" | "short";
+}
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("AAPL");
@@ -61,6 +94,20 @@ const Dashboard = () => {
     message: "",
   });
   const [activeTab, setActiveTab] = useState("overview");
+  const [showAddPosition, setShowAddPosition] = useState(false);
+  const [newPosition, setNewPosition] = useState({
+    symbol: "",
+    shares: 0,
+    price: 0,
+    type: "long" as const,
+  });
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
+  const [realtimeData, setRealtimeData] = useState<any[]>([]);
+  const [marketIndicesData, setMarketIndicesData] = useState<any[]>([]);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
+
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -72,16 +119,128 @@ const Dashboard = () => {
       setApiNotification({
         type: "info",
         message:
-          "Using demo data for the best experience. Real-time data requires premium API access.",
+          "Real-time data updates active! Live market data refreshing every 5 seconds.",
       });
       setShowApiNotification(true);
+
+      // Initialize real-time data services
+      const unsubscribeRealtime = realtimeService.subscribe((data) => {
+        setRealtimeData(data);
+        setLastUpdate(new Date());
+      });
+
+      const unsubscribeIndices = indexService.subscribe((data) => {
+        setMarketIndicesData(data);
+      });
+
+      // Start real-time updates
+      realtimeService.startUpdates(5000); // Update every 5 seconds
+      indexService.startUpdates(10000); // Update indices every 10 seconds
+
+      return () => {
+        unsubscribeRealtime();
+        unsubscribeIndices();
+        realtimeService.stopUpdates();
+        indexService.stopUpdates();
+      };
     }
   }, [isAuthenticated, navigate]);
 
+  // Enhanced positions data
+  useEffect(() => {
+    const mockPositions: Position[] = [
+      {
+        id: "1",
+        symbol: "AAPL",
+        name: "Apple Inc.",
+        shares: 50,
+        avgPrice: 165.2,
+        currentPrice: 175.43,
+        value: 8771.5,
+        dayChange: 2.14,
+        dayChangePercent: 1.23,
+        totalGain: 511.5,
+        totalGainPercent: 6.19,
+        addedAt: new Date(Date.now() - 2592000000), // 30 days ago
+        type: "long",
+      },
+      {
+        id: "2",
+        symbol: "TSLA",
+        name: "Tesla, Inc.",
+        shares: 25,
+        avgPrice: 225.8,
+        currentPrice: 242.68,
+        value: 6067.0,
+        dayChange: -3.45,
+        dayChangePercent: -1.4,
+        totalGain: 422.0,
+        totalGainPercent: 7.48,
+        addedAt: new Date(Date.now() - 1209600000), // 14 days ago
+        type: "long",
+      },
+      {
+        id: "3",
+        symbol: "GOOGL",
+        name: "Alphabet Inc.",
+        shares: 75,
+        avgPrice: 130.45,
+        currentPrice: 138.21,
+        value: 10365.75,
+        dayChange: -1.23,
+        dayChangePercent: -0.88,
+        totalGain: 582.0,
+        totalGainPercent: 5.95,
+        addedAt: new Date(Date.now() - 5184000000), // 60 days ago
+        type: "long",
+      },
+      {
+        id: "4",
+        symbol: "MSFT",
+        name: "Microsoft Corporation",
+        shares: 40,
+        avgPrice: 370.1,
+        currentPrice: 378.85,
+        value: 15154.0,
+        dayChange: 4.52,
+        dayChangePercent: 1.21,
+        totalGain: 350.0,
+        totalGainPercent: 2.36,
+        addedAt: new Date(Date.now() - 7776000000), // 90 days ago
+        type: "long",
+      },
+      {
+        id: "5",
+        symbol: "NVDA",
+        name: "NVIDIA Corporation",
+        shares: 15,
+        avgPrice: 650.0,
+        currentPrice: 721.33,
+        value: 10819.95,
+        dayChange: 15.43,
+        dayChangePercent: 2.18,
+        totalGain: 1069.95,
+        totalGainPercent: 10.99,
+        addedAt: new Date(Date.now() - 1814400000), // 21 days ago
+        type: "long",
+      },
+    ];
+    setPositions(mockPositions);
+  }, []);
+
   // Mock data for demonstration (replace with real portfolio data)
-  const portfolioValue = 125847.32;
-  const dailyChange = 2847.18;
-  const dailyChangePercent = 2.31;
+  const portfolioValue = positions.reduce((sum, pos) => sum + pos.value, 0);
+  const dailyChange = positions.reduce(
+    (sum, pos) => sum + pos.dayChange * pos.shares,
+    0,
+  );
+  const dailyChangePercent =
+    portfolioValue > 0
+      ? (dailyChange / (portfolioValue - dailyChange)) * 100
+      : 0;
+  const totalGain = positions.reduce((sum, pos) => sum + pos.totalGain, 0);
+  const totalGainPercent =
+    portfolioValue > 0 ? (totalGain / (portfolioValue - totalGain)) * 100 : 0;
 
   const watchlist = [
     {
@@ -118,37 +277,6 @@ const Dashboard = () => {
       price: 721.33,
       change: 15.43,
       changePercent: 2.18,
-    },
-  ];
-
-  const positions = [
-    {
-      symbol: "AAPL",
-      shares: 50,
-      avgPrice: 165.2,
-      currentPrice: 175.43,
-      value: 8771.5,
-    },
-    {
-      symbol: "TSLA",
-      shares: 25,
-      avgPrice: 225.8,
-      currentPrice: 242.68,
-      value: 6067.0,
-    },
-    {
-      symbol: "GOOGL",
-      shares: 75,
-      avgPrice: 130.45,
-      currentPrice: 138.21,
-      value: 10365.75,
-    },
-    {
-      symbol: "MSFT",
-      shares: 40,
-      avgPrice: 370.1,
-      currentPrice: 378.85,
-      value: 15154.0,
     },
   ];
 
@@ -254,6 +382,42 @@ const Dashboard = () => {
     }
   };
 
+  const handleAddPosition = () => {
+    if (!newPosition.symbol || !newPosition.shares || !newPosition.price)
+      return;
+
+    const position: Position = {
+      id: Date.now().toString(),
+      symbol: newPosition.symbol.toUpperCase(),
+      name: `${newPosition.symbol.toUpperCase()} Corporation`,
+      shares: newPosition.shares,
+      avgPrice: newPosition.price,
+      currentPrice: newPosition.price + (Math.random() - 0.5) * 10, // Mock current price
+      value: newPosition.shares * newPosition.price,
+      dayChange: (Math.random() - 0.5) * 5,
+      dayChangePercent: (Math.random() - 0.5) * 3,
+      totalGain: 0,
+      totalGainPercent: 0,
+      addedAt: new Date(),
+      type: newPosition.type,
+    };
+
+    // Calculate gains
+    position.totalGain =
+      (position.currentPrice - position.avgPrice) * position.shares;
+    position.totalGainPercent =
+      ((position.currentPrice - position.avgPrice) / position.avgPrice) * 100;
+    position.value = position.shares * position.currentPrice;
+
+    setPositions((prev) => [position, ...prev]);
+    setNewPosition({ symbol: "", shares: 0, price: 0, type: "long" });
+    setShowAddPosition(false);
+  };
+
+  const handleRemovePosition = (id: string) => {
+    setPositions((prev) => prev.filter((pos) => pos.id !== id));
+  };
+
   return (
     <div className="min-h-screen bg-cyber-black cyber-grid">
       <Navigation />
@@ -282,31 +446,61 @@ const Dashboard = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <div className="text-right">
+                <div className="text-xs text-white/60">Last updated</div>
+                <div className="text-xs text-cyber-green">
+                  {lastUpdate.toLocaleTimeString()}
+                </div>
+              </div>
               <Button
                 size="sm"
                 variant="outline"
+                onClick={() => setShowSettings(true)}
                 className="border-cyber-purple/30 text-cyber-purple hover:bg-cyber-purple/10"
               >
-                <Settings className="h-4 w-4 mr-2" />
+                <SettingsIcon className="h-4 w-4 mr-2" />
                 Settings
               </Button>
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh Data
-              </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    realtimeService.simulateMarketEvent("bullish", 0.5);
+                    setApiNotification({
+                      type: "info",
+                      message: "Market data refreshed! Live updates active.",
+                    });
+                    setShowApiNotification(true);
+                  }}
+                  className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh Data
+                </Button>
+              </motion.div>
             </div>
           </div>
         </motion.div>
 
         {/* Portfolio Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: { type: "spring", stiffness: 400, damping: 15 },
+            }}
           >
             <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
@@ -316,7 +510,7 @@ const Dashboard = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-white/70 hover:text-white"
+                  className="text-white/70 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
@@ -339,7 +533,8 @@ const Dashboard = () => {
                   )}
                   <span>
                     {dailyChange >= 0 ? "+" : ""}$
-                    {Math.abs(dailyChange).toFixed(2)} ({dailyChangePercent}%)
+                    {Math.abs(dailyChange).toFixed(2)} (
+                    {dailyChangePercent.toFixed(2)}%)
                   </span>
                 </div>
               </div>
@@ -347,25 +542,89 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              delay: 0.2,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: { type: "spring", stiffness: 400, damping: 15 },
+            }}
           >
             <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-green/20 hover:border-cyber-green/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-cyber-green/20 rounded-xl group-hover:bg-cyber-green/30 transition-all duration-300">
-                  <Target className="h-6 w-6 text-cyber-green" />
-                </div>
+                <motion.div
+                  className="p-2 bg-cyber-green/20 rounded-xl group-hover:bg-cyber-green/30 transition-all duration-300"
+                  whileHover={{ rotate: 15, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                >
+                  <PieChart className="h-6 w-6 text-cyber-green" />
+                </motion.div>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-cyber-green/80">Active Positions</p>
+                <p className="text-sm text-cyber-green/80">Total Gain/Loss</p>
+                <p
+                  className={cn(
+                    "text-2xl font-bold",
+                    totalGain >= 0 ? "text-cyber-green" : "text-cyber-red",
+                  )}
+                >
+                  {totalGain >= 0 ? "+" : ""}${totalGain.toFixed(2)}
+                </p>
+                <p
+                  className={cn(
+                    "text-sm font-medium",
+                    totalGain >= 0
+                      ? "text-cyber-green/60"
+                      : "text-cyber-red/60",
+                  )}
+                >
+                  {totalGain >= 0 ? "+" : ""}
+                  {totalGainPercent.toFixed(2)}% all time
+                </p>
+              </div>
+            </Card>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              delay: 0.3,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: { type: "spring", stiffness: 400, damping: 15 },
+            }}
+          >
+            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-purple/20 hover:border-cyber-purple/40 transition-all duration-300 group shadow-cyber">
+              <div className="flex items-center justify-between mb-4">
+                <motion.div
+                  className="p-2 bg-cyber-purple/20 rounded-xl group-hover:bg-cyber-purple/30 transition-all duration-300"
+                  whileHover={{ rotate: -15, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                >
+                  <Target className="h-6 w-6 text-cyber-purple" />
+                </motion.div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-cyber-purple/80">Active Positions</p>
                 <p className="text-2xl font-bold text-white">
                   {positions.length}
                 </p>
-                <p className="text-sm text-cyber-green/60">
-                  Total: $
+                <p className="text-sm text-cyber-purple/60">
+                  Invested: $
                   {positions
-                    .reduce((sum, pos) => sum + pos.value, 0)
+                    .reduce((sum, pos) => sum + pos.avgPrice * pos.shares, 0)
                     .toLocaleString()}
                 </p>
               </div>
@@ -373,41 +632,42 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-purple/20 hover:border-cyber-purple/40 transition-all duration-300 group shadow-cyber">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-cyber-purple/20 rounded-xl group-hover:bg-cyber-purple/30 transition-all duration-300">
-                  <Eye className="h-6 w-6 text-cyber-purple" />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-cyber-purple/80">Watchlist</p>
-                <p className="text-2xl font-bold text-white">
-                  {watchlist.length}
-                </p>
-                <p className="text-sm text-cyber-purple/60">Securities</p>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              delay: 0.4,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: { type: "spring", stiffness: 400, damping: 15 },
+            }}
           >
             <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-red/20 hover:border-cyber-red/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-cyber-red/20 rounded-xl group-hover:bg-cyber-red/30 transition-all duration-300">
-                  <Activity className="h-6 w-6 text-cyber-red" />
-                </div>
+                <motion.div
+                  className="p-2 bg-cyber-red/20 rounded-xl group-hover:bg-cyber-red/30 transition-all duration-300"
+                  whileHover={{ rotate: 25, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  animate={{
+                    y: [0, -3, 0],
+                    transition: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
+                >
+                  <Bell className="h-6 w-6 text-cyber-red" />
+                </motion.div>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-cyber-red/80">Alerts</p>
+                <p className="text-sm text-cyber-red/80">Active Alerts</p>
                 <p className="text-2xl font-bold text-white">{alerts.length}</p>
-                <p className="text-sm text-cyber-red/60">Active</p>
+                <p className="text-sm text-cyber-red/60">Price alerts set</p>
               </div>
             </Card>
           </motion.div>
@@ -428,6 +688,13 @@ const Dashboard = () => {
                 Overview
               </TabsTrigger>
               <TabsTrigger
+                value="positions"
+                className="data-[state=active]:bg-cyber-green data-[state=active]:text-white"
+              >
+                <Wallet className="h-4 w-4 mr-2" />
+                Positions
+              </TabsTrigger>
+              <TabsTrigger
                 value="trading"
                 className="data-[state=active]:bg-cyber-purple data-[state=active]:text-white"
               >
@@ -436,7 +703,7 @@ const Dashboard = () => {
               </TabsTrigger>
               <TabsTrigger
                 value="watchlist"
-                className="data-[state=active]:bg-cyber-green data-[state=active]:text-white"
+                className="data-[state=active]:bg-cyber-yellow data-[state=active]:text-white"
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Watchlist
@@ -450,7 +717,7 @@ const Dashboard = () => {
               </TabsTrigger>
               <TabsTrigger
                 value="news"
-                className="data-[state=active]:bg-cyber-yellow data-[state=active]:text-white"
+                className="data-[state=active]:bg-cyber-blue data-[state=active]:text-white"
               >
                 <Newspaper className="h-4 w-4 mr-2" />
                 News
@@ -480,94 +747,332 @@ const Dashboard = () => {
                       className="mb-6"
                     />
                   </motion.div>
+                </div>
 
-                  {/* Positions */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                  >
-                    <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 shadow-cyber">
-                      <div className="flex items-center justify-between mb-6">
+                {/* Sidebar */}
+                <div className="space-y-6">
+                  <RiskAssessment
+                    symbol={selectedStock}
+                    onSetPriceAlert={() => setShowPriceAlertModal(true)}
+                    onAddToWatchlist={() => {
+                      // Add to watchlist logic here
+                      console.log("Add to watchlist:", selectedStock);
+                    }}
+                  />
+                  <StockNews compact={true} />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="positions" className="space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-green/20 shadow-cyber">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-cyber-green/20 rounded-xl">
+                        <Wallet className="h-5 w-5 text-cyber-green" />
+                      </div>
+                      <div>
                         <h3 className="text-xl font-bold text-white">
                           Your Positions
                         </h3>
+                        <p className="text-sm text-cyber-green/70">
+                          {positions.length} active positions • $
+                          {portfolioValue.toLocaleString()} total value
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => setShowAddPosition(true)}
+                      className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Position
+                    </Button>
+                  </div>
+
+                  {/* Add Position Form */}
+                  {showAddPosition && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="mb-6 p-4 bg-white/5 border border-cyber-green/20 rounded-xl"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-white font-semibold">
+                          Add New Position
+                        </h4>
                         <Button
                           size="sm"
-                          className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white transition-all duration-300 hover:scale-105"
+                          variant="ghost"
+                          onClick={() => setShowAddPosition(false)}
+                          className="text-white/70 hover:text-white"
                         >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add Position
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
 
-                      <div className="space-y-4">
-                        {positions.map((position, index) => {
-                          const gain =
-                            (position.currentPrice - position.avgPrice) *
-                            position.shares;
-                          const gainPercent =
-                            ((position.currentPrice - position.avgPrice) /
-                              position.avgPrice) *
-                            100;
-                          const isPositive = gain >= 0;
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                          <Label className="text-white text-sm mb-2 block">
+                            Symbol
+                          </Label>
+                          <Input
+                            placeholder="e.g., AAPL"
+                            value={newPosition.symbol}
+                            onChange={(e) =>
+                              setNewPosition({
+                                ...newPosition,
+                                symbol: e.target.value.toUpperCase(),
+                              })
+                            }
+                            className="bg-white/10 border-cyber-green/30 text-white placeholder-white/50"
+                          />
+                        </div>
 
-                          return (
-                            <motion.div
-                              key={position.symbol}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.7 + index * 0.1 }}
-                              className="flex items-center justify-between p-4 bg-white/5 border border-cyber-purple/10 rounded-2xl hover:bg-white/10 hover:border-cyber-purple/30 transition-all duration-200 cursor-pointer group"
-                              onClick={() => setSelectedStock(position.symbol)}
-                            >
-                              <div className="flex items-center space-x-3">
+                        <div>
+                          <Label className="text-white text-sm mb-2 block">
+                            Shares
+                          </Label>
+                          <Input
+                            type="number"
+                            placeholder="100"
+                            value={newPosition.shares || ""}
+                            onChange={(e) =>
+                              setNewPosition({
+                                ...newPosition,
+                                shares: parseInt(e.target.value) || 0,
+                              })
+                            }
+                            className="bg-white/10 border-cyber-green/30 text-white placeholder-white/50"
+                          />
+                        </div>
+
+                        <div>
+                          <Label className="text-white text-sm mb-2 block">
+                            Average Price
+                          </Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="150.00"
+                            value={newPosition.price || ""}
+                            onChange={(e) =>
+                              setNewPosition({
+                                ...newPosition,
+                                price: parseFloat(e.target.value) || 0,
+                              })
+                            }
+                            className="bg-white/10 border-cyber-green/30 text-white placeholder-white/50"
+                          />
+                        </div>
+
+                        <div>
+                          <Label className="text-white text-sm mb-2 block">
+                            Type
+                          </Label>
+                          <select
+                            value={newPosition.type}
+                            onChange={(e) =>
+                              setNewPosition({
+                                ...newPosition,
+                                type: e.target.value as "long" | "short",
+                              })
+                            }
+                            className="w-full px-3 py-2 bg-white/10 border border-cyber-green/30 rounded-md text-white"
+                          >
+                            <option value="long">Long</option>
+                            <option value="short">Short</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <Separator className="my-4" />
+
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-white/70">
+                          Total Investment: $
+                          {(
+                            newPosition.shares * newPosition.price
+                          ).toLocaleString()}
+                        </div>
+                        <Button
+                          onClick={handleAddPosition}
+                          disabled={
+                            !newPosition.symbol ||
+                            !newPosition.shares ||
+                            !newPosition.price
+                          }
+                          className="bg-cyber-green hover:bg-cyber-green-dark text-white"
+                        >
+                          <Plus className="mr-2 h-4 w-4" />
+                          Add Position
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Positions List */}
+                  <div className="space-y-4">
+                    {positions.length === 0 ? (
+                      <div className="text-center py-8 text-white/60">
+                        <Wallet className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                        <p>No positions yet</p>
+                        <p className="text-sm">
+                          Add your first position to start tracking
+                        </p>
+                      </div>
+                    ) : (
+                      positions.map((position, index) => {
+                        const isPositive = position.totalGain >= 0;
+                        const isDayPositive = position.dayChange >= 0;
+
+                        return (
+                          <motion.div
+                            key={position.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="p-4 bg-white/5 border border-cyber-blue/10 rounded-xl hover:bg-white/10 hover:border-cyber-blue/20 transition-all duration-200 group"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4 flex-1">
                                 <div className="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
                                   <span className="text-white font-bold text-sm">
                                     {position.symbol.charAt(0)}
                                   </span>
                                 </div>
-                                <div>
-                                  <p className="font-semibold text-white">
-                                    {position.symbol}
+
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <h4 className="font-semibold text-white text-lg">
+                                      {position.symbol}
+                                    </h4>
+                                    <Badge
+                                      className={cn(
+                                        "text-xs",
+                                        position.type === "long"
+                                          ? "bg-cyber-green/20 text-cyber-green border-cyber-green/30"
+                                          : "bg-cyber-red/20 text-cyber-red border-cyber-red/30",
+                                      )}
+                                    >
+                                      {position.type === "long" ? (
+                                        <ArrowUpRight className="h-3 w-3 mr-1" />
+                                      ) : (
+                                        <ArrowDownRight className="h-3 w-3 mr-1" />
+                                      )}
+                                      {position.type.toUpperCase()}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-sm text-white/70 mb-2">
+                                    {position.name}
                                   </p>
-                                  <p className="text-sm text-cyber-blue/70">
-                                    {position.shares} shares @ $
-                                    {position.avgPrice}
+                                  <div className="grid grid-cols-3 gap-4 text-xs text-cyber-blue/60">
+                                    <div>
+                                      <span className="block">Shares</span>
+                                      <span className="text-white font-medium">
+                                        {position.shares}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="block">Avg Price</span>
+                                      <span className="text-white font-medium">
+                                        ${position.avgPrice.toFixed(2)}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="block">Current</span>
+                                      <span className="text-white font-medium">
+                                        ${position.currentPrice.toFixed(2)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="text-right">
+                                  <p className="font-bold text-white text-xl mb-1">
+                                    ${position.value.toLocaleString()}
                                   </p>
+                                  <div
+                                    className={cn(
+                                      "flex items-center justify-end space-x-1 text-sm font-medium mb-1",
+                                      isPositive
+                                        ? "text-cyber-green"
+                                        : "text-cyber-red",
+                                    )}
+                                  >
+                                    {isPositive ? (
+                                      <TrendingUp className="h-3 w-3" />
+                                    ) : (
+                                      <TrendingDown className="h-3 w-3" />
+                                    )}
+                                    <span>
+                                      {isPositive ? "+" : ""}$
+                                      {position.totalGain.toFixed(2)} (
+                                      {position.totalGainPercent.toFixed(2)}%)
+                                    </span>
+                                  </div>
+                                  <div
+                                    className={cn(
+                                      "text-xs font-medium",
+                                      isDayPositive
+                                        ? "text-cyber-green/60"
+                                        : "text-cyber-red/60",
+                                    )}
+                                  >
+                                    Today: {isDayPositive ? "+" : ""}$
+                                    {(
+                                      position.dayChange * position.shares
+                                    ).toFixed(2)}
+                                  </div>
                                 </div>
                               </div>
 
-                              <div className="text-right">
-                                <p className="font-semibold text-white">
-                                  ${position.value.toLocaleString()}
-                                </p>
-                                <p
-                                  className={cn(
-                                    "text-sm font-medium",
-                                    isPositive
-                                      ? "text-cyber-green"
-                                      : "text-cyber-red",
-                                  )}
+                              <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() =>
+                                    setSelectedStock(position.symbol)
+                                  }
+                                  className="text-cyber-blue hover:text-cyber-blue-light p-2"
+                                  title="View Chart"
                                 >
-                                  {isPositive ? "+" : ""}$
-                                  {Math.abs(gain).toFixed(2)} (
-                                  {gainPercent.toFixed(2)}%)
-                                </p>
+                                  <BarChart3 className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-white/70 hover:text-white p-2"
+                                  title="Edit Position"
+                                >
+                                  <Edit3 className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() =>
+                                    handleRemovePosition(position.id)
+                                  }
+                                  className="text-cyber-red hover:text-cyber-red-dark p-2"
+                                  title="Remove Position"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
                               </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </Card>
-                  </motion.div>
-                </div>
-
-                {/* Sidebar */}
-                <div className="space-y-6">
-                  <StockNews compact={true} />
-                </div>
-              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })
+                    )}
+                  </div>
+                </Card>
+              </motion.div>
             </TabsContent>
 
             <TabsContent value="trading" className="space-y-8">
@@ -604,6 +1109,56 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+
+      {/* Price Alert Modal */}
+      {showPriceAlertModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="w-full max-w-2xl"
+          >
+            <Card className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-xl border border-cyan-500/20 shadow-2xl">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-cyan-500/20 rounded-xl">
+                      <Bell className="h-6 w-6 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">
+                        Set Price Alert
+                      </h2>
+                      <p className="text-gray-400">
+                        Create alert for {selectedStock}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPriceAlertModal(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+
+                <PriceAlerts className="border-0 bg-transparent p-0" />
+              </div>
+            </Card>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

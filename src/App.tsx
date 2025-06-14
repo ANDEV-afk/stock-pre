@@ -15,6 +15,13 @@ import Features from "@/pages/Features";
 import Pricing from "@/pages/Pricing";
 import API from "@/pages/API";
 import Support from "@/pages/Support";
+import GlobalMarkets from "@/pages/GlobalMarkets";
+import News from "@/pages/News";
+import About from "@/pages/About";
+import Careers from "@/pages/Careers";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import PaymentGateway from "@/pages/PaymentGateway";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +42,13 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/api" element={<API />} />
               <Route path="/support" element={<Support />} />
+              <Route path="/markets" element={<GlobalMarkets />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/payment" element={<PaymentGateway />} />
               <Route
                 path="/dashboard"
                 element={

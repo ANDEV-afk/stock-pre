@@ -186,7 +186,7 @@ const StockSearchBar = ({
         {/* Search Input */}
         <motion.div className="relative" whileFocus={{ scale: 1.02 }}>
           <motion.div
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20"
             animate={{
               color: isOpen ? "#007aff" : "#6b7280",
               scale: isOpen ? 1.1 : 1,
@@ -204,13 +204,7 @@ const StockSearchBar = ({
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full h-16 pl-12 pr-16 bg-white text-black placeholder-gray-400 border-2 border-gray-200 rounded-2xl text-lg font-medium focus:outline-none focus:border-cyber-blue focus:ring-4 focus:ring-cyber-blue/20 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
-            animate={{
-              boxShadow: isOpen
-                ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(0, 122, 255, 0.3)"
-                : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-            }}
-            transition={{ duration: 0.3 }}
+            className="w-full h-16 pl-12 pr-16 bg-white text-black placeholder-gray-400 border-2 border-gray-200 rounded-2xl text-lg font-medium focus:outline-none focus:border-cyber-blue focus:ring-4 focus:ring-cyber-blue/20 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm relative z-10"
           />
 
           {/* Clear Button */}
@@ -222,7 +216,7 @@ const StockSearchBar = ({
               whileHover={{ scale: 1.1, backgroundColor: "#f3f4f6" }}
               whileTap={{ scale: 0.9 }}
               onClick={clearSearch}
-              className="absolute right-16 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200"
+              className="absolute right-16 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 z-20"
               transition={{ duration: 0.2 }}
             >
               <X className="h-4 w-4 text-gray-600" />
@@ -231,7 +225,7 @@ const StockSearchBar = ({
 
           {/* Search Button */}
           <motion.div
-            className="absolute right-2 top-2"
+            className="absolute right-2 top-2 z-20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -258,7 +252,7 @@ const StockSearchBar = ({
           </motion.div>
         </motion.div>
 
-        {/* Suggestions Dropdown */}
+        {/* Suggestions Dropdown - Higher z-index to prevent overlapping */}
         <AnimatePresence>
           {isOpen && suggestions.length > 0 && (
             <motion.div
@@ -266,7 +260,7 @@ const StockSearchBar = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-gray-200 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-50"
+              className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-gray-200 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-[100]"
               style={{
                 boxShadow:
                   "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 122, 255, 0.15)",

@@ -9,6 +9,9 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
+  Bar,
+  BarChart,
+  ReferenceLine,
 } from "recharts";
 
 // Enhanced chart components that explicitly handle props to avoid defaultProps warnings
@@ -70,6 +73,9 @@ export {
   ResponsiveContainer,
   Area,
   AreaChart,
+  Bar,
+  BarChart,
+  ReferenceLine,
   EnhancedXAxis as XAxis,
   EnhancedYAxis as YAxis,
 };

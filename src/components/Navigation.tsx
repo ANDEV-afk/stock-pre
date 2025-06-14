@@ -44,6 +44,7 @@ const Navigation = () => {
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/markets", label: "Markets", icon: Activity },
     {
       href: "/dashboard",
       label: "Dashboard",
