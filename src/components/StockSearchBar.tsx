@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, TrendingUp, X } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -177,17 +177,29 @@ const StockSearchBar = ({
       className={cn("relative w-full max-w-2xl", className)}
     >
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative"
       >
         {/* Search Input */}
-        <div className="relative">
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
-            <Search className="h-5 w-5 text-apple-gray-400" />
-          </div>
+        <motion.div
+          className="relative"
+          whileFocus={{ scale: 1.02 }}
+        >
+          <motion.div
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10"
+            animate={{
+              color: isOpen ? "#007aff" : "#6b7280",
+              scale: isOpen ? 1.1 : 1
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            <Search className="h-5 w-5" />
+          </motion.div>
 
-          <input
+          <motion.input
             ref={inputRef}
             type="text"
             value={query}
@@ -195,49 +207,77 @@ const StockSearchBar = ({
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full h-14 pl-12 pr-12 bg-white apple-blur border border-apple-gray-200 rounded-2xl text-lg font-medium text-apple-gray-700 placeholder-apple-gray-400 focus:outline-none focus:ring-2 focus:ring-apple-blue focus:border-transparent shadow-apple hover:shadow-apple-lg transition-all duration-300"
+            className="w-full h-16 pl-12 pr-16 bg-white text-black placeholder-gray-400 border-2 border-gray-200 rounded-2xl text-lg font-medium focus:outline-none focus:border-cyber-blue focus:ring-4 focus:ring-cyber-blue/20 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
+            animate={{
+              boxShadow: isOpen
+                ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(0, 122, 255, 0.3)"
+                : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+            }}
+            transition={{ duration: 0.3 }}
           />
 
           {/* Clear Button */}
           {query && (
             <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1.1, backgroundColor: "#f3f4f6" }}
+              whileTap={{ scale: 0.9 }}
               onClick={clearSearch}
-              className="absolute right-14 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-apple-gray-100 transition-colors duration-200"
+              className="absolute right-16 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200"
+              transition={{ duration: 0.2 }}
             >
-              <X className="h-4 w-4 text-apple-gray-400" />
+              <X className="h-4 w-4 text-gray-600" />
             </motion.button>
           )}
 
           {/* Search Button */}
-          <Button
-            onClick={handleSearch}
-            disabled={!query.trim() || isLoading}
-            className="absolute right-2 top-2 h-10 px-4 bg-apple-blue hover:bg-apple-blue-dark text-white rounded-xl shadow-apple transition-all duration-200"
+          <motion.div
+            className="absolute right-2 top-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {isLoading ? (
-              <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-            ) : (
-              <TrendingUp className="h-4 w-4" />
-            )}
-          </Button>
+            <Button
+              onClick={handleSearch}
+              disabled={!query.trim() || isLoading}
+              className="h-12 px-6 bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white rounded-xl shadow-lg hover:shadow-xl glow-blue transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <motion.div
+                  className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
+              ) : (
+                <motion.div
+                  whileHover={{ rotate: 15, scale: 1.1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <TrendingUp className="h-5 w-5" />
+                </motion.div>
+              )}
+            </Button>
+          </motion.div>
         </div>
 
         {/* Suggestions Dropdown */}
         <AnimatePresence>
           {isOpen && suggestions.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-white apple-blur border border-apple-gray-200 rounded-2xl shadow-apple-lg overflow-hidden z-50"
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-gray-200 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-50"
+              style={{
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 122, 255, 0.15)"
+              }}
             >
               {query.length === 0 && (
-                <div className="px-4 py-3 border-b border-apple-gray-100">
-                  <p className="text-sm font-medium text-apple-gray-600">
+                <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
+                  <p className="text-sm font-semibold text-gray-700 flex items-center">
+                    <TrendingUp className="h-4 w-4 mr-2 text-cyber-blue" />
                     Popular Stocks
                   </p>
                 </div>
@@ -249,27 +289,37 @@ const StockSearchBar = ({
                     key={stock.symbol}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
+                    whileHover={{
+                      backgroundColor: "#f8fafc",
+                      x: 4,
+                      transition: { duration: 0.2 }
+                    }}
+                    whileTap={{ scale: 0.98 }}
                     transition={{ delay: index * 0.05 }}
                     onClick={() => handleSelectStock(stock)}
                     className={cn(
-                      "w-full px-4 py-4 text-left hover:bg-apple-gray-50 transition-colors duration-200 flex items-center justify-between",
-                      selectedIndex === index && "bg-apple-gray-50",
+                      "w-full px-6 py-4 text-left transition-all duration-200 flex items-center justify-between border-l-4 border-transparent",
+                      selectedIndex === index && "bg-blue-50 border-l-cyber-blue",
                     )}
                   >
                     <div className="flex-1">
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-4">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-gradient-to-br from-apple-blue to-apple-purple rounded-xl flex items-center justify-center">
+                          <motion.div
+                            className="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-xl flex items-center justify-center shadow-lg"
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
                             <span className="text-white font-bold text-sm">
                               {stock.symbol.charAt(0)}
                             </span>
-                          </div>
+                          </motion.div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-lg font-semibold text-apple-gray-700 truncate">
+                          <p className="text-lg font-bold text-gray-900 truncate">
                             {stock.symbol}
                           </p>
-                          <p className="text-sm text-apple-gray-500 truncate">
+                          <p className="text-sm text-gray-600 truncate">
                             {stock.name}
                           </p>
                         </div>
@@ -278,21 +328,29 @@ const StockSearchBar = ({
 
                     {stock.price && (
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-apple-gray-700">
+                        <p className="text-lg font-bold text-gray-900">
                           ${stock.price.toFixed(2)}
                         </p>
                         {stock.change !== undefined && (
-                          <p
+                          <motion.p
                             className={cn(
-                              "text-sm font-medium",
+                              "text-sm font-semibold flex items-center justify-end",
                               stock.change >= 0
-                                ? "text-apple-green"
-                                : "text-apple-red",
+                                ? "text-cyber-green"
+                                : "text-cyber-red",
                             )}
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: index * 0.05 + 0.1 }}
                           >
+                            {stock.change >= 0 ? (
+                              <TrendingUp className="h-3 w-3 mr-1" />
+                            ) : (
+                              <TrendingDown className="h-3 w-3 mr-1" />
+                            )}
                             {stock.change >= 0 ? "+" : ""}
                             {stock.change.toFixed(2)}
-                          </p>
+                          </motion.p>
                         )}
                       </div>
                     )}
@@ -304,15 +362,20 @@ const StockSearchBar = ({
                 !suggestions.some(
                   (s) => s.symbol.toLowerCase() === query.toLowerCase(),
                 ) && (
-                  <div className="px-4 py-3 border-t border-apple-gray-100">
-                    <Button
-                      onClick={handleSearch}
-                      variant="ghost"
-                      className="w-full justify-start text-apple-blue hover:bg-apple-blue/5"
+                  <div className="px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Search className="h-4 w-4 mr-2" />
-                      Search for "{query.toUpperCase()}"
-                    </Button>
+                      <Button
+                        onClick={handleSearch}
+                        variant="ghost"
+                        className="w-full justify-start text-cyber-blue hover:bg-cyber-blue/10 hover:text-cyber-blue-dark transition-all duration-200 rounded-xl py-3"
+                      >
+                        <Search className="h-4 w-4 mr-2" />
+                        Search for "{query.toUpperCase()}"
+                      </Button>
+                    </motion.div>
                   </div>
                 )}
             </motion.div>

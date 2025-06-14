@@ -2,10 +2,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, BarChart3, Zap, Shield } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import StockSearchBar from "./StockSearchBar";
 
 const HeroSection = () => {
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -13,6 +15,10 @@ const HeroSection = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const handleStockSearch = (symbol: string) => {
+    navigate(`/predict?symbol=${symbol}`);
+  };
 
   const features = [
     {
@@ -59,47 +65,76 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-8"
+              className="mb-12"
             >
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-                <span className="text-apple-gray-700">Predict the</span>
+                <span className="text-white">Predict the</span>
                 <br />
-                <span className="text-gradient">Future of Stocks</span>
+                <span className="neon-text animate-pulse-neon">
+                  Future of Stocks
+                </span>
               </h1>
 
-              <p className="text-xl md:text-2xl text-apple-gray-500 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl md:text-2xl text-cyber-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
                 Harness the power of artificial intelligence to make smarter
                 investment decisions. Get accurate stock predictions backed by
                 advanced machine learning.
               </p>
             </motion.div>
 
+            {/* Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mb-12"
+            >
+              <StockSearchBar
+                onSearch={handleStockSearch}
+                placeholder="Search any stock (e.g., AAPL, TSLA, GOOGL) to get AI predictions..."
+                className="max-w-2xl mx-auto"
+              />
+            </motion.div>
+
             {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
             >
               <Link to="/predict">
-                <Button
-                  size="lg"
-                  className="bg-apple-blue hover:bg-apple-blue-dark text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-apple-lg hover:shadow-apple-xl transition-all duration-300"
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 0 30px rgba(0, 122, 255, 0.6)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <TrendingUp className="mr-2 h-5 w-5" />
-                  Start Predicting
-                </Button>
+                  <Button
+                    size="lg"
+                    className="bg-cyber-blue hover:bg-cyber-blue-dark text-white px-8 py-4 text-lg font-semibold rounded-2xl glow-blue transition-all duration-300"
+                  >
+                    <TrendingUp className="mr-2 h-5 w-5" />
+                    Start Predicting
+                  </Button>
+                </motion.div>
               </Link>
 
               <Link to="/dashboard">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-apple-gray-300 text-apple-gray-700 hover:bg-apple-gray-100 px-8 py-4 text-lg font-semibold rounded-2xl transition-all duration-300"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <BarChart3 className="mr-2 h-5 w-5" />
-                  View Dashboard
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-2 border-cyber-gray-600 text-cyber-gray-300 hover:bg-cyber-gray-800 hover:text-white px-8 py-4 text-lg font-semibold rounded-2xl transition-all duration-300"
+                  >
+                    <BarChart3 className="mr-2 h-5 w-5" />
+                    View Dashboard
+                  </Button>
+                </motion.div>
               </Link>
             </motion.div>
 
@@ -115,14 +150,21 @@ const HeroSection = () => {
                 { value: "10K+", label: "Active Users" },
                 { value: "1M+", label: "Predictions Made" },
               ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-apple-blue mb-2">
+                <motion.div
+                  key={index}
+                  className="text-center"
+                  whileHover={{ scale: 1.05 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                >
+                  <div className="text-4xl md:text-5xl font-bold neon-text mb-2">
                     {stat.value}
                   </div>
-                  <div className="text-apple-gray-500 font-medium">
+                  <div className="text-cyber-gray-300 font-medium">
                     {stat.label}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
           </div>
