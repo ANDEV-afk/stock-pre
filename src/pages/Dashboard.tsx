@@ -237,10 +237,10 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-apple-gray-700 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-2">
             Dashboard
           </h1>
-          <p className="text-apple-gray-500">
+          <p className="text-cyber-blue/80">
             Track your portfolio and monitor market movements
           </p>
         </motion.div>
@@ -252,24 +252,28 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-apple-blue/10 rounded-xl">
-                  <DollarSign className="h-6 w-6 text-apple-blue" />
+                <div className="p-2 bg-cyber-blue/20 rounded-xl group-hover:bg-cyber-blue/30 transition-all duration-300">
+                  <DollarSign className="h-6 w-6 text-cyber-blue" />
                 </div>
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/70 hover:text-white"
+                >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-apple-gray-500">Portfolio Value</p>
-                <p className="text-2xl font-bold text-apple-gray-700">
+                <p className="text-sm text-cyber-blue/80">Portfolio Value</p>
+                <p className="text-2xl font-bold text-white">
                   ${portfolioValue.toLocaleString()}
                 </p>
                 <div
                   className={cn(
                     "flex items-center space-x-1 text-sm font-medium",
-                    dailyChange >= 0 ? "text-apple-green" : "text-apple-red",
+                    dailyChange >= 0 ? "text-cyber-green" : "text-cyber-red",
                   )}
                 >
                   {dailyChange >= 0 ? (
@@ -291,18 +295,18 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-green/20 hover:border-cyber-green/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-apple-green/10 rounded-xl">
-                  <Target className="h-6 w-6 text-apple-green" />
+                <div className="p-2 bg-cyber-green/20 rounded-xl group-hover:bg-cyber-green/30 transition-all duration-300">
+                  <Target className="h-6 w-6 text-cyber-green" />
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-apple-gray-500">Active Positions</p>
-                <p className="text-2xl font-bold text-apple-gray-700">
+                <p className="text-sm text-cyber-green/80">Active Positions</p>
+                <p className="text-2xl font-bold text-white">
                   {positions.length}
                 </p>
-                <p className="text-sm text-apple-gray-500">
+                <p className="text-sm text-cyber-green/60">
                   Total: $
                   {positions
                     .reduce((sum, pos) => sum + pos.value, 0)
@@ -317,18 +321,18 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-purple/20 hover:border-cyber-purple/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-apple-purple/10 rounded-xl">
-                  <Eye className="h-6 w-6 text-apple-purple" />
+                <div className="p-2 bg-cyber-purple/20 rounded-xl group-hover:bg-cyber-purple/30 transition-all duration-300">
+                  <Eye className="h-6 w-6 text-cyber-purple" />
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-apple-gray-500">Watchlist</p>
-                <p className="text-2xl font-bold text-apple-gray-700">
+                <p className="text-sm text-cyber-purple/80">Watchlist</p>
+                <p className="text-2xl font-bold text-white">
                   {watchlist.length}
                 </p>
-                <p className="text-sm text-apple-gray-500">Securities</p>
+                <p className="text-sm text-cyber-purple/60">Securities</p>
               </div>
             </Card>
           </motion.div>
@@ -338,18 +342,16 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-red/20 hover:border-cyber-red/40 transition-all duration-300 group shadow-cyber">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-apple-red/10 rounded-xl">
-                  <Activity className="h-6 w-6 text-apple-red" />
+                <div className="p-2 bg-cyber-red/20 rounded-xl group-hover:bg-cyber-red/30 transition-all duration-300">
+                  <Activity className="h-6 w-6 text-cyber-red" />
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-apple-gray-500">Alerts</p>
-                <p className="text-2xl font-bold text-apple-gray-700">
-                  {alerts.length}
-                </p>
-                <p className="text-sm text-apple-gray-500">Active</p>
+                <p className="text-sm text-cyber-red/80">Alerts</p>
+                <p className="text-2xl font-bold text-white">{alerts.length}</p>
+                <p className="text-sm text-cyber-red/60">Active</p>
               </div>
             </Card>
           </motion.div>
@@ -380,14 +382,14 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+              <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 shadow-cyber">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-apple-gray-700">
+                  <h3 className="text-xl font-bold text-white">
                     Your Positions
                   </h3>
                   <Button
                     size="sm"
-                    className="bg-apple-blue hover:bg-apple-blue-dark text-white"
+                    className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white transition-all duration-300 hover:scale-105"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Add Position
@@ -411,35 +413,35 @@ const Dashboard = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.7 + index * 0.1 }}
-                        className="flex items-center justify-between p-4 bg-apple-gray-50 rounded-2xl hover:bg-apple-gray-100 transition-colors duration-200 cursor-pointer"
+                        className="flex items-center justify-between p-4 bg-white/5 border border-cyber-purple/10 rounded-2xl hover:bg-white/10 hover:border-cyber-purple/30 transition-all duration-200 cursor-pointer group"
                         onClick={() => setSelectedStock(position.symbol)}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-gradient-to-br from-apple-blue to-apple-purple rounded-xl flex items-center justify-center">
+                          <div className="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
                             <span className="text-white font-bold text-sm">
                               {position.symbol.charAt(0)}
                             </span>
                           </div>
                           <div>
-                            <p className="font-semibold text-apple-gray-700">
+                            <p className="font-semibold text-white">
                               {position.symbol}
                             </p>
-                            <p className="text-sm text-apple-gray-500">
+                            <p className="text-sm text-cyber-blue/70">
                               {position.shares} shares @ ${position.avgPrice}
                             </p>
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <p className="font-semibold text-apple-gray-700">
+                          <p className="font-semibold text-white">
                             ${position.value.toLocaleString()}
                           </p>
                           <p
                             className={cn(
                               "text-sm font-medium",
                               isPositive
-                                ? "text-apple-green"
-                                : "text-apple-red",
+                                ? "text-cyber-green"
+                                : "text-cyber-red",
                             )}
                           >
                             {isPositive ? "+" : ""}${Math.abs(gain).toFixed(2)}{" "}
@@ -462,12 +464,14 @@ const Dashboard = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.7 }}
             >
-              <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+              <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-purple/20 hover:border-cyber-purple/40 transition-all duration-300 shadow-cyber">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-apple-gray-700">
-                    Watchlist
-                  </h3>
-                  <Button size="sm" variant="outline">
+                  <h3 className="text-xl font-bold text-white">Watchlist</h3>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyber-purple/30 text-cyber-purple hover:bg-cyber-purple/10 hover:border-cyber-purple/60"
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
@@ -483,31 +487,31 @@ const Dashboard = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.8 + index * 0.05 }}
                         className={cn(
-                          "flex items-center justify-between p-3 rounded-xl hover:bg-apple-gray-50 transition-colors duration-200 cursor-pointer",
+                          "flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors duration-200 cursor-pointer group",
                           selectedStock === stock.symbol &&
-                            "bg-apple-blue/10 border border-apple-blue/20",
+                            "bg-cyber-blue/10 border border-cyber-blue/30",
                         )}
                         onClick={() => setSelectedStock(stock.symbol)}
                       >
                         <div>
-                          <p className="font-semibold text-apple-gray-700">
+                          <p className="font-semibold text-white group-hover:text-cyber-blue transition-colors">
                             {stock.symbol}
                           </p>
-                          <p className="text-sm text-apple-gray-500">
+                          <p className="text-sm text-cyber-blue/70">
                             {stock.name}
                           </p>
                         </div>
 
                         <div className="text-right">
-                          <p className="font-semibold text-apple-gray-700">
+                          <p className="font-semibold text-white">
                             ${stock.price}
                           </p>
                           <p
                             className={cn(
                               "text-sm font-medium",
                               isPositive
-                                ? "text-apple-green"
-                                : "text-apple-red",
+                                ? "text-cyber-green"
+                                : "text-cyber-red",
                             )}
                           >
                             {isPositive ? "+" : ""}
@@ -527,12 +531,16 @@ const Dashboard = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.8 }}
             >
-              <Card className="p-6 bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple">
+              <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-red/20 hover:border-cyber-red/40 transition-all duration-300 shadow-cyber">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-apple-gray-700">
+                  <h3 className="text-xl font-bold text-white">
                     Recent Alerts
                   </h3>
-                  <Button size="sm" variant="outline">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyber-red/30 text-cyber-red hover:bg-cyber-red/10 hover:border-cyber-red/60"
+                  >
                     View All
                   </Button>
                 </div>
@@ -544,14 +552,14 @@ const Dashboard = () => {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.9 + index * 0.1 }}
-                      className="flex items-start space-x-3 p-3 bg-apple-gray-50 rounded-xl"
+                      className="flex items-start space-x-3 p-3 bg-white/5 border border-cyber-blue/10 rounded-xl hover:bg-white/10 hover:border-cyber-blue/20 transition-all duration-200"
                     >
-                      <div className="w-2 h-2 bg-apple-blue rounded-full mt-2 flex-shrink-0" />
+                      <div className="w-2 h-2 bg-cyber-blue rounded-full mt-2 flex-shrink-0 animate-pulse" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-apple-gray-700">
+                        <p className="text-sm font-medium text-white">
                           {alert.symbol}: {alert.message}
                         </p>
-                        <p className="text-xs text-apple-gray-500 mt-1">
+                        <p className="text-xs text-cyber-blue/70 mt-1">
                           {alert.time}
                         </p>
                       </div>
