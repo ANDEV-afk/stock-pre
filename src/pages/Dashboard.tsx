@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatChartData } from "@/lib/api";
 import { demoDataService } from "@/lib/demo-data-service";
+import { apiService } from "@/lib/api-service";
 import {
   TrendingUp,
   TrendingDown,
