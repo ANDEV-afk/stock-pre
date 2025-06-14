@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { finnhubAPI, IndexData } from "@/lib/api";
+import { IndexData } from "@/lib/api";
+import { demoDataService } from "@/lib/demo-data-service";
 import {
   TrendingUp,
   TrendingDown,
@@ -21,47 +22,49 @@ const IndicesDashboard = () => {
   const fetchIndicesData = async () => {
     setIsLoading(true);
     try {
-      const data = await finnhubAPI.getIndicesData();
+      console.log("Loading market indices data...");
+      // Use demo data service for consistent experience
+      const data = demoDataService.generateIndicesData();
       setIndices(data);
       setLastUpdated(new Date());
     } catch (error) {
-      console.error("Error fetching indices:", error);
-      // Fallback to mock data if API fails
+      console.log("Generating fallback indices data...");
+      // Simple fallback if even demo service fails
       setIndices([
         {
-          symbol: "^IXIC",
-          name: "NASDAQ Composite",
-          price: 15647.32,
-          change: 156.43,
-          changePercent: 1.01,
+          symbol: "AAPL",
+          name: "Apple Inc.",
+          price: 175.43,
+          change: 2.14,
+          changePercent: 1.23,
         },
         {
-          symbol: "^GSPC",
-          name: "S&P 500",
-          price: 4568.89,
-          change: -23.45,
-          changePercent: -0.51,
+          symbol: "GOOGL",
+          name: "Alphabet Inc.",
+          price: 138.21,
+          change: -1.23,
+          changePercent: -0.88,
         },
         {
-          symbol: "^DJI",
-          name: "Dow Jones",
-          price: 35432.1,
-          change: 89.76,
-          changePercent: 0.25,
+          symbol: "MSFT",
+          name: "Microsoft Corp.",
+          price: 378.85,
+          change: 4.52,
+          changePercent: 1.21,
         },
         {
-          symbol: "^RUT",
-          name: "Russell 2000",
-          price: 2234.56,
-          change: -12.34,
-          changePercent: -0.55,
+          symbol: "TSLA",
+          name: "Tesla Inc.",
+          price: 242.68,
+          change: -3.45,
+          changePercent: -1.4,
         },
         {
-          symbol: "^VIX",
-          name: "VIX",
-          price: 18.43,
-          change: 1.23,
-          changePercent: 7.15,
+          symbol: "NVDA",
+          name: "NVIDIA Corp.",
+          price: 721.33,
+          change: 15.43,
+          changePercent: 2.18,
         },
       ]);
       setLastUpdated(new Date());

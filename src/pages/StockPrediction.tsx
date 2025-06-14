@@ -8,8 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
-import { apiService } from "@/lib/api-service";
+import { finnhubAPI, formatChartData } from "@/lib/api";
+import { demoDataService } from "@/lib/demo-data-service";
 import {
   Brain,
   TrendingUp,
@@ -43,18 +43,18 @@ const StockPrediction = () => {
     setSelectedStock(symbol);
 
     try {
-      console.log(`Generating AI predictions for ${symbol} using demo data`);
+      console.log(`Generating AI predictions for ${symbol}...`);
 
-      // Use demo data for consistent experience (API has access limitations)
-      const mockData = apiService.generateMockStockData(symbol);
-      const historicalData = formatChartData(mockData.candles);
+      // Use demo data service for consistent experience
+      const demoData = demoDataService.generateStockData(symbol);
+      const historicalData = formatChartData(demoData.candles);
 
       // Generate AI predictions using mock historical data
       const prices = historicalData.map((d) => d.price);
       const prediction = finnhubAPI.generatePrediction(prices, symbol);
 
       const allData = [...historicalData, ...prediction.predictions];
-      const currentPrice = mockData.quote.c;
+      const currentPrice = demoData.quote.c;
 
       setPredictionData({
         symbol,
@@ -69,8 +69,8 @@ const StockPrediction = () => {
         support: prediction.support,
         resistance: prediction.resistance,
         timeframe: "7 days",
-        quote: mockData.quote,
-        profile: mockData.profile,
+        quote: demoData.quote,
+        profile: demoData.profile,
       });
     } catch (error) {
       console.error("Error generating predictions:", error);
@@ -130,7 +130,7 @@ const StockPrediction = () => {
           t: Date.now() / 1000,
         },
         profile: {
-          name: apiService.generateMockStockData(symbol).profile.name,
+          name: demoDataService.generateStockData(symbol).profile.name,
         },
       });
     } finally {
