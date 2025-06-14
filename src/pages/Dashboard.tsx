@@ -41,6 +41,14 @@ const Dashboard = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
+    } else {
+      // Show demo data notification immediately
+      setApiNotification({
+        type: "info",
+        message:
+          "Using demo data for the best experience. Real-time data requires premium API access.",
+      });
+      setShowApiNotification(true);
     }
   }, [isAuthenticated, navigate]);
 
