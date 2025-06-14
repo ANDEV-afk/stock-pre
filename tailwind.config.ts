@@ -52,34 +52,46 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Apple-inspired color palette
-        apple: {
+        // Dark cyber theme colors
+        cyber: {
+          black: "#000000",
+          dark: "#0a0a0a",
           gray: {
-            50: "#fafafa",
-            100: "#f5f5f7",
-            200: "#e8e8ed",
-            300: "#d2d2d7",
-            400: "#86868b",
-            500: "#6e6e73",
-            600: "#515154",
-            700: "#1d1d1f",
+            900: "#111111",
+            800: "#1a1a1a",
+            700: "#2a2a2a",
+            600: "#3a3a3a",
+            500: "#5a5a5a",
+            400: "#8a8a8a",
+            300: "#aaaaaa",
+            200: "#cccccc",
+            100: "#eeeeee",
           },
           blue: {
             DEFAULT: "#007aff",
             dark: "#0056cc",
-            light: "#5ac8fa",
+            light: "#3399ff",
+            neon: "#00d4ff",
           },
           purple: {
             DEFAULT: "#5856d6",
             dark: "#3634a3",
+            light: "#7b79d6",
+            neon: "#a855f7",
           },
           green: {
             DEFAULT: "#34c759",
             dark: "#248a3d",
+            neon: "#00ff88",
           },
           red: {
             DEFAULT: "#ff3b30",
             dark: "#d70015",
+            neon: "#ff0044",
+          },
+          yellow: {
+            DEFAULT: "#ffcc00",
+            neon: "#ffff00",
           },
         },
       },
@@ -92,12 +104,8 @@ export default {
           "Arial",
           "sans-serif",
         ],
-        display: [
-          "SF Pro Display",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "sans-serif",
-        ],
+        mono: ["SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "monospace"],
+        cyber: ["Orbitron", "monospace"],
       },
       fontSize: {
         "2xs": ["0.625rem", { lineHeight: "0.75rem" }],
@@ -106,6 +114,7 @@ export default {
         "5xl": ["3.5rem", { lineHeight: "4rem" }],
         "6xl": ["4.5rem", { lineHeight: "5rem" }],
         "7xl": ["6rem", { lineHeight: "6.5rem" }],
+        "8xl": ["8rem", { lineHeight: "8.5rem" }],
       },
       spacing: {
         18: "4.5rem",
@@ -119,9 +128,13 @@ export default {
         "4xl": "2rem",
       },
       boxShadow: {
-        apple: "0 4px 16px rgba(0, 0, 0, 0.1)",
-        "apple-lg": "0 8px 32px rgba(0, 0, 0, 0.12)",
-        "apple-xl": "0 16px 64px rgba(0, 0, 0, 0.15)",
+        cyber: "0 0 20px rgba(0, 122, 255, 0.3)",
+        "cyber-lg": "0 0 40px rgba(0, 122, 255, 0.4)",
+        "cyber-xl": "0 0 60px rgba(0, 122, 255, 0.5)",
+        "neon-blue": "0 0 10px #007aff, 0 0 20px #007aff, 0 0 40px #007aff",
+        "neon-purple": "0 0 10px #5856d6, 0 0 20px #5856d6, 0 0 40px #5856d6",
+        dark: "0 8px 32px rgba(0, 0, 0, 0.8)",
+        "dark-lg": "0 16px 64px rgba(0, 0, 0, 0.9)",
       },
       keyframes: {
         "accordion-down": {
@@ -152,6 +165,31 @@ export default {
             transform: "translateX(0)",
           },
         },
+        glow: {
+          "0%, 100%": {
+            boxShadow: "0 0 20px rgba(0, 122, 255, 0.3)",
+          },
+          "50%": {
+            boxShadow: "0 0 40px rgba(0, 122, 255, 0.6)",
+          },
+        },
+        "pulse-neon": {
+          "0%, 100%": {
+            textShadow: "0 0 5px currentColor, 0 0 10px currentColor",
+          },
+          "50%": {
+            textShadow:
+              "0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor",
+          },
+        },
+        matrix: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100vh)" },
+        },
+        "cyber-scan": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-8px)" },
@@ -162,7 +200,19 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in-up": "fade-in-up 0.6s ease-out",
         "slide-in-left": "slide-in-left 0.6s ease-out",
+        glow: "glow 2s ease-in-out infinite",
+        "pulse-neon": "pulse-neon 2s ease-in-out infinite",
+        matrix: "matrix 3s linear infinite",
+        "cyber-scan": "cyber-scan 2s ease-in-out infinite",
         float: "float 3s ease-in-out infinite",
+      },
+      backgroundImage: {
+        "cyber-grid": `
+          linear-gradient(rgba(0, 122, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 122, 255, 0.1) 1px, transparent 1px)
+        `,
+        "radial-dark":
+          "radial-gradient(circle at center, #1a1a1a 0%, #000000 100%)",
       },
     },
   },
