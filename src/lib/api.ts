@@ -81,7 +81,9 @@ class FinnhubAPI {
         console.error(`Finnhub API error (${response.status}):`, errorData);
 
         if (response.status === 403) {
-          throw new Error("Access denied - API key may not have permissions for this data");
+          throw new Error(
+            "Access denied - API key may not have permissions for this data",
+          );
         } else if (response.status === 429) {
           throw new Error("Rate limit exceeded - too many requests");
         } else {
@@ -103,14 +105,13 @@ class FinnhubAPI {
       throw error;
     }
   }
-  }
 
   async getQuote(symbol: string): Promise<StockQuote> {
     try {
       const data = await this.makeRequest("/quote", { symbol });
 
       // Validate response data
-      if (!data || typeof data.c === 'undefined') {
+      if (!data || typeof data.c === "undefined") {
         throw new Error(`No data available for symbol: ${symbol}`);
       }
 
@@ -185,8 +186,7 @@ class FinnhubAPI {
         });
 
         // Add small delay between requests to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 100));
-
+        await new Promise((resolve) => setTimeout(resolve, 100));
       } catch (error) {
         console.error(`Error fetching ${index.symbol}:`, error);
 
@@ -196,10 +196,11 @@ class FinnhubAPI {
           GOOGL: 138.21,
           MSFT: 378.85,
           TSLA: 242.68,
-          NVDA: 721.33
+          NVDA: 721.33,
         };
 
-        const basePrice = mockPrices[index.symbol as keyof typeof mockPrices] || 100;
+        const basePrice =
+          mockPrices[index.symbol as keyof typeof mockPrices] || 100;
         const change = (Math.random() - 0.5) * 10;
 
         indicesData.push({
