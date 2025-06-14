@@ -28,6 +28,9 @@ import {
   Download,
   Share,
   Bookmark,
+  Activity,
+  CheckCircle,
+  Headphones,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -518,7 +521,7 @@ const VideoTutorials = () => {
           </AnimatePresence>
         </div>
 
-        {/* CTA Section */}
+        {/* Enhanced CTA Section with Pricing Categories */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -526,18 +529,198 @@ const VideoTutorials = () => {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <div className="bg-white/5 backdrop-blur-md border border-cyber-blue/20 rounded-3xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Access Full Course Library
+          <div className="bg-white/5 backdrop-blur-md border border-cyber-blue/20 rounded-3xl p-8 max-w-6xl mx-auto">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Unlock Premium Trading Education
             </h3>
-            <p className="text-cyber-blue/80 mb-6">
-              Get unlimited access to all full-length courses and premium
-              content
+            <p className="text-cyber-blue/80 mb-8 max-w-3xl mx-auto">
+              Choose your learning path and get unlimited access to professional
+              trading courses, AI-powered predictions, and exclusive content
             </p>
-            <Button className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white px-8 py-3 text-lg font-semibold rounded-2xl">
-              <Zap className="h-5 w-5 mr-2" />
-              Upgrade to Pro
-            </Button>
+
+            {/* Pricing Categories Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Basic Predictions */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="bg-white/5 border border-cyber-green/20 rounded-2xl p-6 hover:bg-white/10 hover:border-cyber-green/40 transition-all duration-300 group"
+              >
+                <div className="p-3 bg-cyber-green/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-green/25 transition-all duration-300">
+                  <TrendingUp className="h-6 w-6 text-cyber-green" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-2">
+                  Basic Predictions
+                </h4>
+                <div className="text-3xl font-bold text-cyber-green mb-1">
+                  $9.99
+                </div>
+                <div className="text-sm text-white/60 mb-4">per month</div>
+                <ul className="text-sm text-white/80 space-y-2 mb-6">
+                  <li>• 50 stock predictions/day</li>
+                  <li>• Basic technical analysis</li>
+                  <li>• Email alerts</li>
+                  <li>• Mobile app access</li>
+                  <li>• Community support</li>
+                </ul>
+                <Button
+                  onClick={() =>
+                    (window.location.href =
+                      "/payment?plan=Basic&price=9.99&billing=monthly&category=predictions&source=video_library")
+                  }
+                  className="w-full bg-cyber-green hover:bg-cyber-green-dark text-white rounded-xl transition-all duration-300"
+                >
+                  Start Basic Plan
+                </Button>
+              </motion.div>
+
+              {/* Pro Predictions */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="bg-white/5 border border-cyber-blue/30 rounded-2xl p-6 hover:bg-white/10 hover:border-cyber-blue/50 transition-all duration-300 group relative ring-2 ring-cyber-blue/50 scale-105"
+              >
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-gradient-to-r from-cyber-blue to-cyber-purple text-white px-3 py-1 rounded-full text-xs font-bold">
+                    MOST POPULAR
+                  </div>
+                </div>
+                <div className="p-3 bg-cyber-blue/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
+                  <BarChart3 className="h-6 w-6 text-cyber-blue" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-2">
+                  Pro Predictions
+                </h4>
+                <div className="text-3xl font-bold text-cyber-blue mb-1">
+                  $29.99
+                </div>
+                <div className="text-sm text-white/60 mb-4">per month</div>
+                <ul className="text-sm text-white/80 space-y-2 mb-6">
+                  <li>• Unlimited AI predictions</li>
+                  <li>• Advanced market analysis</li>
+                  <li>• Real-time alerts</li>
+                  <li>• Full course library access</li>
+                  <li>• Priority support</li>
+                  <li>• API access</li>
+                </ul>
+                <Button
+                  onClick={() =>
+                    (window.location.href =
+                      "/payment?plan=Professional&price=29.99&billing=monthly&category=predictions&source=video_library")
+                  }
+                  className="w-full bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white rounded-xl transition-all duration-300"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  Upgrade to Pro
+                </Button>
+              </motion.div>
+
+              {/* Elite Predictions */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="bg-white/5 border border-cyber-purple/20 rounded-2xl p-6 hover:bg-white/10 hover:border-cyber-purple/40 transition-all duration-300 group"
+              >
+                <div className="p-3 bg-cyber-purple/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-purple/25 transition-all duration-300">
+                  <Brain className="h-6 w-6 text-cyber-purple" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-2">
+                  Elite Predictions
+                </h4>
+                <div className="text-3xl font-bold text-cyber-purple mb-1">
+                  $99.99
+                </div>
+                <div className="text-sm text-white/60 mb-4">per month</div>
+                <ul className="text-sm text-white/80 space-y-2 mb-6">
+                  <li>• Custom AI model training</li>
+                  <li>• Portfolio optimization</li>
+                  <li>• 1-on-1 expert consultations</li>
+                  <li>• White-label access</li>
+                  <li>• Advanced risk modeling</li>
+                  <li>• Institutional-grade features</li>
+                </ul>
+                <Button
+                  onClick={() =>
+                    (window.location.href =
+                      "/payment?plan=Elite&price=99.99&billing=monthly&category=predictions&source=video_library")
+                  }
+                  className="w-full bg-cyber-purple hover:bg-cyber-purple-dark text-white rounded-xl transition-all duration-300"
+                >
+                  Get Elite Access
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Additional Features Section */}
+            <div className="bg-gradient-to-r from-cyber-blue/10 to-cyber-purple/10 border border-cyber-blue/20 rounded-2xl p-6 mb-8">
+              <h4 className="text-xl font-bold text-white mb-4">
+                What's Included in All Plans
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                <div className="flex items-center space-x-3">
+                  <BookOpen className="h-5 w-5 text-cyber-green" />
+                  <span className="text-white/80">
+                    Full video course library
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Activity className="h-5 w-5 text-cyber-blue" />
+                  <span className="text-white/80">Real-time market data</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Shield className="h-5 w-5 text-cyber-purple" />
+                  <span className="text-white/80">Risk management tools</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Users className="h-5 w-5 text-cyber-yellow" />
+                  <span className="text-white/80">
+                    Trading community access
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Target className="h-5 w-5 text-cyber-red" />
+                  <span className="text-white/80">Portfolio tracking</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Clock className="h-5 w-5 text-cyber-green" />
+                  <span className="text-white/80">24/7 market monitoring</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Money Back Guarantee */}
+            <div className="flex items-center justify-center space-x-2 text-cyber-green/80 mb-4">
+              <CheckCircle className="h-5 w-5" />
+              <span className="text-sm">
+                30-day money-back guarantee • Cancel anytime
+              </span>
+            </div>
+
+            {/* Alternative CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => (window.location.href = "/dashboard")}
+                variant="outline"
+                className="border-cyber-blue/30 text-cyber-blue hover:bg-cyber-blue/10 px-6 py-2"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Try Free Demo
+              </Button>
+              <Button
+                onClick={() => (window.location.href = "/support")}
+                variant="outline"
+                className="border-cyber-purple/30 text-cyber-purple hover:bg-cyber-purple/10 px-6 py-2"
+              >
+                <Headphones className="h-4 w-4 mr-2" />
+                Contact Sales
+              </Button>
+            </div>
           </div>
         </motion.div>
       </div>

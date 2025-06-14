@@ -165,6 +165,26 @@ const PriceAlerts = ({ className }: PriceAlertsProps) => {
     };
   }, [simulatePriceUpdates, checkAlertTriggers]);
 
+  // Handle escape key for closing add alert form
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && showAddAlert) {
+        setShowAddAlert(false);
+        setNewAlert({
+          symbol: "",
+          type: "above",
+          value: 0,
+          condition: "once",
+          notificationMethod: "both",
+          priority: "medium",
+        });
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [showAddAlert]);
+
   // Mock alerts data with enhanced features
   useEffect(() => {
     const mockAlerts: PriceAlert[] = [
@@ -433,6 +453,7 @@ const PriceAlerts = ({ className }: PriceAlertsProps) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
             className="mb-6 p-4 bg-white/5 border border-cyber-purple/20 rounded-xl"
           >
             <div className="flex items-center justify-between mb-4">
@@ -440,8 +461,19 @@ const PriceAlerts = ({ className }: PriceAlertsProps) => {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setShowAddAlert(false)}
-                className="text-white/70 hover:text-white"
+                onClick={() => {
+                  setShowAddAlert(false);
+                  // Reset form when closing
+                  setNewAlert({
+                    symbol: "",
+                    type: "above",
+                    value: 0,
+                    condition: "once",
+                    notificationMethod: "both",
+                    priority: "medium",
+                  });
+                }}
+                className="text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="h-4 w-4" />
               </Button>

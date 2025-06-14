@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
@@ -150,6 +150,26 @@ const Dashboard = () => {
       };
     }
   }, [isAuthenticated, navigate]);
+
+  // Handle escape key for modals
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (showPriceAlertModal) {
+          setShowPriceAlertModal(false);
+        }
+        if (showSettings) {
+          setShowSettings(false);
+        }
+        if (showAddPosition) {
+          setShowAddPosition(false);
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [showPriceAlertModal, showSettings, showAddPosition]);
 
   // Enhanced positions data
   useEffect(() => {
@@ -1190,51 +1210,55 @@ const Dashboard = () => {
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
 
       {/* Price Alert Modal */}
-      {showPriceAlertModal && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        >
+      <AnimatePresence>
+        {showPriceAlertModal && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            className="w-full max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowPriceAlertModal(false)}
           >
-            <Card className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-xl border border-cyan-500/20 shadow-2xl">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-cyan-500/20 rounded-xl">
-                      <Bell className="h-6 w-6 text-cyan-400" />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="w-full max-w-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Card className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-xl border border-cyan-500/20 shadow-2xl">
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-cyan-500/20 rounded-xl">
+                        <Bell className="h-6 w-6 text-cyan-400" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-white">
+                          Set Price Alert
+                        </h2>
+                        <p className="text-gray-400">
+                          Create alert for {selectedStock}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-white">
-                        Set Price Alert
-                      </h2>
-                      <p className="text-gray-400">
-                        Create alert for {selectedStock}
-                      </p>
-                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPriceAlertModal(false)}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowPriceAlertModal(false)}
-                    className="text-gray-400 hover:text-white"
-                  >
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
 
-                <PriceAlerts className="border-0 bg-transparent p-0" />
-              </div>
-            </Card>
+                  <PriceAlerts className="border-0 bg-transparent p-0" />
+                </div>
+              </Card>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 };

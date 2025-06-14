@@ -6,6 +6,7 @@ import VideoTutorials from "@/components/VideoTutorials";
 import FeatureShowcase from "@/components/FeatureShowcase";
 import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
 import BackgroundVideoOverlay from "@/components/BackgroundVideoOverlay";
+import CommunityLinks from "@/components/CommunityLinks";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -141,10 +142,13 @@ const Index = () => {
       {/* Stock Ticker */}
       <StockTicker />
 
-      {/* Feature Showcase Section */}
+      {/* Feature Showcase */}
       <FeatureShowcase />
 
-      {/* Video Tutorials Section */}
+      {/* Community Links */}
+      <CommunityLinks />
+
+      {/* Video Tutorials */}
       <VideoTutorials />
 
       {/* Benefits Section */}
