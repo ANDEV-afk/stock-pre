@@ -64,13 +64,24 @@ class FinnhubAPI {
       const response = await fetch(url.toString());
 
       if (!response.ok) {
-        const errorData = await response.text();
+        // Read the response body once and handle different content types
+        let errorData;
+        const contentType = response.headers.get("content-type");
+
+        try {
+          if (contentType && contentType.includes("application/json")) {
+            errorData = await response.json();
+          } else {
+            errorData = await response.text();
+          }
+        } catch (parseError) {
+          errorData = `Response status: ${response.status}`;
+        }
+
         console.error(`Finnhub API error (${response.status}):`, errorData);
 
         if (response.status === 403) {
-          throw new Error(
-            "Access denied - API key may not have permissions for this data",
-          );
+          throw new Error("Access denied - API key may not have permissions for this data");
         } else if (response.status === 429) {
           throw new Error("Rate limit exceeded - too many requests");
         } else {
@@ -78,16 +89,36 @@ class FinnhubAPI {
         }
       }
 
+      // Only read response body if status is ok
       const data = await response.json();
       return data;
     } catch (error) {
+      // Don't log network errors as API errors to avoid confusion
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        console.error("Network error:", error);
+        throw new Error("Network connection failed");
+      }
+
       console.error("Finnhub API error:", error);
       throw error;
     }
   }
+  }
 
   async getQuote(symbol: string): Promise<StockQuote> {
-    return this.makeRequest("/quote", { symbol });
+    try {
+      const data = await this.makeRequest("/quote", { symbol });
+
+      // Validate response data
+      if (!data || typeof data.c === 'undefined') {
+        throw new Error(`No data available for symbol: ${symbol}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(`Error fetching quote for ${symbol}:`, error);
+      throw error;
+    }
   }
 
   async getCandles(
@@ -96,12 +127,24 @@ class FinnhubAPI {
     from: number,
     to: number,
   ): Promise<StockCandle> {
-    return this.makeRequest("/stock/candle", {
-      symbol,
-      resolution,
-      from: from.toString(),
-      to: to.toString(),
-    });
+    try {
+      const data = await this.makeRequest("/stock/candle", {
+        symbol,
+        resolution,
+        from: from.toString(),
+        to: to.toString(),
+      });
+
+      // Validate candle data
+      if (!data || data.s !== "ok" || !data.t || data.t.length === 0) {
+        throw new Error(`No candle data available for symbol: ${symbol}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(`Error fetching candles for ${symbol}:`, error);
+      throw error;
+    }
   }
 
   async searchSymbol(query: string): Promise<StockSymbol[]> {
@@ -120,47 +163,54 @@ class FinnhubAPI {
   // Get major indices data - using stock symbols that work with free tier
   async getIndicesData(): Promise<IndexData[]> {
     const indices = [
-      { symbol: "QQQ", name: "NASDAQ ETF" }, // NASDAQ tracking ETF
-      { symbol: "SPY", name: "S&P 500 ETF" }, // S&P 500 tracking ETF
-      { symbol: "DIA", name: "Dow Jones ETF" }, // Dow Jones tracking ETF
-      { symbol: "IWM", name: "Russell 2000 ETF" }, // Russell 2000 tracking ETF
-      { symbol: "VXX", name: "Volatility ETF" }, // VIX tracking ETF
+      { symbol: "AAPL", name: "Apple Inc." }, // Use popular stocks instead of ETFs
+      { symbol: "GOOGL", name: "Alphabet Inc." },
+      { symbol: "MSFT", name: "Microsoft Corp." },
+      { symbol: "TSLA", name: "Tesla Inc." },
+      { symbol: "NVDA", name: "NVIDIA Corp." },
     ];
 
-    const indicesData = await Promise.all(
-      indices.map(async (index) => {
-        try {
-          const quote = await this.getQuote(index.symbol);
-          return {
-            symbol: index.symbol,
-            name: index.name,
-            price: quote.c || 0,
-            change: quote.d || 0,
-            changePercent: quote.dp || 0,
-          };
-        } catch (error) {
-          console.error(`Error fetching ${index.symbol}:`, error);
-          // Return realistic mock data for fallback
-          const mockPrices = {
-            QQQ: 385.5,
-            SPY: 455.2,
-            DIA: 345.8,
-            IWM: 198.3,
-            VXX: 23.45,
-          };
-          const basePrice =
-            mockPrices[index.symbol as keyof typeof mockPrices] || 100;
-          const change = (Math.random() - 0.5) * 10;
-          return {
-            symbol: index.symbol,
-            name: index.name,
-            price: basePrice,
-            change: change,
-            changePercent: (change / basePrice) * 100,
-          };
-        }
-      }),
-    );
+    // Process indices one by one to avoid overwhelming the API
+    const indicesData: IndexData[] = [];
+
+    for (const index of indices) {
+      try {
+        const quote = await this.getQuote(index.symbol);
+        indicesData.push({
+          symbol: index.symbol,
+          name: index.name,
+          price: quote.c || 0,
+          change: quote.d || 0,
+          changePercent: quote.dp || 0,
+        });
+
+        // Add small delay between requests to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+      } catch (error) {
+        console.error(`Error fetching ${index.symbol}:`, error);
+
+        // Return realistic mock data for fallback
+        const mockPrices = {
+          AAPL: 175.43,
+          GOOGL: 138.21,
+          MSFT: 378.85,
+          TSLA: 242.68,
+          NVDA: 721.33
+        };
+
+        const basePrice = mockPrices[index.symbol as keyof typeof mockPrices] || 100;
+        const change = (Math.random() - 0.5) * 10;
+
+        indicesData.push({
+          symbol: index.symbol,
+          name: index.name,
+          price: basePrice,
+          change: change,
+          changePercent: (change / basePrice) * 100,
+        });
+      }
+    }
 
     return indicesData;
   }

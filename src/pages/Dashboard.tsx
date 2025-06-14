@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
+import { apiService } from "@/lib/api-service";
 import {
   TrendingUp,
   TrendingDown,
@@ -141,8 +142,11 @@ const Dashboard = () => {
   // Fetch real stock data
   const fetchStockData = async (symbol: string) => {
     setIsLoadingChart(true);
+
     try {
       const { from, to } = generateDateRange(30); // Last 30 days
+
+      // Try to fetch real data
       const [candles, quote] = await Promise.all([
         finnhubAPI.getCandles(symbol, "D", from, to),
         finnhubAPI.getQuote(symbol),
@@ -152,74 +156,59 @@ const Dashboard = () => {
       if (formattedData.length > 0) {
         setChartData(formattedData);
         setStockQuote(quote);
+        apiService.setApiStatus("online");
+        return; // Success - exit early
       } else {
         throw new Error("No data available");
       }
     } catch (error) {
       console.error("Error fetching stock data:", error);
 
-      // Show API notification
-      const errorMessage = (error as Error).message;
-      if (errorMessage.includes("Access denied")) {
-        setApiNotification({
-          type: "limited",
-          message:
-            "Using demo data due to API limitations. Real data requires premium subscription.",
-        });
-      } else if (errorMessage.includes("Rate limit")) {
-        setApiNotification({
-          type: "limited",
-          message:
-            "API rate limit reached. Using cached data. Try again in a few minutes.",
-        });
+      // Determine if we should use mock data
+      if (apiService.shouldUseMockData(error as Error)) {
+        const errorMessage = (error as Error).message;
+
+        // Show appropriate API notification
+        if (
+          errorMessage.includes("Access denied") ||
+          errorMessage.includes("403")
+        ) {
+          apiService.setApiStatus("limited", "API access restricted");
+          setApiNotification({
+            type: "limited",
+            message:
+              "Using demo data due to API limitations. Real data requires premium subscription.",
+          });
+        } else if (
+          errorMessage.includes("Rate limit") ||
+          errorMessage.includes("429")
+        ) {
+          apiService.setApiStatus("limited", "Rate limit exceeded");
+          setApiNotification({
+            type: "limited",
+            message:
+              "API rate limit reached. Using demo data. Try again in a few minutes.",
+          });
+        } else {
+          apiService.setApiStatus("offline", errorMessage);
+          setApiNotification({
+            type: "error",
+            message: "Unable to fetch live data. Showing demo data instead.",
+          });
+        }
+
+        setShowApiNotification(true);
+
+        // Use improved mock data service
+        const mockData = apiService.generateMockStockData(symbol);
+        const formattedCandles = formatChartData(mockData.candles);
+
+        setChartData(formattedCandles);
+        setStockQuote(mockData.quote);
       } else {
-        setApiNotification({
-          type: "error",
-          message: "Unable to fetch live data. Showing demo data instead.",
-        });
+        // Re-throw if it's not an API access issue
+        throw error;
       }
-      setShowApiNotification(true);
-
-      // Fallback to mock data with better stock prices
-      const stockPrices = {
-        AAPL: 175,
-        GOOGL: 138,
-        MSFT: 379,
-        TSLA: 243,
-        NVDA: 721,
-        AMZN: 145,
-      };
-
-      const basePrice = stockPrices[symbol as keyof typeof stockPrices] || 150;
-      const mockData = [];
-
-      for (let i = 30; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const volatility = 0.02;
-        const trend = (Math.random() - 0.5) * volatility;
-        const price = basePrice * (1 + trend * (i / 30));
-        mockData.push({
-          date: date.toLocaleDateString(),
-          price: parseFloat(price.toFixed(2)),
-          predicted: false,
-        });
-      }
-      setChartData(mockData);
-
-      // Mock quote data
-      const lastPrice = mockData[mockData.length - 1].price;
-      const change = (Math.random() - 0.5) * 5;
-      setStockQuote({
-        c: lastPrice,
-        d: change,
-        dp: (change / lastPrice) * 100,
-        h: lastPrice * 1.02,
-        l: lastPrice * 0.98,
-        o: lastPrice * 0.995,
-        pc: lastPrice - change,
-        t: Date.now() / 1000,
-      });
     } finally {
       setIsLoadingChart(false);
     }
