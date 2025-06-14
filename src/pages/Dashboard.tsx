@@ -147,30 +147,21 @@ const Dashboard = () => {
     },
   ];
 
-  // Fetch real stock data
+  // Generate demo stock data (seamless user experience)
   const fetchStockData = async (symbol: string) => {
     setIsLoadingChart(true);
 
+    console.log(`Loading demo data for ${symbol}...`);
+
     try {
-      const { from, to } = generateDateRange(30); // Last 30 days
+      // Use dedicated demo data service for consistent experience
+      const demoData = demoDataService.generateStockData(symbol);
+      const formattedCandles = formatChartData(demoData.candles);
 
-      // Try to fetch real data
-      const [candles, quote] = await Promise.all([
-        finnhubAPI.getCandles(symbol, "D", from, to),
-        finnhubAPI.getQuote(symbol),
-      ]);
-
-      const formattedData = formatChartData(candles);
-      if (formattedData.length > 0) {
-        setChartData(formattedData);
-        setStockQuote(quote);
-        apiService.setApiStatus("online");
-        return; // Success - exit early
-      } else {
-        throw new Error("No data available");
-      }
+      setChartData(formattedCandles);
+      setStockQuote(demoData.quote);
     } catch (error) {
-      console.error("Error fetching stock data:", error);
+      console.log("Generating fallback data...");
 
       // Determine if we should use mock data
       if (apiService.shouldUseMockData(error as Error)) {
