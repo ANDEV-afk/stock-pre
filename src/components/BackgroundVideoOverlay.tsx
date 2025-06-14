@@ -49,16 +49,16 @@ const BackgroundVideoOverlay = ({
     // Initialize particles based on variant
     const initParticles = () => {
       particles.length = 0;
-      const particleCount = variant === "particles" ? 100 : 50;
+      const particleCount = variant === "particles" ? 150 : 80;
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 1,
-          vy: (Math.random() - 0.5) * 1,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.5 + 0.2,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          size: Math.random() * 4 + 1,
+          opacity: Math.random() * 0.6 + 0.3,
           color: getParticleColor(),
           type: getParticleType(),
         });
@@ -88,13 +88,32 @@ const BackgroundVideoOverlay = ({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle, index) => {
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        // Enhanced rolling motion
+        const time = Date.now() * 0.001;
+        particle.x += particle.vx + Math.sin(time + index) * 0.5;
+        particle.y += particle.vy + Math.cos(time + index) * 0.5;
 
-        // Bounce off edges
-        if (particle.x <= 0 || particle.x >= canvas.width) particle.vx *= -1;
-        if (particle.y <= 0 || particle.y >= canvas.height) particle.vy *= -1;
+        // Add spiral effect
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const angle = Math.atan2(particle.y - centerY, particle.x - centerX);
+        const distance = Math.sqrt(
+          Math.pow(particle.x - centerX, 2) + Math.pow(particle.y - centerY, 2),
+        );
+
+        // Gentle spiral motion
+        particle.x += Math.cos(angle + time * 0.1) * 0.2;
+        particle.y += Math.sin(angle + time * 0.1) * 0.2;
+
+        // Bounce off edges with rolling effect
+        if (particle.x <= 0 || particle.x >= canvas.width) {
+          particle.vx *= -0.8;
+          particle.vy += (Math.random() - 0.5) * 0.5;
+        }
+        if (particle.y <= 0 || particle.y >= canvas.height) {
+          particle.vy *= -0.8;
+          particle.vx += (Math.random() - 0.5) * 0.5;
+        }
 
         // Keep particles in bounds
         particle.x = Math.max(0, Math.min(canvas.width, particle.x));

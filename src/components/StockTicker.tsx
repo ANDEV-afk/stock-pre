@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
 interface StockTickerItem {
@@ -12,6 +13,7 @@ interface StockTickerItem {
 }
 
 const StockTicker = () => {
+  const { theme } = useTheme();
   const [stockData, setStockData] = useState<StockTickerItem[]>([]);
 
   // Real-time stock data simulation
@@ -153,12 +155,20 @@ const StockTicker = () => {
   const extendedStockData = [...stockData, ...stockData];
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-cyber-dark/95 via-cyber-black/90 to-cyber-dark/95 backdrop-blur-md border-y border-cyber-blue/20">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyber-blue/20 to-transparent animate-pulse" />
-        <div className="cyber-grid h-full w-full opacity-30" />
-      </div>
+    <div
+      className={`relative overflow-hidden backdrop-blur-md border-y ${
+        theme === "dark"
+          ? "bg-gradient-to-r from-cyber-dark/95 via-cyber-black/90 to-cyber-dark/95 border-cyber-blue/20"
+          : "bg-white/90 border-gray-200"
+      }`}
+    >
+      {/* Background Pattern - Only in dark mode */}
+      {theme === "dark" && (
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyber-blue/20 to-transparent animate-pulse" />
+          <div className="cyber-grid h-full w-full opacity-30" />
+        </div>
+      )}
 
       {/* Ticker Content */}
       <div className="relative z-10 py-4">
@@ -182,7 +192,11 @@ const StockTicker = () => {
             return (
               <motion.div
                 key={`${stock.symbol}-${index}`}
-                className="flex items-center space-x-3 px-6 py-2 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-cyber-blue/40 transition-all duration-300 group"
+                className={`flex items-center space-x-3 px-6 py-2 backdrop-blur-sm rounded-2xl border transition-all duration-300 group ${
+                  theme === "dark"
+                    ? "bg-white/5 border-white/10 hover:border-cyber-blue/40"
+                    : "bg-white/70 border-gray-200/50 hover:border-gray-300/60"
+                }`}
                 whileHover={{ scale: 1.05, y: -2 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -196,10 +210,18 @@ const StockTicker = () => {
                     </span>
                   </div>
                   <div>
-                    <span className="text-white font-semibold text-sm">
+                    <span
+                      className={`font-semibold text-sm ${
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       {stock.symbol}
                     </span>
-                    <div className="text-xs text-white/60 truncate max-w-[100px]">
+                    <div
+                      className={`text-xs truncate max-w-[100px] ${
+                        theme === "dark" ? "text-white/60" : "text-gray-500"
+                      }`}
+                    >
                       {stock.name}
                     </div>
                   </div>
@@ -208,13 +230,18 @@ const StockTicker = () => {
                 {/* Price */}
                 <div className="text-right">
                   <motion.div
-                    className="text-white font-bold text-lg"
+                    className={`font-bold text-lg ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}
                     key={stock.price}
                     initial={{
                       scale: 1.1,
                       color: isPositive ? "#10B981" : "#EF4444",
                     }}
-                    animate={{ scale: 1, color: "#ffffff" }}
+                    animate={{
+                      scale: 1,
+                      color: theme === "dark" ? "#ffffff" : "#111827",
+                    }}
                     transition={{ duration: 0.5 }}
                   >
                     ${stock.price.toFixed(2)}
@@ -239,7 +266,11 @@ const StockTicker = () => {
                       {isPositive ? "+" : ""}
                       {stock.change.toFixed(2)}
                     </span>
-                    <span className="text-white/60">
+                    <span
+                      className={
+                        theme === "dark" ? "text-white/60" : "text-gray-500"
+                      }
+                    >
                       ({isPositive ? "+" : ""}
                       {stock.changePercent.toFixed(2)}%)
                     </span>
@@ -252,12 +283,34 @@ const StockTicker = () => {
       </div>
 
       {/* Gradient Overlays for seamless effect */}
-      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-cyber-dark to-transparent z-20 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-cyber-dark to-transparent z-20 pointer-events-none" />
+      <div
+        className={`absolute left-0 top-0 bottom-0 w-20 z-20 pointer-events-none ${
+          theme === "dark"
+            ? "bg-gradient-to-r from-cyber-dark to-transparent"
+            : "bg-gradient-to-r from-white to-transparent"
+        }`}
+      />
+      <div
+        className={`absolute right-0 top-0 bottom-0 w-20 z-20 pointer-events-none ${
+          theme === "dark"
+            ? "bg-gradient-to-l from-cyber-dark to-transparent"
+            : "bg-gradient-to-l from-white to-transparent"
+        }`}
+      />
 
       {/* Live Indicator */}
-      <div className="absolute top-1 right-6 flex items-center space-x-2 text-xs text-cyber-green z-30 bg-cyber-dark/80 backdrop-blur-sm px-3 py-1 rounded-full border border-cyber-green/20">
-        <div className="w-2 h-2 bg-cyber-green rounded-full animate-pulse" />
+      <div
+        className={`absolute top-1 right-6 flex items-center space-x-2 text-xs z-30 backdrop-blur-sm px-3 py-1 rounded-full border ${
+          theme === "dark"
+            ? "text-cyber-green bg-cyber-dark/80 border-cyber-green/20"
+            : "text-green-600 bg-white/80 border-green-200"
+        }`}
+      >
+        <div
+          className={`w-2 h-2 rounded-full animate-pulse ${
+            theme === "dark" ? "bg-cyber-green" : "bg-green-500"
+          }`}
+        />
         <span className="font-medium">LIVE MARKET DATA</span>
       </div>
     </div>

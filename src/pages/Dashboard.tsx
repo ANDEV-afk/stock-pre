@@ -5,8 +5,9 @@ import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
 import IndicesDashboard from "@/components/IndicesDashboard";
 import ApiStatusNotification from "@/components/ApiStatusNotification";
-import PriceAlerts from "@/components/PriceAlerts";
-import WatchlistManager from "@/components/WatchlistManager";
+import PriceAlertModal from "@/components/PriceAlertModal";
+import WatchlistModal from "@/components/WatchlistModal";
+import AlertsSidebar from "@/components/AlertsSidebar";
 import TimeIntervalSelector from "@/components/TimeIntervalSelector";
 import StockNews from "@/components/StockNews";
 import Settings from "@/components/Settings";
@@ -20,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePayment } from "@/contexts/PaymentContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { formatChartData } from "@/lib/api";
 import { demoDataService } from "@/lib/demo-data-service";
 import { apiService } from "@/lib/api-service";
@@ -50,6 +52,7 @@ import {
   Trash2,
   ArrowUpRight,
   ArrowDownRight,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -120,6 +123,7 @@ const Dashboard = () => {
   const [positions, setPositions] = useState<Position[]>([]);
   const [showSettings, setShowSettings] = useState(false);
   const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
+  const [showWatchlistModal, setShowWatchlistModal] = useState(false);
   const [realtimeData, setRealtimeData] = useState<any[]>([]);
   const [marketIndicesData, setMarketIndicesData] = useState<any[]>([]);
 
@@ -129,6 +133,7 @@ const Dashboard = () => {
 
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   // Rotate through companies every 8 seconds
   useEffect(() => {
@@ -184,6 +189,9 @@ const Dashboard = () => {
       if (event.key === "Escape") {
         if (showPriceAlertModal) {
           setShowPriceAlertModal(false);
+        }
+        if (showWatchlistModal) {
+          setShowWatchlistModal(false);
         }
         if (showSettings) {
           setShowSettings(false);
@@ -471,7 +479,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cyber-black cyber-grid">
+    <div
+      className={cn(
+        "min-h-screen transition-all duration-500",
+        theme === "dark" ? "bg-cyber-black cyber-grid" : "bg-white",
+      )}
+    >
       <Navigation />
 
       <ApiStatusNotification
@@ -725,9 +738,6 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* Global Indices Dashboard */}
-        <IndicesDashboard />
-
         {/* Main Content Tabs */}
         <div className="mt-8">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -777,15 +787,15 @@ const Dashboard = () => {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-8">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main Chart */}
-                <div className="lg:col-span-2">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Main Chart - Takes up 3 columns */}
+                <div className="lg:col-span-3">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <div className="mb-4 flex items-center justify-between">
+                    <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div className="flex items-center space-x-3">
                         <h3 className="text-xl font-bold text-white">
                           {featuredCompanies[currentCompanyIndex].name}
@@ -842,15 +852,19 @@ const Dashboard = () => {
                   </motion.div>
                 </div>
 
-                {/* Sidebar */}
+                {/* Right Sidebar - Takes up 1 column */}
                 <div className="space-y-6">
+                  {/* Active Alerts Sidebar - Matching the design */}
+                  <AlertsSidebar
+                    onOpenAlertModal={() => setShowPriceAlertModal(true)}
+                    className="w-full"
+                  />
+
+                  {/* Risk Assessment - Below alerts */}
                   <RiskAssessment
                     symbol={selectedStock}
                     onSetPriceAlert={() => setShowPriceAlertModal(true)}
-                    onAddToWatchlist={() => {
-                      // Add to watchlist logic here
-                      console.log("Add to watchlist:", selectedStock);
-                    }}
+                    onAddToWatchlist={() => setShowWatchlistModal(true)}
                   />
                 </div>
               </div>
@@ -1181,18 +1195,121 @@ const Dashboard = () => {
                     showPredictions={true}
                   />
                 </div>
-                <div>
-                  <WatchlistManager />
+                <div className="space-y-4">
+                  {/* Quick Actions Sidebar */}
+                  <Card className="p-4 bg-cyber-dark/50 border-cyber-blue/20">
+                    <h3 className="text-lg font-semibold text-white mb-4">
+                      Quick Actions
+                    </h3>
+                    <div className="space-y-3">
+                      <Button
+                        onClick={() => setShowWatchlistModal(true)}
+                        className="w-full bg-cyber-green/20 hover:bg-cyber-green/30 text-cyber-green border border-cyber-green/30"
+                        variant="outline"
+                      >
+                        <Star className="h-4 w-4 mr-2" />
+                        Manage Watchlist
+                      </Button>
+                      <Button
+                        onClick={() => setShowPriceAlertModal(true)}
+                        className="w-full bg-cyber-blue/20 hover:bg-cyber-blue/30 text-cyber-blue border border-cyber-blue/30"
+                        variant="outline"
+                      >
+                        <Bell className="h-4 w-4 mr-2" />
+                        Set Price Alert
+                      </Button>
+                      <Button
+                        onClick={() => setActiveTab("news")}
+                        className="w-full bg-cyber-purple/20 hover:bg-cyber-purple/30 text-cyber-purple border border-cyber-purple/30"
+                        variant="outline"
+                      >
+                        <Newspaper className="h-4 w-4 mr-2" />
+                        Latest News
+                      </Button>
+                    </div>
+                  </Card>
+
+                  {/* Company Overview */}
+                  <Card className="p-4 bg-cyber-dark/50 border-cyber-purple/20">
+                    <h3 className="text-lg font-semibold text-white mb-3">
+                      {featuredCompanies[currentCompanyIndex].name}
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Symbol:</span>
+                        <span className="text-cyber-blue font-medium">
+                          {selectedStock}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Rotation:</span>
+                        <span className="text-cyber-green text-xs">
+                          Auto ({currentCompanyIndex + 1}/7)
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
               </div>
             </TabsContent>
 
-            <TabsContent value="watchlist">
-              <WatchlistManager />
+            <TabsContent value="watchlist" className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center"
+              >
+                <Card className="p-8 bg-cyber-dark/50 border-cyber-green/20">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-cyber-green/20 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
+                      <Eye className="h-8 w-8 text-cyber-green" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">
+                      Manage Your Watchlist
+                    </h3>
+                    <p className="text-white/60">
+                      Track your favorite stocks and monitor their performance
+                    </p>
+                    <Button
+                      onClick={() => setShowWatchlistModal(true)}
+                      className="bg-cyber-green hover:bg-cyber-green/80 text-black font-medium"
+                    >
+                      <Star className="h-4 w-4 mr-2" />
+                      Open Watchlist
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
             </TabsContent>
 
-            <TabsContent value="alerts">
-              <PriceAlerts />
+            <TabsContent value="alerts" className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center"
+              >
+                <Card className="p-8 bg-cyber-dark/50 border-cyber-blue/20">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-cyber-blue/20 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
+                      <Bell className="h-8 w-8 text-cyber-blue" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">
+                      Price Alerts
+                    </h3>
+                    <p className="text-white/60">
+                      Set up price alerts to stay informed about market
+                      movements
+                    </p>
+                    <Button
+                      onClick={() => setShowPriceAlertModal(true)}
+                      className="bg-cyber-blue hover:bg-cyber-blue/80 text-white font-medium"
+                    >
+                      <Bell className="h-4 w-4 mr-2" />
+                      Manage Alerts
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
             </TabsContent>
 
             <TabsContent value="news">
@@ -1273,59 +1390,42 @@ const Dashboard = () => {
         </motion.div>
       )}
 
+      {/* Floating Action Buttons for mobile/tablet */}
+      <div className="fixed bottom-6 right-6 lg:hidden flex flex-col space-y-3 z-40">
+        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+          <Button
+            onClick={() => setShowPriceAlertModal(true)}
+            className="w-12 h-12 rounded-full bg-cyber-blue hover:bg-cyber-blue/80 text-white shadow-lg"
+          >
+            <Bell className="h-5 w-5" />
+          </Button>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+          <Button
+            onClick={() => setShowWatchlistModal(true)}
+            className="w-12 h-12 rounded-full bg-cyber-green hover:bg-cyber-green/80 text-black shadow-lg"
+          >
+            <Star className="h-5 w-5" />
+          </Button>
+        </motion.div>
+      </div>
+
       {/* Settings Modal */}
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
 
       {/* Price Alert Modal */}
-      <AnimatePresence>
-        {showPriceAlertModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowPriceAlertModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="w-full max-w-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Card className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-xl border border-cyan-500/20 shadow-2xl">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-cyan-500/20 rounded-xl">
-                        <Bell className="h-6 w-6 text-cyan-400" />
-                      </div>
-                      <div>
-                        <h2 className="text-2xl font-bold text-white">
-                          Set Price Alert
-                        </h2>
-                        <p className="text-gray-400">
-                          Create alert for {selectedStock}
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowPriceAlertModal(false)}
-                      className="text-gray-400 hover:text-white"
-                    >
-                      <X className="h-5 w-5" />
-                    </Button>
-                  </div>
+      <PriceAlertModal
+        isOpen={showPriceAlertModal}
+        onClose={() => setShowPriceAlertModal(false)}
+        selectedSymbol={selectedStock}
+      />
 
-                  <PriceAlerts className="border-0 bg-transparent p-0" />
-                </div>
-              </Card>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Watchlist Modal */}
+      <WatchlistModal
+        isOpen={showWatchlistModal}
+        onClose={() => setShowWatchlistModal(false)}
+        selectedSymbol={selectedStock}
+      />
     </div>
   );
 };

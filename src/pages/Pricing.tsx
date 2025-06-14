@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
+import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +40,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const Pricing = () => {
+  const { theme } = useTheme();
   const [isAnnual, setIsAnnual] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);

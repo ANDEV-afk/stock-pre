@@ -1,345 +1,276 @@
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
-import { Card } from "@/components/ui/card";
+import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Users,
   Target,
-  Award,
   TrendingUp,
-  Globe,
+  Award,
   Shield,
   Zap,
-  Brain,
+  ArrowRight,
+  Globe,
+  BarChart3,
   Heart,
-  Lightbulb,
-  Rocket,
-  Star,
 } from "lucide-react";
 
 const About = () => {
-  const teamMembers = [
+  const { theme } = useTheme();
+  const stats = [
+    { label: "Active Users", value: "50K+", icon: Users },
+    { label: "Market Coverage", value: "Global", icon: Globe },
+    { label: "Uptime", value: "99.9%", icon: Shield },
+    { label: "Data Points", value: "1M+", icon: BarChart3 },
+  ];
+
+  const team = [
+    {
+      name: "Alex Thompson",
+      role: "CEO & Founder",
+      description: "Former Goldman Sachs analyst with 10+ years in fintech",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+    },
     {
       name: "Sarah Chen",
-      role: "CEO & Founder",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      bio: "Former Goldman Sachs VP with 15+ years in quantitative trading",
-    },
-    {
-      name: "Michael Rodriguez",
       role: "CTO",
+      description: "Ex-Google engineer specializing in AI and machine learning",
       image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      bio: "Ex-Google AI researcher specializing in financial machine learning",
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400",
     },
     {
-      name: "Emily Watson",
+      name: "Marcus Rivera",
       role: "Head of Product",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      bio: "Former Bloomberg product lead with expertise in trading platforms",
-    },
-    {
-      name: "David Kim",
-      role: "Chief Data Scientist",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      bio: "PhD in Quantitative Finance from MIT, published researcher",
-    },
-  ];
-
-  const milestones = [
-    {
-      year: "2019",
-      title: "Company Founded",
-      description: "Started with a vision to democratize AI trading",
-    },
-    {
-      year: "2020",
-      title: "Series A Funding",
-      description: "$10M raised from leading VCs",
-    },
-    {
-      year: "2021",
-      title: "100K Users",
-      description: "Reached 100,000 active traders",
-    },
-    {
-      year: "2022",
-      title: "AI Breakthrough",
-      description: "Launched revolutionary prediction engine",
-    },
-    {
-      year: "2023",
-      title: "Global Expansion",
-      description: "Expanded to 50+ countries worldwide",
-    },
-    {
-      year: "2024",
-      title: "1M+ Users",
-      description: "Over 1 million traders using our platform",
-    },
-  ];
-
-  const values = [
-    {
-      icon: Shield,
-      title: "Trust & Security",
       description:
-        "Bank-grade security and transparent algorithms you can trust",
-    },
-    {
-      icon: Lightbulb,
-      title: "Innovation",
-      description:
-        "Cutting-edge AI technology that evolves with market dynamics",
-    },
-    {
-      icon: Heart,
-      title: "Community",
-      description: "Building a supportive ecosystem for traders of all levels",
-    },
-    {
-      icon: Target,
-      title: "Results",
-      description: "Focused on delivering real, measurable trading outcomes",
+        "Product leader from Bloomberg with deep financial expertise",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-cyber-black cyber-grid">
+    <GlobalAnimatedBackground variant="minimal">
       <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-6">
-            About StockVision
-          </h1>
-          <p className="text-xl text-cyber-blue/80 max-w-3xl mx-auto">
-            We're on a mission to democratize AI-powered trading and make
-            sophisticated market analysis accessible to everyone.
-          </p>
-        </motion.div>
+      <div className="min-h-screen pt-20 pb-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Hero Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30">
+              About StockVision
+            </Badge>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
+              Democratizing
+              <span className="bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
+                {" "}
+                Financial Intelligence
+              </span>
+            </h1>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              We're building the future of stock market analysis with
+              cutting-edge AI, real-time data, and intuitive design to empower
+              every investor.
+            </p>
+          </motion.div>
 
-        {/* Mission & Vision */}
-        <section className="mb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Card className="p-8 bg-white/10 backdrop-blur-md border border-cyber-blue/20 h-full">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-3 bg-cyber-blue/20 rounded-xl">
-                    <Target className="h-6 w-6 text-cyber-blue" />
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          >
+            {stats.map((stat, index) => (
+              <Card
+                key={index}
+                className="bg-cyber-dark/50 border-cyber-blue/20 text-center p-6"
+              >
+                <CardContent className="p-0">
+                  <div className="p-3 bg-cyber-blue/20 rounded-full w-fit mx-auto mb-4">
+                    <stat.icon className="h-6 w-6 text-cyber-blue" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white">Our Mission</h2>
-                </div>
-                <p className="text-cyber-blue/80 text-lg leading-relaxed">
-                  To empower every trader with AI-driven insights that were once
-                  exclusive to Wall Street institutions. We believe that
-                  sophisticated market analysis should be accessible,
-                  affordable, and easy to understand.
-                </p>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <Card className="p-8 bg-white/10 backdrop-blur-md border border-cyber-purple/20 h-full">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-3 bg-cyber-purple/20 rounded-xl">
-                    <Rocket className="h-6 w-6 text-cyber-purple" />
+                  <div className="text-2xl font-bold text-white mb-1">
+                    {stat.value}
                   </div>
-                  <h2 className="text-2xl font-bold text-white">Our Vision</h2>
-                </div>
-                <p className="text-cyber-purple/80 text-lg leading-relaxed">
-                  To become the world's most trusted platform for AI-powered
-                  trading, creating a future where intelligent technology
-                  enhances human decision-making in financial markets.
-                </p>
+                  <div className="text-white/60 text-sm">{stat.label}</div>
+                </CardContent>
               </Card>
-            </motion.div>
-          </div>
-        </section>
+            ))}
+          </motion.div>
 
-        {/* Stats */}
-        <section className="mb-20">
+          {/* Mission Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="grid lg:grid-cols-2 gap-12 mb-16"
+          >
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-6">
+                Our Mission
+              </h2>
+              <p className="text-white/70 text-lg mb-6">
+                We believe that sophisticated financial analysis shouldn't be
+                limited to Wall Street. StockVision brings institutional-grade
+                tools and insights to individual investors, leveling the playing
+                field in financial markets.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Target className="h-5 w-5 text-cyber-green" />
+                  <span className="text-white">
+                    AI-powered market predictions
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <TrendingUp className="h-5 w-5 text-cyber-blue" />
+                  <span className="text-white">Real-time market data</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Shield className="h-5 w-5 text-cyber-purple" />
+                  <span className="text-white">Enterprise-grade security</span>
+                </div>
+              </div>
+            </div>
+            <Card className="bg-cyber-dark/50 border-cyber-green/20 p-6">
+              <CardHeader className="p-0 mb-4">
+                <div className="flex items-center space-x-3">
+                  <Award className="h-6 w-6 text-cyber-green" />
+                  <CardTitle className="text-white">Our Values</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 space-y-4">
+                <div>
+                  <h4 className="text-white font-semibold mb-2">
+                    Transparency
+                  </h4>
+                  <p className="text-white/60 text-sm">
+                    Clear, honest communication about our methods and
+                    limitations.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold mb-2">Innovation</h4>
+                  <p className="text-white/60 text-sm">
+                    Constantly pushing the boundaries of financial technology.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold mb-2">
+                    Accessibility
+                  </h4>
+                  <p className="text-white/60 text-sm">
+                    Making powerful tools available to everyone, not just
+                    professionals.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Team Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6"
+            className="mb-16"
           >
-            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-green/20 text-center">
-              <div className="text-3xl font-bold text-cyber-green mb-2">
-                1M+
-              </div>
-              <div className="text-white/70">Active Traders</div>
-            </Card>
-            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 text-center">
-              <div className="text-3xl font-bold text-cyber-blue mb-2">
-                $50B+
-              </div>
-              <div className="text-white/70">Assets Tracked</div>
-            </Card>
-            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-purple/20 text-center">
-              <div className="text-3xl font-bold text-cyber-purple mb-2">
-                50+
-              </div>
-              <div className="text-white/70">Countries</div>
-            </Card>
-            <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-yellow/20 text-center">
-              <div className="text-3xl font-bold text-cyber-yellow mb-2">
-                99.9%
-              </div>
-              <div className="text-white/70">Uptime</div>
-            </Card>
-          </motion.div>
-        </section>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Meet Our Team
+              </h2>
+              <p className="text-white/70 text-lg">
+                A diverse group of experts passionate about financial innovation
+              </p>
+            </div>
 
-        {/* Team */}
-        <section className="mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Meet Our Team
-            </h2>
-            <p className="text-cyber-blue/80 text-lg">
-              Industry veterans and AI experts working together to revolutionize
-              trading
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 + index * 0.1 }}
-              >
-                <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 text-center hover:border-cyber-blue/40 transition-all duration-300">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-                  />
-                  <h3 className="text-white font-bold text-lg mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-cyber-blue mb-3">{member.role}</p>
-                  <p className="text-white/70 text-sm">{member.bio}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Values */}
-        <section className="mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold text-white mb-4">Our Values</h2>
-            <p className="text-cyber-blue/80 text-lg">
-              The principles that guide everything we do
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + index * 0.1 }}
-              >
-                <Card className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 text-center hover:border-cyber-blue/40 transition-all duration-300 h-full">
-                  <div className="p-3 bg-cyber-blue/20 rounded-xl w-fit mx-auto mb-4">
-                    <value.icon className="h-6 w-6 text-cyber-blue" />
-                  </div>
-                  <h3 className="text-white font-bold text-lg mb-3">
-                    {value.title}
-                  </h3>
-                  <p className="text-white/70 text-sm">{value.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Timeline */}
-        <section>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold text-white mb-4">Our Journey</h2>
-            <p className="text-cyber-blue/80 text-lg">
-              Key milestones in our mission to transform trading
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyber-blue to-cyber-purple"></div>
-
-            <div className="space-y-8">
-              {milestones.map((milestone, index) => (
+            <div className="grid md:grid-cols-3 gap-8">
+              {team.map((member, index) => (
                 <motion.div
-                  key={milestone.year}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.8 + index * 0.2 }}
-                  className={cn(
-                    "relative flex items-center",
-                    index % 2 === 0 ? "md:justify-start" : "md:justify-end",
-                  )}
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + index * 0.1 }}
                 >
-                  <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-cyber-blue rounded-full border-4 border-cyber-black"></div>
-
-                  <Card
-                    className={cn(
-                      "ml-12 md:ml-0 p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20 max-w-md",
-                      index % 2 === 0 ? "md:mr-8" : "md:ml-8",
-                    )}
-                  >
-                    <div className="flex items-center space-x-3 mb-3">
-                      <Badge className="bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30">
-                        {milestone.year}
-                      </Badge>
-                      <h3 className="text-white font-bold">
-                        {milestone.title}
+                  <Card className="bg-cyber-dark/50 border-cyber-blue/20 hover:border-cyber-blue/40 transition-colors p-6 text-center">
+                    <CardContent className="p-0">
+                      <div className="w-24 h-24 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-white text-2xl font-bold">
+                          {member.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </span>
+                      </div>
+                      <h3 className="text-white font-semibold text-lg mb-1">
+                        {member.name}
                       </h3>
-                    </div>
-                    <p className="text-white/70">{milestone.description}</p>
+                      <p className="text-cyber-blue text-sm font-medium mb-3">
+                        {member.role}
+                      </p>
+                      <p className="text-white/60 text-sm">
+                        {member.description}
+                      </p>
+                    </CardContent>
                   </Card>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </section>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="text-center"
+          >
+            <Card className="bg-gradient-to-r from-cyber-blue/20 to-cyber-purple/20 border-cyber-blue/30 p-8">
+              <CardContent className="p-0">
+                <Heart className="h-12 w-12 text-cyber-red mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  Join Our Journey
+                </h3>
+                <p className="text-white/70 mb-6 max-w-2xl mx-auto">
+                  We're always looking for talented individuals who share our
+                  passion for democratizing financial technology. Come build the
+                  future with us.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    onClick={() => (window.location.href = "/careers")}
+                    className="bg-cyber-blue hover:bg-cyber-blue/80 text-white"
+                  >
+                    View Open Positions
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        "mailto:contact@stockvision.com?subject=General Inquiry&body=Hello, I would like to get in touch regarding your services.",
+                        "_blank",
+                      )
+                    }
+                    variant="outline"
+                    className="border-cyber-purple/30 text-cyber-purple hover:bg-cyber-purple/10"
+                  >
+                    Contact Us
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </GlobalAnimatedBackground>
   );
 };
 

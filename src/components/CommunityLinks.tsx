@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   MessageCircle,
   Github,
@@ -19,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const CommunityLinks = () => {
+  const { theme } = useTheme();
   const [showDemoModal, setShowDemoModal] = useState(false);
 
   const communityPlatforms = [
@@ -148,12 +150,28 @@ Best regards`;
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <Card className="p-8 bg-white/10 backdrop-blur-md border border-cyber-blue/20 max-w-4xl mx-auto">
+        <Card
+          className={`p-8 backdrop-blur-md max-w-4xl mx-auto ${
+            theme === "dark"
+              ? "bg-white/10 border border-cyber-blue/20"
+              : "bg-white/70 border border-gray-200/50 shadow-xl"
+          }`}
+        >
           <div className="mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-4">
+            <h2
+              className={`text-3xl font-bold mb-4 ${
+                theme === "dark"
+                  ? "bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent"
+                  : "bg-gradient-to-r from-blue-600 via-gray-900 to-purple-600 bg-clip-text text-transparent"
+              }`}
+            >
               Join Our Community
             </h2>
-            <p className="text-cyber-blue/80 max-w-2xl mx-auto mb-8">
+            <p
+              className={`max-w-2xl mx-auto mb-8 ${
+                theme === "dark" ? "text-cyber-blue/80" : "text-slate-600"
+              }`}
+            >
               Connect with 250K+ traders, share strategies, get real-time
               support, and access exclusive content across all our platforms.
             </p>
@@ -174,17 +192,22 @@ Best regards`;
                 >
                   <Button
                     className={cn(
-                      "bg-black border h-16 w-full flex items-center justify-start space-x-4 px-6",
+                      "border h-16 w-full flex items-center justify-start space-x-4 px-6",
                       platform.borderColor,
                       platform.textColor,
                       platform.hoverBg,
                       "transition-all duration-300 group",
+                      theme === "dark" ? "bg-black" : "bg-white",
                     )}
                     onClick={() => handleCommunityClick(platform)}
                   >
                     <Icon className="h-6 w-6 flex-shrink-0" />
                     <div className="text-left flex-1">
-                      <div className="font-semibold text-white group-hover:text-white">
+                      <div
+                        className={`font-semibold group-hover:text-white ${
+                          theme === "dark" ? "text-white" : "text-gray-900"
+                        }`}
+                      >
                         {platform.name}
                       </div>
                       <div className="text-sm opacity-80">
@@ -221,11 +244,17 @@ Best regards`;
                     className={cn(
                       "w-full h-12 flex items-center justify-center space-x-3 rounded-xl font-semibold",
                       button.variant === "primary" &&
-                        "bg-cyber-blue hover:bg-cyber-blue-dark text-white",
+                        (theme === "dark"
+                          ? "bg-cyber-blue hover:bg-cyber-blue-dark text-white"
+                          : "bg-blue-500 hover:bg-blue-600 text-white"),
                       button.variant === "secondary" &&
-                        "bg-cyber-green hover:bg-cyber-green-dark text-white",
+                        (theme === "dark"
+                          ? "bg-cyber-green hover:bg-cyber-green-dark text-white"
+                          : "bg-green-500 hover:bg-green-600 text-white"),
                       button.variant === "outline" &&
-                        "bg-black border border-cyber-blue/50 text-cyber-blue hover:bg-cyber-blue/10",
+                        (theme === "dark"
+                          ? "bg-black border border-cyber-blue/50 text-cyber-blue hover:bg-cyber-blue/10"
+                          : "bg-white border border-blue-300 text-blue-600 hover:bg-blue-50"),
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -237,23 +266,75 @@ Best regards`;
           </div>
 
           {/* Community Stats */}
-          <div className="mt-8 pt-6 border-t border-white/10">
+          <div
+            className={`mt-8 pt-6 border-t ${
+              theme === "dark" ? "border-white/10" : "border-gray-200"
+            }`}
+          >
             <div className="grid grid-cols-4 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-cyber-blue">250K+</div>
-                <div className="text-xs text-white/60">Members</div>
+                <div
+                  className={`text-2xl font-bold ${
+                    theme === "dark" ? "text-cyber-blue" : "text-blue-600"
+                  }`}
+                >
+                  250K+
+                </div>
+                <div
+                  className={`text-xs ${
+                    theme === "dark" ? "text-white/60" : "text-slate-500"
+                  }`}
+                >
+                  Members
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-cyber-green">2.5K</div>
-                <div className="text-xs text-white/60">Online Now</div>
+                <div
+                  className={`text-2xl font-bold ${
+                    theme === "dark" ? "text-cyber-green" : "text-green-600"
+                  }`}
+                >
+                  2.5K
+                </div>
+                <div
+                  className={`text-xs ${
+                    theme === "dark" ? "text-white/60" : "text-slate-500"
+                  }`}
+                >
+                  Online Now
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-cyber-purple">50K+</div>
-                <div className="text-xs text-white/60">Discussions</div>
+                <div
+                  className={`text-2xl font-bold ${
+                    theme === "dark" ? "text-cyber-purple" : "text-purple-600"
+                  }`}
+                >
+                  50K+
+                </div>
+                <div
+                  className={`text-xs ${
+                    theme === "dark" ? "text-white/60" : "text-slate-500"
+                  }`}
+                >
+                  Discussions
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-cyber-yellow">15K+</div>
-                <div className="text-xs text-white/60">Daily Messages</div>
+                <div
+                  className={`text-2xl font-bold ${
+                    theme === "dark" ? "text-cyber-yellow" : "text-yellow-600"
+                  }`}
+                >
+                  15K+
+                </div>
+                <div
+                  className={`text-xs ${
+                    theme === "dark" ? "text-white/60" : "text-slate-500"
+                  }`}
+                >
+                  Daily Messages
+                </div>
               </div>
             </div>
           </div>
@@ -331,25 +412,25 @@ Best regards`;
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     className="p-4 bg-white/5 border border-cyber-purple/20 rounded-xl cursor-pointer"
-                    onClick={() => (window.location.href = "/api")}
+                    onClick={() => (window.location.href = "/about")}
                   >
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="p-2 bg-cyber-purple/20 rounded-lg">
                         <Users className="h-5 w-5 text-cyber-purple" />
                       </div>
                       <h4 className="font-semibold text-white">
-                        API Playground
+                        About StockVision
                       </h4>
                     </div>
                     <p className="text-sm text-white/70 mb-3">
-                      Test our powerful APIs with live data and see integration
-                      examples.
+                      Learn more about our mission, team, and the technology
+                      behind our predictions.
                     </p>
                     <Button
                       size="sm"
                       className="bg-cyber-purple hover:bg-cyber-purple-dark text-white w-full"
                     >
-                      Explore API
+                      Learn More
                     </Button>
                   </motion.div>
                 </div>

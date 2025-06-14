@@ -52,7 +52,43 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Dark cyber theme colors
+        // Theme-aware cyber colors that change based on light/dark mode
+        "cyber-blue": {
+          DEFAULT: "hsl(var(--cyber-blue))",
+          dark: "hsl(var(--cyber-blue) / 0.8)",
+          light: "hsl(var(--cyber-blue) / 0.6)",
+        },
+        "cyber-purple": {
+          DEFAULT: "hsl(var(--cyber-purple))",
+          dark: "hsl(var(--cyber-purple) / 0.8)",
+          light: "hsl(var(--cyber-purple) / 0.6)",
+        },
+        "cyber-green": {
+          DEFAULT: "hsl(var(--cyber-green))",
+          dark: "hsl(var(--cyber-green) / 0.8)",
+          light: "hsl(var(--cyber-green) / 0.6)",
+        },
+        "cyber-red": {
+          DEFAULT: "hsl(var(--cyber-red))",
+          dark: "hsl(var(--cyber-red) / 0.8)",
+          light: "hsl(var(--cyber-red) / 0.6)",
+        },
+        "cyber-yellow": {
+          DEFAULT: "hsl(var(--cyber-yellow))",
+          dark: "hsl(var(--cyber-yellow) / 0.8)",
+          light: "hsl(var(--cyber-yellow) / 0.6)",
+        },
+        "cyber-black": {
+          DEFAULT: "hsl(var(--cyber-black))",
+          dark: "hsl(var(--cyber-black) / 0.8)",
+          light: "hsl(var(--cyber-black) / 0.6)",
+        },
+        "cyber-dark": {
+          DEFAULT: "hsl(var(--cyber-dark))",
+          dark: "hsl(var(--cyber-dark) / 0.8)",
+          light: "hsl(var(--cyber-dark) / 0.6)",
+        },
+        // Static cyber theme colors (for fallback)
         cyber: {
           black: "#000000",
           dark: "#0a0a0a",

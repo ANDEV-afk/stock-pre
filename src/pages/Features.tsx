@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
+import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +26,7 @@ import {
 import { Link } from "react-router-dom";
 
 const Features = () => {
+  const { theme } = useTheme();
   const coreFeatures = [
     {
       icon: Brain,

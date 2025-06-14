@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   Zap,
   Play,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 
 const FeatureShowcase = () => {
+  const { theme } = useTheme();
   const newFeatures = [
     {
       icon: TrendingUp,
@@ -65,7 +67,9 @@ const FeatureShowcase = () => {
   ];
 
   return (
-    <section className="py-16 relative">
+    <section
+      className={`py-16 relative ${theme === "light" ? "bg-white" : ""}`}
+    >
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -85,16 +89,32 @@ const FeatureShowcase = () => {
             ease: "easeInOut",
           }}
         >
-          <Badge className="bg-gradient-to-r from-cyber-green to-cyber-blue text-white px-4 py-2 text-lg">
+          <Badge
+            className={
+              theme === "dark"
+                ? "bg-gradient-to-r from-cyber-green to-cyber-blue text-white px-4 py-2 text-lg"
+                : "bg-gradient-to-r from-green-500 to-blue-600 text-white px-4 py-2 text-lg"
+            }
+          >
             <Zap className="h-4 w-4 mr-2" />
             Latest Updates
           </Badge>
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-4">
+        <h2
+          className={`text-3xl md:text-4xl font-bold mb-4 ${
+            theme === "dark"
+              ? "bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent"
+              : "bg-gradient-to-r from-blue-600 via-gray-900 to-purple-600 bg-clip-text text-transparent"
+          }`}
+        >
           Enhanced Trading Experience
         </h2>
-        <p className="text-xl text-cyber-blue/80 max-w-2xl mx-auto">
+        <p
+          className={`text-xl max-w-2xl mx-auto ${
+            theme === "dark" ? "text-cyber-blue/80" : "text-slate-600"
+          }`}
+        >
           Discover our latest features designed to provide you with the most
           immersive and intuitive trading platform
         </p>
@@ -115,7 +135,13 @@ const FeatureShowcase = () => {
               whileHover={{ y: -8, scale: 1.02 }}
               className="group"
             >
-              <Card className="p-6 bg-white/5 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 h-full relative overflow-hidden group-hover:shadow-xl group-hover:shadow-cyber-blue/25">
+              <Card
+                className={`p-6 backdrop-blur-md transition-all duration-300 h-full relative overflow-hidden ${
+                  theme === "dark"
+                    ? "bg-white/5 border border-cyber-blue/20 hover:border-cyber-blue/40 group-hover:shadow-xl group-hover:shadow-cyber-blue/25"
+                    : "bg-white/70 border border-gray-200/50 hover:border-gray-300/60 shadow-lg hover:shadow-xl group-hover:shadow-blue-500/25"
+                }`}
+              >
                 {/* Animated Background Gradient */}
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
@@ -150,11 +176,21 @@ const FeatureShowcase = () => {
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyber-blue transition-colors duration-300">
+                  <h3
+                    className={`text-xl font-bold mb-3 transition-colors duration-300 ${
+                      theme === "dark"
+                        ? "text-white group-hover:text-cyber-blue"
+                        : "text-gray-900 group-hover:text-blue-600"
+                    }`}
+                  >
                     {feature.title}
                   </h3>
 
-                  <p className="text-white/80 leading-relaxed">
+                  <p
+                    className={`leading-relaxed ${
+                      theme === "dark" ? "text-white/80" : "text-slate-600"
+                    }`}
+                  >
                     {feature.description}
                   </p>
                 </div>
@@ -180,13 +216,19 @@ const FeatureShowcase = () => {
         viewport={{ once: true }}
         className="text-center mt-16"
       >
-        <div className="inline-flex items-center space-x-2 text-cyber-blue/80 mb-4">
+        <div
+          className={`inline-flex items-center space-x-2 mb-4 ${
+            theme === "dark" ? "text-cyber-blue/80" : "text-blue-600"
+          }`}
+        >
           <Smartphone className="h-5 w-5" />
           <span>Experience these features across all devices</span>
         </div>
 
         <motion.p
-          className="text-lg text-white/70"
+          className={`text-lg ${
+            theme === "dark" ? "text-white/70" : "text-slate-600"
+          }`}
           animate={{
             opacity: [0.7, 1, 0.7],
           }}
