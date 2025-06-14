@@ -14,6 +14,7 @@ import StockPrediction from "@/pages/StockPrediction";
 import Features from "@/pages/Features";
 import Pricing from "@/pages/Pricing";
 import API from "@/pages/API";
+import Support from "@/pages/Support";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/features" element={<Features />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/api" element={<API />} />
+              <Route path="/support" element={<Support />} />
               <Route
                 path="/dashboard"
                 element={
