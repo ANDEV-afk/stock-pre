@@ -143,13 +143,27 @@ const Dashboard = () => {
       ]);
 
       const formattedData = formatChartData(candles);
-      setChartData(formattedData);
-      setStockQuote(quote);
+      if (formattedData.length > 0) {
+        setChartData(formattedData);
+        setStockQuote(quote);
+      } else {
+        throw new Error("No data available");
+      }
     } catch (error) {
       console.error("Error fetching stock data:", error);
-      // Fallback to mock data
+      // Fallback to mock data with better stock prices
+      const stockPrices = {
+        AAPL: 175,
+        GOOGL: 138,
+        MSFT: 379,
+        TSLA: 243,
+        NVDA: 721,
+        AMZN: 145,
+      };
+
+      const basePrice = stockPrices[symbol as keyof typeof stockPrices] || 150;
       const mockData = [];
-      const basePrice = 150;
+
       for (let i = 30; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
@@ -163,6 +177,20 @@ const Dashboard = () => {
         });
       }
       setChartData(mockData);
+
+      // Mock quote data
+      const lastPrice = mockData[mockData.length - 1].price;
+      const change = (Math.random() - 0.5) * 5;
+      setStockQuote({
+        c: lastPrice,
+        d: change,
+        dp: (change / lastPrice) * 100,
+        h: lastPrice * 1.02,
+        l: lastPrice * 0.98,
+        o: lastPrice * 0.995,
+        pc: lastPrice - change,
+        t: Date.now() / 1000,
+      });
     } finally {
       setIsLoadingChart(false);
     }

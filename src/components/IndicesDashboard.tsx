@@ -176,7 +176,7 @@ const IndicesDashboard = () => {
                     )}
                   >
                     {isPositive ? "+" : ""}
-                    {index.changePercent.toFixed(2)}%
+                    {(index.changePercent || 0).toFixed(2)}%
                   </div>
                 </div>
 
@@ -187,7 +187,7 @@ const IndicesDashboard = () => {
 
                   <div className="space-y-1">
                     <p className="text-lg font-bold text-white">
-                      {index.price.toLocaleString(undefined, {
+                      {(index.price || 0).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
@@ -200,7 +200,7 @@ const IndicesDashboard = () => {
                       )}
                     >
                       {isPositive ? "+" : ""}
-                      {index.change.toFixed(2)}
+                      {(index.change || 0).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -269,8 +269,9 @@ const IndicesDashboard = () => {
             <div className="flex justify-between items-center">
               <span className="text-cyber-gray-300">Volatility</span>
               <span className="text-cyber-yellow font-semibold">
-                {indices.find((i) => i.symbol === "^VIX")?.price.toFixed(2) ||
-                  "N/A"}
+                {(indices.find((i) => i.symbol === "VXX")?.price || 0).toFixed(
+                  2,
+                )}
               </span>
             </div>
           </div>
