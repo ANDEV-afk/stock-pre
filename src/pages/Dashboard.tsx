@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
 import IndicesDashboard from "@/components/IndicesDashboard";
+import ApiStatusNotification from "@/components/ApiStatusNotification";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,6 +29,11 @@ const Dashboard = () => {
   const [chartData, setChartData] = useState<any[]>([]);
   const [isLoadingChart, setIsLoadingChart] = useState(false);
   const [stockQuote, setStockQuote] = useState<any>(null);
+  const [showApiNotification, setShowApiNotification] = useState(false);
+  const [apiNotification, setApiNotification] = useState({
+    type: "info" as const,
+    message: "",
+  });
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -151,6 +157,29 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching stock data:", error);
+
+      // Show API notification
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes("Access denied")) {
+        setApiNotification({
+          type: "limited",
+          message:
+            "Using demo data due to API limitations. Real data requires premium subscription.",
+        });
+      } else if (errorMessage.includes("Rate limit")) {
+        setApiNotification({
+          type: "limited",
+          message:
+            "API rate limit reached. Using cached data. Try again in a few minutes.",
+        });
+      } else {
+        setApiNotification({
+          type: "error",
+          message: "Unable to fetch live data. Showing demo data instead.",
+        });
+      }
+      setShowApiNotification(true);
+
       // Fallback to mock data with better stock prices
       const stockPrices = {
         AAPL: 175,
@@ -203,6 +232,13 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-cyber-black cyber-grid">
       <Navigation />
+
+      <ApiStatusNotification
+        show={showApiNotification}
+        type={apiNotification.type}
+        message={apiNotification.message}
+        onDismiss={() => setShowApiNotification(false)}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
