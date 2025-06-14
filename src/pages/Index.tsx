@@ -123,7 +123,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cyber-black cyber-grid relative">
       <Navigation />
 
       {/* Hero Section */}
