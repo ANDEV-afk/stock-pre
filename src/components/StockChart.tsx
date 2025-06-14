@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
-} from "recharts";
+} from "./ChartWrapper";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
@@ -228,22 +228,8 @@ const StockChart = ({
                   stroke="#e8e8ed"
                   vertical={false}
                 />
-                <XAxis
-                  dataKey="date"
-                  stroke="#86868b"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fontSize: 12, fill: "#86868b" }}
-                />
-                <YAxis
-                  stroke="#86868b"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  domain={["dataMin - 5", "dataMax + 5"]}
-                  tick={{ fontSize: 12, fill: "#86868b" }}
-                />
+                <XAxis dataKey="date" />
+                <YAxis />
                 <Tooltip content={<CustomTooltip />} />
 
                 {/* Historical Data */}
@@ -276,22 +262,8 @@ const StockChart = ({
                   stroke="#e8e8ed"
                   vertical={false}
                 />
-                <XAxis
-                  dataKey="date"
-                  stroke="#86868b"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fontSize: 12, fill: "#86868b" }}
-                />
-                <YAxis
-                  stroke="#86868b"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  domain={["dataMin - 5", "dataMax + 5"]}
-                  tick={{ fontSize: 12, fill: "#86868b" }}
-                />
+                <XAxis dataKey="date" />
+                <YAxis />
                 <Tooltip content={<CustomTooltip />} />
 
                 {/* Historical Line */}
