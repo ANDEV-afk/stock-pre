@@ -234,6 +234,7 @@ const StockChart = ({
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  tick={{ fontSize: 12, fill: "#86868b" }}
                 />
                 <YAxis
                   stroke="#86868b"
@@ -241,6 +242,7 @@ const StockChart = ({
                   tickLine={false}
                   axisLine={false}
                   domain={["dataMin - 5", "dataMax + 5"]}
+                  tick={{ fontSize: 12, fill: "#86868b" }}
                 />
                 <Tooltip content={<CustomTooltip />} />
 
@@ -280,6 +282,7 @@ const StockChart = ({
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  tick={{ fontSize: 12, fill: "#86868b" }}
                 />
                 <YAxis
                   stroke="#86868b"
@@ -287,6 +290,7 @@ const StockChart = ({
                   tickLine={false}
                   axisLine={false}
                   domain={["dataMin - 5", "dataMax + 5"]}
+                  tick={{ fontSize: 12, fill: "#86868b" }}
                 />
                 <Tooltip content={<CustomTooltip />} />
 
