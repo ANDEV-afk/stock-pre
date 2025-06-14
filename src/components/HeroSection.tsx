@@ -17,7 +17,7 @@ const HeroSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const handleStockSearch = (symbol: string) => {
-    navigate(`/predict?symbol=${symbol}`);
+    navigate(`/markets?search=${symbol}`);
   };
 
   const features = [

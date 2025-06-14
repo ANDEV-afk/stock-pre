@@ -1,0 +1,377 @@
+/* Enhanced Cyber Grid Animation */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 122, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 122, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: cyber-grid-move 20s linear infinite;
+}
+
+@keyframes cyber-grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+/* Enhanced Cyber Grid with pulse effect */
+.cyber-grid-pulse {
+  background-image:
+    linear-gradient(rgba(0, 122, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 122, 255, 0.2) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: cyber-grid-pulse 4s ease-in-out infinite;
+}
+
+@keyframes cyber-grid-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    background-size: 40px 40px;
+  }
+  50% {
+    opacity: 0.7;
+    background-size: 60px 60px;
+  }
+}
+
+/* Floating Animation */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Glow Effects */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(0, 122, 255, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-blue:hover {
+  box-shadow: 0 0 30px rgba(0, 122, 255, 0.8);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-purple:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.8);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-green:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+}
+
+/* Stock Ticker Animations */
+.stock-ticker-scroll {
+  animation: ticker-scroll 60s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Data Matrix Animation */
+.matrix-rain {
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-rain::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    rgba(0, 255, 100, 0.03) 50%,
+    transparent 100%
+  );
+  animation: matrix-scan 3s linear infinite;
+}
+
+@keyframes matrix-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Pulse Animations */
+.pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(0, 122, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 122, 255, 1);
+  }
+}
+
+/* Shimmer Effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Rotating Border */
+.rotating-border {
+  position: relative;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #007aff, #a855f7, #10b981, #007aff);
+  background-size: 400% 400%;
+  animation: rotating-border 4s ease infinite;
+}
+
+@keyframes rotating-border {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Text Glow Animation */
+.text-glow {
+  animation: text-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow {
+  from {
+    text-shadow: 0 0 10px rgba(0, 122, 255, 0.8);
+  }
+  to {
+    text-shadow:
+      0 0 20px rgba(0, 122, 255, 0.8),
+      0 0 30px rgba(0, 122, 255, 0.6),
+      0 0 40px rgba(0, 122, 255, 0.4);
+  }
+}
+
+/* Particle Float */
+.particle-float {
+  animation: particle-float 8s ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-15px) translateX(10px);
+  }
+}
+
+/* Chart Line Animation */
+.chart-line-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: chart-line-draw 2s ease-out forwards;
+}
+
+@keyframes chart-line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Hover Scale */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Fade In Up */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fade-in-up 0.6s ease forwards;
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide In Left */
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slide-in-left 0.6s ease forwards;
+}
+
+@keyframes slide-in-left {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide In Right */
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  animation: slide-in-right 0.6s ease forwards;
+}
+
+@keyframes slide-in-right {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Bounce In */
+.bounce-in {
+  animation: bounce-in 0.8s ease;
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Typewriter Effect */
+.typewriter {
+  overflow: hidden;
+  border-right: 3px solid rgba(0, 122, 255, 0.8);
+  white-space: nowrap;
+  animation:
+    typewriter 4s steps(40, end),
+    blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgba(0, 122, 255, 0.8);
+  }
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .cyber-grid {
+    background-size: 30px 30px;
+  }
+
+  .glow-blue,
+  .glow-purple,
+  .glow-green {
+    box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+  }
+}
+
+/* Performance Optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}

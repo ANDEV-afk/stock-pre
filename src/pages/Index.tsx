@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import StockTicker from "@/components/StockTicker";
+import VideoTutorials from "@/components/VideoTutorials";
+import FeatureShowcase from "@/components/FeatureShowcase";
+import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
+import BackgroundVideoOverlay from "@/components/BackgroundVideoOverlay";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -12,6 +17,9 @@ import {
   Star,
   CheckCircle,
   Zap,
+  TrendingUp,
+  BarChart3,
+  DollarSign,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -123,20 +131,61 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-cyber-black cyber-grid relative">
+    <GlobalAnimatedBackground variant="home" className="bg-cyber-black">
+      <BackgroundVideoOverlay variant="financial" opacity={0.08} />
       <Navigation />
 
       {/* Hero Section */}
       <HeroSection />
 
+      {/* Stock Ticker */}
+      <StockTicker />
+
+      {/* Feature Showcase Section */}
+      <FeatureShowcase />
+
+      {/* Video Tutorials Section */}
+      <VideoTutorials />
+
       {/* Benefits Section */}
-      <section className="py-24 bg-gradient-to-br from-cyber-black via-cyber-dark to-cyber-black relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cyber-blue/30 rounded-full blur-3xl animate-pulse" />
-          <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-cyber-purple/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
+      <section className="py-24 relative overflow-hidden">
+        {/* Enhanced Animated background elements */}
+        <div className="absolute inset-0 opacity-30">
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-cyber-blue/30 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-cyber-purple/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 0.8, 1],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2,
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyber-green/15 rounded-full blur-3xl"
+            animate={{
+              rotate: 360,
+              scale: [1, 1.3, 1],
+            }}
+            transition={{
+              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+              scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+            }}
           />
         </div>
 
@@ -201,11 +250,91 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Statistics Counter Section */}
+      <section className="py-16 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              {
+                value: "2.5M+",
+                label: "Active Traders",
+                icon: Users,
+                color: "cyber-blue",
+              },
+              {
+                value: "95.7%",
+                label: "Accuracy Rate",
+                icon: TrendingUp,
+                color: "cyber-green",
+              },
+              {
+                value: "$50B+",
+                label: "Volume Traded",
+                icon: DollarSign,
+                color: "cyber-yellow",
+              },
+              {
+                value: "150+",
+                label: "Markets Covered",
+                icon: BarChart3,
+                color: "cyber-purple",
+              },
+            ].map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="text-center"
+                >
+                  <motion.div
+                    className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-${stat.color} to-${stat.color}-dark rounded-2xl flex items-center justify-center shadow-lg`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon className="h-8 w-8 text-white" />
+                  </motion.div>
+                  <motion.div
+                    className={`text-3xl md:text-4xl font-bold text-${stat.color} mb-2`}
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <p className="text-white/80 font-medium">{stat.label}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
-      <section className="py-24 bg-gradient-to-br from-cyber-dark via-cyber-black to-cyber-dark relative">
-        {/* Animated background grid */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="cyber-grid h-full w-full" />
+      <section className="py-24 relative overflow-hidden">
+        {/* Enhanced Animated background */}
+        <div className="absolute inset-0 opacity-15">
+          <div className="cyber-grid h-full w-full animate-pulse" />
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 20% 80%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                               radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+                               radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
+            }}
+            animate={{
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -269,13 +398,46 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-24 bg-gradient-to-br from-cyber-black via-cyber-dark to-cyber-black relative overflow-hidden">
-        {/* Floating elements */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Enhanced Floating elements */}
         <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-32 left-1/4 w-64 h-64 bg-cyber-blue/20 rounded-full blur-3xl animate-float" />
-          <div
-            className="absolute bottom-32 right-1/4 w-80 h-80 bg-cyber-purple/15 rounded-full blur-3xl animate-float"
-            style={{ animationDelay: "2s" }}
+          <motion.div
+            className="absolute top-32 left-1/4 w-64 h-64 bg-cyber-blue/20 rounded-full blur-3xl"
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 20, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-32 right-1/4 w-80 h-80 bg-cyber-purple/15 rounded-full blur-3xl"
+            animate={{
+              y: [0, 40, 0],
+              x: [0, -25, 0],
+              scale: [1, 0.9, 1],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-cyber-green/10 rounded-full blur-3xl"
+            animate={{
+              rotate: 360,
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              rotate: { duration: 25, repeat: Infinity, ease: "linear" },
+              scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+            }}
           />
         </div>
 
@@ -363,42 +525,83 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-apple-blue to-apple-purple">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-24 relative overflow-hidden">
+        {/* Enhanced CTA Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyber-blue/20 via-cyber-purple/30 to-cyber-green/20" />
+        <motion.div
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              "radial-gradient(circle at 0% 0%, rgba(0, 122, 255, 0.3) 0%, transparent 50%)",
+              "radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.3) 0%, transparent 50%)",
+              "radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.3) 0%, transparent 50%)",
+              "radial-gradient(circle at 100% 0%, rgba(0, 122, 255, 0.3) 0%, transparent 50%)",
+            ],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-cyber-blue to-white bg-clip-text text-transparent mb-6"
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
               Ready to Transform Your Trading?
-            </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            </motion.h2>
+            <p className="text-xl text-cyber-blue/90 mb-8 max-w-2xl mx-auto">
               Join thousands of successful traders who trust StockVision for
               their investment decisions.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register">
-                <Button
-                  size="lg"
-                  className="bg-white text-apple-blue hover:bg-apple-gray-100 px-8 py-4 text-lg font-semibold rounded-2xl shadow-apple-lg transition-all duration-300"
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <Zap className="mr-2 h-5 w-5" />
-                  Start Free Trial
-                </Button>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-lg hover:shadow-cyber-blue/25 transition-all duration-300"
+                  >
+                    <Zap className="mr-2 h-5 w-5" />
+                    Start Free Trial
+                  </Button>
+                </motion.div>
               </Link>
 
-              <Link to="/predict">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-white text-white hover:bg-white hover:text-apple-blue px-8 py-4 text-lg font-semibold rounded-2xl transition-all duration-300"
+              <Link to="/markets">
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  Try Demo
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-2 border-cyber-blue/50 text-cyber-blue hover:bg-cyber-blue/10 hover:border-cyber-blue px-8 py-4 text-lg font-semibold rounded-2xl transition-all duration-300"
+                  >
+                    Explore Markets
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </motion.div>
               </Link>
             </div>
           </motion.div>
@@ -406,18 +609,41 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-cyber-dark to-cyber-black border-t border-cyber-blue/20 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gradient-to-br from-cyber-dark/95 to-cyber-black border-t border-cyber-blue/20 text-white py-12 relative">
+        {/* Footer Background Animation */}
+        <div className="absolute inset-0 opacity-10">
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              background: [
+                "radial-gradient(circle at 20% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 40%)",
+                "radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%)",
+                "radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%)",
+              ],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
+              <motion.div
+                className="flex items-center space-x-2 mb-4"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="bg-gradient-to-br from-cyber-blue to-cyber-purple p-2 rounded-xl shadow-lg shadow-cyber-blue/25">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
                   StockVision
                 </span>
-              </div>
+              </motion.div>
               <p className="text-cyber-blue/80 mb-4 max-w-md">
                 Empowering traders with AI-driven stock predictions and
                 real-time market insights.
@@ -433,7 +659,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/features"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300"
                   >
                     Features
                   </Link>
@@ -441,7 +667,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/pricing"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300"
                   >
                     Pricing
                   </Link>
@@ -449,7 +675,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/api"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300"
                   >
                     API
                   </Link>
@@ -457,7 +683,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/support"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300"
                   >
                     Support
                   </Link>
@@ -471,7 +697,11 @@ const Index = () => {
                 <li>
                   <Link
                     to="/about"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300 block py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "/about";
+                    }}
                   >
                     About
                   </Link>
@@ -479,7 +709,11 @@ const Index = () => {
                 <li>
                   <Link
                     to="/careers"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300 block py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "/careers";
+                    }}
                   >
                     Careers
                   </Link>
@@ -487,7 +721,11 @@ const Index = () => {
                 <li>
                   <Link
                     to="/privacy"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300 block py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "/privacy";
+                    }}
                   >
                     Privacy
                   </Link>
@@ -495,7 +733,11 @@ const Index = () => {
                 <li>
                   <Link
                     to="/terms"
-                    className="hover:text-white hover:text-cyber-blue transition-colors"
+                    className="hover:text-cyber-blue transition-colors duration-300 block py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "/terms";
+                    }}
                   >
                     Terms
                   </Link>
@@ -505,7 +747,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </GlobalAnimatedBackground>
   );
 };
 

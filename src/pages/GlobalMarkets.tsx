@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
+import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
+import BackgroundVideoOverlay from "@/components/BackgroundVideoOverlay";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,10 +33,13 @@ import {
   Zap,
   LineChart,
   X,
+  CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePayment } from "@/contexts/PaymentContext";
 import { RealCompany, TOP_50_COMPANIES } from "@/lib/companies-data";
 import CompanyLogo from "@/components/CompanyLogo";
+import ProfessionalChart from "@/components/ProfessionalChart";
 
 interface TopCompany extends RealCompany {}
 
@@ -74,6 +80,8 @@ interface TopCompany {
 }
 
 const GlobalMarkets = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedSector, setSelectedSector] = useState("all");
@@ -90,9 +98,42 @@ const GlobalMarkets = () => {
   const [marketCapFilter, setMarketCapFilter] = useState("all");
   const [priceRangeFilter, setPriceRangeFilter] = useState("all");
   const [performanceFilter, setPerformanceFilter] = useState("all");
+  const [highlightedCompany, setHighlightedCompany] = useState<string | null>(
+    null,
+  );
 
   const [marketIndices, setMarketIndices] = useState<MarketIndex[]>([]);
   const [topCompanies, setTopCompanies] = useState<TopCompany[]>([]);
+
+  // Payment context
+  const { isPaid } = usePayment();
+
+  // Handle search parameter from URL (when coming from home page search)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchParam = urlParams.get("search");
+    if (searchParam) {
+      setSearchQuery(searchParam);
+      setHighlightedCompany(searchParam.toUpperCase());
+      // Remove search param from URL after processing
+      navigate("/markets", { replace: true });
+
+      // Scroll to highlighted company after a short delay
+      setTimeout(() => {
+        const element = document.getElementById(
+          `company-${searchParam.toUpperCase()}`,
+        );
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 1000);
+
+      // Remove highlighting after 5 seconds
+      setTimeout(() => {
+        setHighlightedCompany(null);
+      }, 5000);
+    }
+  }, [location.search, navigate]);
 
   const regions = [
     { id: "all", label: "All Regions", count: 0 },
@@ -489,7 +530,8 @@ const GlobalMarkets = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cyber-black cyber-grid">
+    <GlobalAnimatedBackground variant="markets" className="bg-cyber-black">
+      <BackgroundVideoOverlay variant="abstract" opacity={0.05} />
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -917,10 +959,15 @@ const GlobalMarkets = () => {
                       return (
                         <motion.tr
                           key={company.id}
+                          id={`company-${company.symbol}`}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.02 }}
-                          className="border-b border-white/5 hover:bg-white/5 transition-all duration-200 group"
+                          className={cn(
+                            "border-b border-white/5 hover:bg-white/5 transition-all duration-200 group",
+                            highlightedCompany === company.symbol &&
+                              "bg-cyber-blue/20 ring-2 ring-cyber-blue/50 animate-pulse",
+                          )}
                         >
                           <td className="py-4 px-2">
                             <span className="text-cyber-blue font-medium">
@@ -1087,6 +1134,7 @@ const GlobalMarkets = () => {
                                     ? "text-cyber-yellow"
                                     : "text-white/70 hover:text-cyber-yellow",
                                 )}
+                                title="Add to Watchlist"
                               >
                                 <Star
                                   className={cn(
@@ -1100,9 +1148,20 @@ const GlobalMarkets = () => {
                                 variant="ghost"
                                 className="text-cyber-blue hover:text-cyber-blue-light p-2"
                                 onClick={() => openChart(company)}
-                                title="View Line Chart"
+                                title="View Chart"
                               >
                                 <LineChart className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="text-cyber-purple hover:text-cyber-purple-light p-2"
+                                onClick={() =>
+                                  (window.location.href = `/prediction/${company.symbol}`)
+                                }
+                                title="AI Prediction"
+                              >
+                                <Activity className="h-4 w-4" />
                               </Button>
                             </div>
                           </td>
@@ -1198,50 +1257,15 @@ const GlobalMarkets = () => {
                 </div>
               </div>
 
-              {/* Simple Line Chart Visualization */}
-              <div className="bg-white/5 rounded-2xl p-6">
-                <h4 className="text-lg font-semibold text-white mb-4">
-                  30-Day Price Chart
-                </h4>
-                <div className="relative h-64 bg-cyber-black/50 rounded-xl p-4">
-                  <div className="flex items-center justify-center h-full">
-                    <div className="text-center">
-                      <LineChart className="h-16 w-16 text-cyber-blue mx-auto mb-4" />
-                      <p className="text-white font-medium">
-                        Interactive Chart Coming Soon
-                      </p>
-                      <p className="text-cyber-blue/70 text-sm mt-2">
-                        Line chart visualization for{" "}
-                        {selectedCompanyForChart.symbol} will be available in
-                        the next update
-                      </p>
-                      <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
-                        <div className="text-center">
-                          <p className="text-cyber-blue/70">Volume</p>
-                          <p className="text-white font-medium">
-                            {(selectedCompanyForChart.volume / 1000000).toFixed(
-                              1,
-                            )}
-                            M
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-cyber-blue/70">P/E Ratio</p>
-                          <p className="text-white font-medium">
-                            {selectedCompanyForChart.pe.toFixed(1)}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-cyber-blue/70">Beta</p>
-                          <p className="text-white font-medium">
-                            {selectedCompanyForChart.beta.toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Professional Trading Chart */}
+              <ProfessionalChart
+                symbol={selectedCompanyForChart.symbol}
+                companyName={selectedCompanyForChart.name}
+                currentPrice={selectedCompanyForChart.price}
+                change={selectedCompanyForChart.change}
+                changePercent={selectedCompanyForChart.changePercent}
+                className="bg-transparent border-0"
+              />
 
               {/* Action Buttons */}
               <div className="flex justify-center space-x-4 mt-6">
@@ -1261,16 +1285,34 @@ const GlobalMarkets = () => {
                     : "Add to"}{" "}
                   Watchlist
                 </Button>
-                <Button className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300">
+                <Button
+                  onClick={() => {
+                    // Redirect to AI prediction page
+                    window.location.href = `/prediction/${selectedCompanyForChart.symbol}`;
+                  }}
+                  className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300"
+                >
                   <TrendingUp className="mr-2 h-5 w-5" />
-                  View Full Analysis
+                  AI Prediction Analysis
                 </Button>
+                {!isPaid && (
+                  <Button
+                    onClick={() =>
+                      (window.location.href =
+                        "/payment?plan=Professional&price=29&billing=monthly&source=chart_analysis")
+                    }
+                    className="bg-gradient-to-r from-cyber-green to-cyber-purple hover:from-cyber-green-dark hover:to-cyber-purple-dark text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300"
+                  >
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Upgrade for More Features
+                  </Button>
+                )}
               </div>
             </motion.div>
           </motion.div>
         )}
       </div>
-    </div>
+    </GlobalAnimatedBackground>
   );
 };
 

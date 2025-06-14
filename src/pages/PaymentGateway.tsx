@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePayment } from "@/contexts/PaymentContext";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,7 @@ interface PlanDetails {
 }
 
 const PaymentGateway = () => {
+  const { processPayment } = usePayment();
   const [selectedMethod, setSelectedMethod] = useState<string>("card");
   const [selectedPlan] = useState<PlanDetails>({
     name: "Pro Plan",
@@ -82,6 +84,22 @@ const PaymentGateway = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+
+    // Simulate payment processing delay
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Process payment through context
+    const success = processPayment(selectedPlan.name, selectedPlan.price);
+
+    if (success) {
+      setPaymentSuccess(true);
+    }
+
+    setIsProcessing(false);
+  };
 
   const paymentMethods: PaymentMethod[] = [
     {
@@ -127,16 +145,6 @@ const PaymentGateway = () => {
       fees: "1%",
     },
   ];
-
-  const handlePayment = async () => {
-    setIsProcessing(true);
-
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    setIsProcessing(false);
-    setPaymentSuccess(true);
-  };
 
   const formatCardNumber = (value: string) => {
     const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
@@ -217,13 +225,23 @@ const PaymentGateway = () => {
                 </div>
               </div>
 
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
-                onClick={() => (window.location.href = "/dashboard")}
-              >
-                Go to Dashboard
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
+                  onClick={() => (window.location.href = "/dashboard")}
+                >
+                  Go to Dashboard
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-cyber-green text-cyber-green hover:bg-cyber-green/10"
+                  onClick={() => (window.location.href = "/markets")}
+                >
+                  Explore Markets
+                </Button>
+              </div>
             </Card>
           </motion.div>
         </div>

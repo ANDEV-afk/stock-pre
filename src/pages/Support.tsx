@@ -60,6 +60,8 @@ const Support = () => {
   const [showDemoModal, setShowDemoModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const searchSuggestionsData = [
     "How to set up price alerts",
@@ -1183,8 +1185,21 @@ const Support = () => {
                 >
                   <Button
                     size="lg"
-                    onClick={() => setShowDemoModal(true)}
+                    onClick={() => setShowContactModal(true)}
                     className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
+                  >
+                    <Headphones className="mr-2 h-5 w-5" />
+                    Get in Touch
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    onClick={() => setShowDemoModal(true)}
+                    className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white"
                   >
                     <MessageCircle className="mr-2 h-5 w-5" />
                     Contact Sales
@@ -1208,6 +1223,134 @@ const Support = () => {
           </Card>
         </motion.div>
       </div>
+
+      {/* Enhanced Contact Options Modal */}
+      {showContactModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowContactModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-cyber-dark border border-cyber-blue/30 rounded-3xl p-8 max-w-2xl w-full shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-white">
+                Get in Touch with Our Support Team
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowContactModal(false)}
+                className="text-white/70 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <p className="text-cyber-blue/80 mb-8 text-center">
+              Choose your preferred way to connect with us. Our team is ready to
+              help you with any questions.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {contactOptions.map((option, index) => {
+                const Icon = option.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative"
+                  >
+                    {option.popular && (
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                        <Badge className="bg-cyber-green text-black px-3 py-1 text-xs font-semibold">
+                          Most Popular
+                        </Badge>
+                      </div>
+                    )}
+                    <Card
+                      className={`p-6 bg-cyber-dark border-2 hover:bg-cyber-dark/80 transition-all duration-300 cursor-pointer group relative ${
+                        option.popular
+                          ? "border-cyber-green"
+                          : "border-gray-600"
+                      }`}
+                      onClick={() => {
+                        if (option.title === "Live Chat") {
+                          alert("Live chat feature opening...");
+                        } else if (option.title === "Video Call") {
+                          window.open(
+                            "https://calendly.com/stockvision/video-demo",
+                            "_blank",
+                          );
+                        } else if (option.title === "Email Support") {
+                          window.open(
+                            "mailto:support@stockvision.ai?subject=Support Request",
+                            "_blank",
+                          );
+                        } else if (option.title === "Phone Support") {
+                          window.open("tel:+1-800-STOCK-AI", "_blank");
+                        }
+                      }}
+                    >
+                      <div className="text-center">
+                        <div
+                          className={`p-3 bg-${option.color}/20 rounded-xl w-fit mx-auto mb-4 group-hover:bg-${option.color}/30 transition-colors`}
+                        >
+                          <Icon
+                            className={`h-8 w-8 text-${option.color === "cyber-yellow" ? "amber-500" : option.color}`}
+                          />
+                        </div>
+                        <h4 className="text-xl font-bold text-white mb-2">
+                          {option.title}
+                        </h4>
+                        <p className="text-cyber-blue text-sm mb-4">
+                          {option.description}
+                        </p>
+                        <div className="space-y-2 mb-6">
+                          <Badge
+                            className={`bg-${option.color === "cyber-yellow" ? "amber" : option.color}/20 text-${option.color === "cyber-yellow" ? "amber-300" : option.color} border-${option.color === "cyber-yellow" ? "amber" : option.color}/30`}
+                          >
+                            {option.availability}
+                          </Badge>
+                          <p className="text-gray-400 text-sm">
+                            Response time: {option.responseTime}
+                          </p>
+                        </div>
+                        <Button
+                          className={`w-full ${
+                            option.color === "cyber-blue"
+                              ? "bg-cyber-blue hover:bg-cyber-blue-dark"
+                              : option.color === "cyber-green"
+                                ? "bg-cyber-green hover:bg-cyber-green-dark"
+                                : option.color === "cyber-purple"
+                                  ? "bg-cyber-purple hover:bg-cyber-purple-dark"
+                                  : "bg-amber-600 hover:bg-amber-700"
+                          } text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-105`}
+                        >
+                          {option.cta}
+                        </Button>
+                      </div>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 text-center">
+              <p className="text-cyber-blue/60 text-sm">
+                Our support team is available Monday-Friday, 9 AM - 6 PM EST
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Demo Contact Modal */}
       <DemoContactModal

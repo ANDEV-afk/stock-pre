@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePayment } from "@/contexts/PaymentContext";
 import { formatChartData } from "@/lib/api";
 import { demoDataService } from "@/lib/demo-data-service";
 import { apiService } from "@/lib/api-service";
@@ -106,6 +107,9 @@ const Dashboard = () => {
   const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
   const [realtimeData, setRealtimeData] = useState<any[]>([]);
   const [marketIndicesData, setMarketIndicesData] = useState<any[]>([]);
+
+  // Payment context
+  const { isPaid, currentPlan } = usePayment();
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   const { isAuthenticated } = useAuth();
@@ -1109,6 +1113,77 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </div>
+
+      {/* Upgrade Prompt - Only show for free users */}
+      {!isPaid && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-4 right-4 z-40"
+        >
+          <Card className="p-4 bg-gradient-to-r from-cyber-blue/20 to-cyber-purple/20 backdrop-blur-md border border-cyber-blue/30 shadow-2xl max-w-sm">
+            <div className="flex items-start space-x-3">
+              <div className="p-2 bg-cyber-blue/20 rounded-xl">
+                <Target className="h-5 w-5 text-cyber-blue" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-white text-sm mb-1">
+                  Unlock Advanced Features
+                </h4>
+                <p className="text-cyber-blue/80 text-xs mb-3">
+                  Get real-time alerts, unlimited watchlists, and advanced
+                  analytics
+                </p>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      (window.location.href =
+                        "/payment?plan=Professional&price=29&billing=monthly&source=dashboard")
+                    }
+                    className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white text-xs px-3 py-1"
+                  >
+                    Upgrade Now
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-white/60 hover:text-white text-xs px-2 py-1"
+                  >
+                    Later
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Pro User Status - Show for paid users */}
+      {isPaid && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-4 right-4 z-40"
+        >
+          <Card className="p-4 bg-gradient-to-r from-cyber-green/20 to-cyber-blue/20 backdrop-blur-md border border-cyber-green/30 shadow-2xl max-w-sm">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-cyber-green/20 rounded-xl">
+                <CheckCircle className="h-5 w-5 text-cyber-green" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-white text-sm mb-1">
+                  {currentPlan.charAt(0).toUpperCase() + currentPlan.slice(1)}{" "}
+                  Plan Active
+                </h4>
+                <p className="text-cyber-green/80 text-xs">
+                  All premium features unlocked!
+                </p>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Settings Modal */}
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
