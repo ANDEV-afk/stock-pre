@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePayment } from "@/contexts/PaymentContext";
+import { useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -54,19 +55,65 @@ interface PlanDetails {
 
 const PaymentGateway = () => {
   const { processPayment } = usePayment();
+  const location = useLocation();
   const [selectedMethod, setSelectedMethod] = useState<string>("card");
+
+  // Read URL parameters to get plan details
+  const urlParams = new URLSearchParams(location.search);
+  const planName = urlParams.get("plan") || "Professional";
+  const planPrice = parseFloat(urlParams.get("price") || "29");
+  const planBilling = urlParams.get("billing") || "monthly";
+  const planCategory = urlParams.get("category") || "predictions";
+  const planSource = urlParams.get("source") || "general";
+
+  // Get plan features based on plan name
+  const getPlanFeatures = (plan: string) => {
+    switch (plan.toLowerCase()) {
+      case "basic":
+        return [
+          "50 stock predictions per day",
+          "Basic technical analysis",
+          "Email alerts",
+          "Mobile app access",
+          "Community support",
+        ];
+      case "pro":
+      case "professional":
+        return [
+          "Unlimited AI predictions",
+          "Advanced market analysis",
+          "Real-time alerts",
+          "Full course library access",
+          "Priority support",
+          "API access",
+        ];
+      case "elite":
+      case "premium":
+        return [
+          "Custom AI model training",
+          "Portfolio optimization",
+          "1-on-1 expert consultations",
+          "White-label access",
+          "Advanced risk modeling",
+          "Institutional-grade features",
+        ];
+      default:
+        return [
+          "Real-time market data",
+          "Advanced AI predictions",
+          "Portfolio analytics",
+          "Priority support",
+          "Mobile app access",
+        ];
+    }
+  };
+
   const [selectedPlan] = useState<PlanDetails>({
-    name: "Pro Plan",
-    price: 49,
-    originalPrice: 59,
-    period: "month",
-    features: [
-      "Real-time market data",
-      "Advanced AI predictions",
-      "Portfolio analytics",
-      "Priority support",
-      "Mobile app access",
-    ],
+    name: `${planName} Plan`,
+    price: planPrice,
+    originalPrice: planPrice > 0 ? Math.round(planPrice * 1.2) : undefined,
+    period: planBilling === "yearly" ? "year" : "month",
+    features: getPlanFeatures(planName),
   });
 
   const [cardForm, setCardForm] = useState({

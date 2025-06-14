@@ -77,12 +77,12 @@ const VideoTutorials = () => {
   const tutorials: VideoTutorial[] = [
     {
       id: "1",
-      title: "Complete Stock Market Course for Beginners",
+      title: "Stock Market Fundamentals",
       description:
-        "Master the fundamentals of stock trading, market mechanics, portfolio building, and risk management from scratch.",
+        "Essential concepts every trader needs to know. Learn market basics, chart reading, and portfolio building in digestible segments.",
       thumbnail:
         "https://images.pexels.com/photos/5849556/pexels-photo-5849556.jpeg",
-      duration: "2:45:30",
+      duration: "45:30",
       views: "2.3M",
       rating: 4.9,
       level: "Beginner",
@@ -92,21 +92,20 @@ const VideoTutorials = () => {
       videoUrl:
         "https://videos.pexels.com/video-files/7652692/7652692-hd_1280_720_25fps.mp4",
       chapters: [
-        { title: "Introduction to Stock Markets", time: "0:00" },
-        { title: "How to Read Stock Charts", time: "25:30" },
-        { title: "Building Your First Portfolio", time: "58:15" },
-        { title: "Risk Management Basics", time: "1:42:20" },
-        { title: "Getting Started with Trading", time: "2:18:45" },
+        { title: "Market Overview", time: "0:00" },
+        { title: "Reading Charts", time: "12:30" },
+        { title: "Portfolio Basics", time: "28:15" },
+        { title: "Getting Started", time: "38:45" },
       ],
     },
     {
       id: "2",
-      title: "Advanced Technical Analysis Masterclass",
+      title: "Technical Analysis Essentials",
       description:
-        "Deep dive into candlestick patterns, support/resistance levels, technical indicators, and advanced chart analysis techniques.",
+        "Master key technical indicators, chart patterns, and analysis techniques used by professional traders daily.",
       thumbnail:
         "https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg",
-      duration: "3:12:45",
+      duration: "52:15",
       views: "1.8M",
       rating: 4.8,
       level: "Intermediate",
@@ -116,21 +115,20 @@ const VideoTutorials = () => {
       videoUrl:
         "https://videos.pexels.com/video-files/8369984/8369984-sd_426_240_30fps.mp4",
       chapters: [
-        { title: "Candlestick Pattern Recognition", time: "0:00" },
-        { title: "Support and Resistance Levels", time: "42:15" },
-        { title: "Moving Averages and Trends", time: "1:28:30" },
-        { title: "RSI and MACD Indicators", time: "2:05:10" },
-        { title: "Advanced Chart Patterns", time: "2:48:20" },
+        { title: "Candlestick Patterns", time: "0:00" },
+        { title: "Support & Resistance", time: "18:15" },
+        { title: "Moving Averages", time: "32:30" },
+        { title: "RSI & MACD", time: "45:10" },
       ],
     },
     {
       id: "3",
-      title: "AI-Powered Trading: Complete Guide",
+      title: "AI Trading Introduction",
       description:
-        "Learn how artificial intelligence and machine learning are revolutionizing trading strategies and investment decisions.",
+        "Discover how AI and machine learning enhance trading decisions with practical examples and real-world applications.",
       thumbnail:
         "https://images.pexels.com/photos/5849556/pexels-photo-5849556.jpeg",
-      duration: "1:58:45",
+      duration: "38:45",
       views: "956K",
       rating: 4.7,
       level: "Advanced",
@@ -140,20 +138,20 @@ const VideoTutorials = () => {
       videoUrl:
         "https://videos.pexels.com/video-files/7578640/7578640-sd_426_226_25fps.mp4",
       chapters: [
-        { title: "Introduction to AI Trading", time: "0:00" },
-        { title: "Machine Learning Basics", time: "32:20" },
-        { title: "Building Trading Algorithms", time: "1:08:15" },
-        { title: "Backtesting and Optimization", time: "1:35:30" },
+        { title: "AI Trading Basics", time: "0:00" },
+        { title: "ML Applications", time: "15:20" },
+        { title: "Algorithm Setup", time: "28:15" },
+        { title: "Testing Strategies", time: "35:30" },
       ],
     },
     {
       id: "4",
-      title: "Complete Risk Management Course",
+      title: "Risk Management Fundamentals",
       description:
-        "Essential risk management techniques, position sizing, stop-loss strategies, and portfolio protection methods.",
+        "Protect your capital with proven risk management techniques, position sizing, and portfolio protection strategies.",
       thumbnail:
         "https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg",
-      duration: "2:22:15",
+      duration: "42:15",
       views: "1.2M",
       rating: 4.9,
       level: "Intermediate",
@@ -163,20 +161,20 @@ const VideoTutorials = () => {
       videoUrl:
         "https://videos.pexels.com/video-files/8970369/8970369-sd_360_640_30fps.mp4",
       chapters: [
-        { title: "Understanding Risk Types", time: "0:00" },
-        { title: "Position Sizing Strategies", time: "38:45" },
-        { title: "Stop-Loss Techniques", time: "1:12:30" },
-        { title: "Portfolio Diversification", time: "1:48:20" },
+        { title: "Risk Types", time: "0:00" },
+        { title: "Position Sizing", time: "14:45" },
+        { title: "Stop-Loss Setup", time: "28:30" },
+        { title: "Diversification", time: "38:20" },
       ],
     },
     {
       id: "5",
-      title: "Professional Day Trading Strategies",
+      title: "Day Trading Strategies",
       description:
-        "Proven day trading strategies, scalping techniques, momentum trading, and real-world case studies with performance metrics.",
+        "Professional day trading techniques including scalping, momentum trading, and psychological discipline.",
       thumbnail:
         "https://images.pexels.com/photos/5849556/pexels-photo-5849556.jpeg",
-      duration: "4:18:30",
+      duration: "58:30",
       views: "3.1M",
       rating: 4.8,
       level: "Advanced",
@@ -186,22 +184,20 @@ const VideoTutorials = () => {
       videoUrl:
         "https://videos.pexels.com/video-files/7652692/7652692-hd_1280_720_25fps.mp4",
       chapters: [
-        { title: "Day Trading Fundamentals", time: "0:00" },
-        { title: "Pre-Market Analysis", time: "52:15" },
-        { title: "Scalping Strategies", time: "1:45:30" },
-        { title: "Momentum Trading", time: "2:38:45" },
-        { title: "Risk Management for Day Traders", time: "3:25:10" },
-        { title: "Psychology and Discipline", time: "3:58:20" },
+        { title: "Day Trading Setup", time: "0:00" },
+        { title: "Pre-Market Analysis", time: "16:15" },
+        { title: "Scalping Techniques", time: "32:30" },
+        { title: "Psychology & Discipline", time: "48:20" },
       ],
     },
     {
       id: "6",
-      title: "Options Trading Mastery Course",
+      title: "Options Trading Basics",
       description:
-        "Complete guide to options trading including strategies, Greeks, spreads, and advanced techniques with real examples.",
+        "Understanding options, Greeks, basic strategies, and how to profit from options trading with practical examples.",
       thumbnail:
         "https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg",
-      duration: "3:45:20",
+      duration: "48:20",
       views: "1.5M",
       rating: 4.6,
       level: "Intermediate",
@@ -212,10 +208,9 @@ const VideoTutorials = () => {
         "https://videos.pexels.com/video-files/8369984/8369984-sd_426_240_30fps.mp4",
       chapters: [
         { title: "Options Basics", time: "0:00" },
-        { title: "Understanding the Greeks", time: "48:30" },
-        { title: "Basic Options Strategies", time: "1:35:15" },
-        { title: "Advanced Spreads", time: "2:28:40" },
-        { title: "Options Trading Psychology", time: "3:12:55" },
+        { title: "The Greeks", time: "18:30" },
+        { title: "Basic Strategies", time: "32:15" },
+        { title: "Trading Psychology", time: "42:55" },
       ],
     },
   ];
@@ -538,9 +533,9 @@ const VideoTutorials = () => {
               trading courses, AI-powered predictions, and exclusive content
             </p>
 
-            {/* Pricing Categories Grid */}
+            {/* Pricing Categories Grid - Basic, Pro, Elite Structure */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* Basic Predictions */}
+              {/* Basic Plan */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -551,13 +546,15 @@ const VideoTutorials = () => {
                 <div className="p-3 bg-cyber-green/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-green/25 transition-all duration-300">
                   <TrendingUp className="h-6 w-6 text-cyber-green" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">
+                <h4 className="text-xl font-bold text-white mb-2 text-center">
                   Basic Predictions
                 </h4>
-                <div className="text-3xl font-bold text-cyber-green mb-1">
-                  $9.99
+                <div className="text-center mb-4">
+                  <div className="text-3xl font-bold text-cyber-green mb-1">
+                    $9.99
+                  </div>
+                  <div className="text-sm text-white/60">per month</div>
                 </div>
-                <div className="text-sm text-white/60 mb-4">per month</div>
                 <ul className="text-sm text-white/80 space-y-2 mb-6">
                   <li>• 50 stock predictions/day</li>
                   <li>• Basic technical analysis</li>
@@ -576,7 +573,7 @@ const VideoTutorials = () => {
                 </Button>
               </motion.div>
 
-              {/* Pro Predictions */}
+              {/* Pro Plan - Most Popular */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -592,13 +589,15 @@ const VideoTutorials = () => {
                 <div className="p-3 bg-cyber-blue/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
                   <BarChart3 className="h-6 w-6 text-cyber-blue" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">
+                <h4 className="text-xl font-bold text-white mb-2 text-center">
                   Pro Predictions
                 </h4>
-                <div className="text-3xl font-bold text-cyber-blue mb-1">
-                  $29.99
+                <div className="text-center mb-4">
+                  <div className="text-3xl font-bold text-cyber-blue mb-1">
+                    $29.99
+                  </div>
+                  <div className="text-sm text-white/60">per month</div>
                 </div>
-                <div className="text-sm text-white/60 mb-4">per month</div>
                 <ul className="text-sm text-white/80 space-y-2 mb-6">
                   <li>• Unlimited AI predictions</li>
                   <li>• Advanced market analysis</li>
@@ -610,7 +609,7 @@ const VideoTutorials = () => {
                 <Button
                   onClick={() =>
                     (window.location.href =
-                      "/payment?plan=Professional&price=29.99&billing=monthly&category=predictions&source=video_library")
+                      "/payment?plan=Pro&price=29.99&billing=monthly&category=predictions&source=video_library")
                   }
                   className="w-full bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white rounded-xl transition-all duration-300"
                 >
@@ -619,7 +618,7 @@ const VideoTutorials = () => {
                 </Button>
               </motion.div>
 
-              {/* Elite Predictions */}
+              {/* Elite Plan */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -630,13 +629,15 @@ const VideoTutorials = () => {
                 <div className="p-3 bg-cyber-purple/20 rounded-xl w-fit mx-auto mb-4 group-hover:shadow-lg group-hover:shadow-cyber-purple/25 transition-all duration-300">
                   <Brain className="h-6 w-6 text-cyber-purple" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">
+                <h4 className="text-xl font-bold text-white mb-2 text-center">
                   Elite Predictions
                 </h4>
-                <div className="text-3xl font-bold text-cyber-purple mb-1">
-                  $99.99
+                <div className="text-center mb-4">
+                  <div className="text-3xl font-bold text-cyber-purple mb-1">
+                    $99.99
+                  </div>
+                  <div className="text-sm text-white/60">per month</div>
                 </div>
-                <div className="text-sm text-white/60 mb-4">per month</div>
                 <ul className="text-sm text-white/80 space-y-2 mb-6">
                   <li>• Custom AI model training</li>
                   <li>• Portfolio optimization</li>

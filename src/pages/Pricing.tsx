@@ -107,84 +107,83 @@ const Pricing = () => {
 
   const plans = [
     {
-      name: "Starter",
-      monthlyPrice: 0,
-      annualPrice: 0,
-      originalMonthlyPrice: null,
-      originalAnnualPrice: null,
+      name: "Basic",
+      monthlyPrice: 9.99,
+      annualPrice: 7.99, // 20% discount
+      originalMonthlyPrice: 19.99,
+      originalAnnualPrice: 15.99,
       description: "Perfect for beginners exploring stock trading",
       icon: Sparkles,
-      color: "cyber-blue",
+      color: "cyber-green",
       popular: false,
       features: [
-        "5 stock predictions per day",
-        "Basic charts and analytics",
-        "Community support",
+        "50 stock predictions per day",
+        "Basic technical analysis",
+        "Email alerts",
         "Mobile app access",
-        "Email notifications",
+        "Community support",
         "Basic watchlists",
       ],
       limits: [
-        "Limited to 3 watchlists",
-        "No real-time alerts",
-        "No API access",
+        "Limited to 5 watchlists",
+        "Basic chart indicators",
         "Community support only",
       ],
-      cta: "Get Started Free",
-      highlight: "No credit card required",
+      cta: "Start Basic Plan",
+      highlight: "Great for beginners",
     },
     {
-      name: "Professional",
-      monthlyPrice: 29,
-      annualPrice: 23.2, // 20% discount
-      originalMonthlyPrice: 49,
-      originalAnnualPrice: 39.2,
+      name: "Pro",
+      monthlyPrice: 29.99,
+      annualPrice: 23.99, // 20% discount
+      originalMonthlyPrice: 49.99,
+      originalAnnualPrice: 39.99,
       description: "For serious traders and active investors",
       icon: Star,
-      color: "cyber-purple",
+      color: "cyber-blue",
       popular: true,
       features: [
-        "Unlimited predictions",
-        "Advanced AI models",
+        "Unlimited AI predictions",
+        "Advanced market analysis",
         "Real-time alerts",
+        "Full course library access",
         "Priority support",
-        "API access (10K calls/month)",
-        "Custom indicators",
+        "API access",
         "Advanced charting tools",
         "Portfolio analytics",
         "Price alert automation",
         "Technical analysis suite",
       ],
       limits: [],
-      cta: "Start 14-Day Free Trial",
+      cta: "Upgrade to Pro",
       highlight: "Most popular choice",
     },
     {
-      name: "Enterprise",
-      monthlyPrice: null,
-      annualPrice: null,
-      originalMonthlyPrice: null,
-      originalAnnualPrice: null,
-      description: "For institutions and professional teams",
+      name: "Elite",
+      monthlyPrice: 99.99,
+      annualPrice: 79.99, // 20% discount
+      originalMonthlyPrice: 149.99,
+      originalAnnualPrice: 119.99,
+      description: "For professional traders and institutions",
       icon: Crown,
-      color: "cyber-green",
+      color: "cyber-purple",
       popular: false,
       features: [
-        "White-label solution",
-        "Custom AI training",
+        "Custom AI model training",
+        "Portfolio optimization",
+        "1-on-1 expert consultations",
+        "White-label access",
+        "Advanced risk modeling",
+        "Institutional-grade features",
         "Dedicated support team",
         "SLA guarantees (99.9% uptime)",
         "Unlimited API access",
         "Advanced integrations",
-        "Compliance features",
-        "Multi-user management",
-        "Custom reporting",
-        "On-premise deployment",
         "24/7 phone support",
       ],
       limits: [],
-      cta: "Contact Sales",
-      highlight: "Custom implementation",
+      cta: "Get Elite Access",
+      highlight: "Premium features",
     },
   ];
 
@@ -195,328 +194,274 @@ const Pricing = () => {
       items: [
         {
           name: "AI-Powered Predictions",
-          starter: "Basic",
+          basic: "Standard",
           pro: "Advanced",
-          enterprise: "Custom Models",
+          elite: "Custom Models",
         },
         {
           name: "Confidence Intervals",
-          starter: false,
+          basic: false,
           pro: true,
-          enterprise: true,
+          elite: true,
         },
         {
-          name: "Pattern Recognition",
-          starter: false,
+          name: "Risk Assessment",
+          basic: false,
           pro: true,
-          enterprise: true,
+          elite: true,
         },
         {
           name: "Sentiment Analysis",
-          starter: false,
+          basic: false,
           pro: true,
-          enterprise: true,
+          elite: true,
         },
         {
-          name: "Custom AI Training",
-          starter: false,
+          name: "Custom Model Training",
+          basic: false,
           pro: false,
-          enterprise: true,
+          elite: true,
         },
       ],
     },
     {
-      category: "Analytics & Tools",
+      category: "Data & Analytics",
       icon: BarChart3,
       items: [
         {
-          name: "Technical Indicators",
-          starter: "5",
-          pro: "50+",
-          enterprise: "Unlimited",
-        },
-        {
-          name: "Chart Types",
-          starter: "3",
-          pro: "10+",
-          enterprise: "Unlimited",
+          name: "Predictions per Day",
+          basic: "50",
+          pro: "Unlimited",
+          elite: "Unlimited",
         },
         {
           name: "Watchlists",
-          starter: "3",
+          basic: "5",
           pro: "Unlimited",
-          enterprise: "Unlimited",
+          elite: "Unlimited",
         },
         {
-          name: "Price Alerts",
-          starter: false,
+          name: "Portfolio Tracking",
+          basic: "3",
           pro: "Unlimited",
-          enterprise: "Unlimited",
+          elite: "Unlimited",
         },
         {
-          name: "Portfolio Analytics",
-          starter: false,
+          name: "Advanced Charts",
+          basic: false,
           pro: true,
-          enterprise: true,
+          elite: true,
+        },
+        {
+          name: "Custom Indicators",
+          basic: false,
+          pro: true,
+          elite: true,
         },
       ],
     },
     {
-      category: "Data & Access",
+      category: "Market Data",
       icon: Globe,
       items: [
         {
           name: "Real-time Data",
-          starter: "Delayed 15min",
+          basic: "Delayed 15min",
           pro: "Real-time",
-          enterprise: "Real-time",
+          elite: "Real-time",
         },
         {
           name: "Historical Data",
-          starter: "1 year",
-          pro: "10 years",
-          enterprise: "Unlimited",
+          basic: "1 year",
+          pro: "5 years",
+          elite: "Unlimited",
         },
         {
           name: "Global Markets",
-          starter: "US only",
-          pro: "Global",
-          enterprise: "Global + Custom",
+          basic: "US only",
+          pro: "US + Europe",
+          elite: "Worldwide",
         },
         {
-          name: "API Access",
-          starter: false,
-          pro: "10K/month",
-          enterprise: "Unlimited",
+          name: "After-hours Trading",
+          basic: false,
+          pro: true,
+          elite: true,
         },
         {
-          name: "Data Export",
-          starter: false,
-          pro: "CSV",
-          enterprise: "All Formats",
+          name: "Options Data",
+          basic: false,
+          pro: true,
+          elite: true,
         },
       ],
     },
     {
-      category: "Support & Services",
+      category: "Support & Features",
       icon: Users,
       items: [
         {
-          name: "Support Type",
-          starter: "Community",
-          pro: "Email + Chat",
-          enterprise: "Dedicated Team",
+          name: "Support Level",
+          basic: "Community",
+          pro: "Priority Email",
+          elite: "Dedicated Manager",
         },
         {
           name: "Response Time",
-          starter: "48+ hours",
-          pro: "< 4 hours",
-          enterprise: "< 1 hour",
+          basic: "48+ hours",
+          pro: "4-8 hours",
+          elite: "1 hour",
         },
         {
-          name: "Training & Onboarding",
-          starter: false,
-          pro: "Self-service",
-          enterprise: "Dedicated",
-        },
-        {
-          name: "Custom Integration",
-          starter: false,
+          name: "Phone Support",
+          basic: false,
           pro: false,
-          enterprise: true,
+          elite: true,
         },
         {
-          name: "SLA Guarantee",
-          starter: false,
+          name: "Training Sessions",
+          basic: false,
           pro: false,
-          enterprise: "99.9%",
+          elite: true,
+        },
+        {
+          name: "Custom Integrations",
+          basic: false,
+          pro: false,
+          elite: true,
         },
       ],
     },
   ];
 
-  const faqs = [
-    {
-      question: "Can I change plans anytime?",
-      answer:
-        "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate the billing accordingly.",
-    },
-    {
-      question: "Is there a free trial for paid plans?",
-      answer:
-        "Yes! The Professional plan comes with a 14-day free trial. No credit card required to start.",
-    },
-    {
-      question: "What payment methods do you accept?",
-      answer:
-        "We accept all major credit cards, debit cards, UPI, and bank transfers. All payments are processed securely through Razorpay.",
-    },
-    {
-      question: "Do you offer educational discounts?",
-      answer:
-        "Yes, we offer 50% discounts for students and educators with valid academic credentials.",
-    },
-    {
-      question: "What's included in API access?",
-      answer:
-        "API access includes real-time stock data, predictions, technical indicators, and historical data with comprehensive documentation.",
-    },
-    {
-      question: "Can I cancel anytime?",
-      answer:
-        "Absolutely. You can cancel your subscription at any time with no cancellation fees. Your access continues until the end of your billing period.",
-    },
-  ];
+  const handlePlanSelect = (planName: string) => {
+    setSelectedPlan(planName);
 
-  const getPrice = (plan: any) => {
-    if (plan.monthlyPrice === null) return "Custom";
-    if (plan.monthlyPrice === 0) return "Free";
-    return isAnnual ? `$${plan.annualPrice}` : `$${plan.monthlyPrice}`;
+    if (planName === "Basic") {
+      // Redirect to payment with Basic plan details
+      window.location.href =
+        "/payment?plan=Basic&price=9.99&billing=monthly&source=pricing";
+    } else if (planName === "Pro") {
+      // Redirect to payment with Pro plan details
+      window.location.href =
+        "/payment?plan=Pro&price=29.99&billing=monthly&source=pricing";
+    } else if (planName === "Elite") {
+      // Redirect to payment with Elite plan details
+      window.location.href =
+        "/payment?plan=Elite&price=99.99&billing=monthly&source=pricing";
+    }
+  };
+
+  const formatPrice = (monthly: number | null, annual: number | null) => {
+    if (monthly === null) return "Custom";
+    const price = isAnnual ? annual : monthly;
+    return `$${price}`;
   };
 
   const getOriginalPrice = (plan: any) => {
-    if (plan.monthlyPrice === null || plan.monthlyPrice === 0) return null;
+    if (plan.monthlyPrice === null) return null;
     return isAnnual ? plan.originalAnnualPrice : plan.originalMonthlyPrice;
   };
 
-  const handleSelectPlan = (planName: string) => {
-    if (planName === "Starter") {
-      // Redirect to register for free plan
-      window.location.href = "/register";
-    } else if (planName === "Enterprise") {
-      // Show contact options for enterprise
-      setShowContactOptions(true);
-    } else {
-      // Redirect to payment gateway with plan information
-      const plan = plans.find((p) => p.name === planName);
-      const price = plan
-        ? isAnnual
-          ? plan.annualPrice
-          : plan.monthlyPrice
-        : 0;
-      const billing = isAnnual ? "annual" : "monthly";
-      window.location.href = `/payment?plan=${planName}&price=${price}&billing=${billing}`;
-    }
+  const getCurrentPrice = (plan: any) => {
+    if (plan.monthlyPrice === null) return null;
+    return isAnnual ? plan.annualPrice : plan.monthlyPrice;
+  };
+
+  const calculateSavings = (plan: any) => {
+    if (plan.monthlyPrice === null) return 0;
+    const original = getOriginalPrice(plan);
+    const current = getCurrentPrice(plan);
+    if (!original || !current) return 0;
+    return Math.round(((original - current) / original) * 100);
   };
 
   return (
     <div className="min-h-screen bg-cyber-black cyber-grid">
       <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-        {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-6">
-            Simple, Transparent Pricing
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-6">
+            Choose Your Trading Plan
           </h1>
-          <p className="text-xl text-cyber-blue/80 max-w-3xl mx-auto mb-8">
-            Start free and scale as you grow. No hidden fees, no surprises.
+          <p className="text-xl text-cyber-blue/90 max-w-3xl mx-auto mb-8">
+            Unlock the power of AI-driven stock predictions and take your
+            trading to the next level
           </p>
 
           {/* Billing Toggle */}
-          <div className="flex items-center justify-center space-x-4 mb-12">
-            <Label
-              htmlFor="billing-toggle"
+          <div className="flex items-center justify-center space-x-4 mb-8">
+            <span
               className={cn(
-                "text-lg font-medium cursor-pointer transition-colors",
+                "text-sm",
                 !isAnnual ? "text-white" : "text-white/60",
               )}
             >
               Monthly
-            </Label>
-            <div className="relative">
-              <Switch
-                id="billing-toggle"
-                checked={isAnnual}
-                onCheckedChange={setIsAnnual}
-                className="data-[state=checked]:bg-cyber-blue"
-              />
-            </div>
-            <Label
-              htmlFor="billing-toggle"
+            </span>
+            <Switch
+              checked={isAnnual}
+              onCheckedChange={setIsAnnual}
+              className="data-[state=checked]:bg-cyber-green"
+            />
+            <span
               className={cn(
-                "text-lg font-medium cursor-pointer transition-colors",
+                "text-sm",
                 isAnnual ? "text-white" : "text-white/60",
               )}
             >
               Annual
-            </Label>
-            <Badge className="bg-cyber-green/20 text-cyber-green border-cyber-green/30">
+            </span>
+            <Badge className="bg-cyber-green/20 text-cyber-green border-cyber-green/30 ml-2">
               Save 20%
             </Badge>
           </div>
         </motion.div>
 
-        {/* Get in Touch Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-16"
-        >
-          <Card className="p-6 bg-gradient-to-r from-cyber-blue/10 to-cyber-purple/10 border border-cyber-blue/30">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="mb-4 md:mb-0">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Need Help Choosing the Right Plan?
-                </h3>
-                <p className="text-cyber-blue/80">
-                  Get in touch with our sales team for personalized assistance
-                </p>
-              </div>
-              <Button
-                onClick={() => setShowContactOptions(true)}
-                size="lg"
-                className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:scale-105 transition-all duration-300"
-              >
-                <HeadphonesIcon className="mr-2 h-5 w-5" />
-                Get in Touch
-              </Button>
-            </div>
-          </Card>
-        </motion.div>
-
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
-            const price = getPrice(plan);
+            const currentPrice = getCurrentPrice(plan);
             const originalPrice = getOriginalPrice(plan);
+            const savings = calculateSavings(plan);
 
             return (
               <motion.div
-                key={index}
+                key={plan.name}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ delay: index * 0.1 }}
                 className={cn(
                   "relative",
-                  plan.popular && "md:scale-105 md:z-10",
+                  plan.popular && "lg:scale-105 lg:z-10",
                 )}
               >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                    <Badge className="bg-gradient-to-r from-cyber-blue to-cyber-purple text-white px-4 py-2 text-sm font-semibold shadow-lg">
-                      <Star className="h-4 w-4 mr-1" />
-                      Most Popular
-                    </Badge>
-                  </div>
-                )}
-
                 <Card
                   className={cn(
-                    "p-8 bg-white/10 backdrop-blur-md border transition-all duration-300 h-full",
+                    "p-8 bg-white/10 backdrop-blur-md border transition-all duration-300 hover:bg-white/15",
                     plan.popular
-                      ? "border-cyber-purple bg-cyber-purple/10 shadow-lg shadow-cyber-purple/25"
+                      ? "border-cyber-blue bg-cyber-blue/10 ring-2 ring-cyber-blue/50 shadow-lg shadow-cyber-blue/25"
                       : "border-cyber-blue/20 hover:border-cyber-blue/40",
                   )}
                 >
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <Badge className="bg-cyber-blue text-white px-4 py-2 text-sm font-semibold shadow-lg">
+                        Most Popular
+                      </Badge>
+                    </div>
+                  )}
+
                   <div className="text-center mb-8">
                     <div
-                      className={`p-3 bg-${plan.color}/20 rounded-xl w-fit mx-auto mb-4`}
+                      className={`inline-flex p-4 rounded-2xl mb-4 bg-${plan.color}/20`}
                     >
                       <Icon className={`h-8 w-8 text-${plan.color}`} />
                     </div>
@@ -524,53 +469,77 @@ const Pricing = () => {
                     <h3 className="text-2xl font-bold text-white mb-2">
                       {plan.name}
                     </h3>
-                    <p className="text-cyber-blue/80 mb-4">
+                    <p className="text-cyber-blue/80 mb-6">
                       {plan.description}
                     </p>
 
-                    <div className="mb-4">
-                      {originalPrice && (
-                        <span className="text-white/50 line-through text-lg mr-2">
-                          ${originalPrice}
+                    <div className="mb-6">
+                      <div className="flex items-baseline justify-center mb-2">
+                        {originalPrice && originalPrice !== currentPrice && (
+                          <span className="text-lg text-white/50 line-through mr-2">
+                            ${originalPrice}
+                          </span>
+                        )}
+                        <span className="text-4xl font-bold bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
+                          {formatPrice(plan.monthlyPrice, plan.annualPrice)}
                         </span>
-                      )}
-                      <span className="text-4xl font-bold bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
-                        {price}
-                      </span>
-                      {price !== "Free" && price !== "Custom" && (
-                        <span className="text-white/70">
-                          /{isAnnual ? "month" : "month"}
-                        </span>
+                        {currentPrice && (
+                          <span className="text-white/70 ml-1">
+                            /{isAnnual ? "year" : "month"}
+                          </span>
+                        )}
+                      </div>
+
+                      {savings > 0 && (
+                        <Badge className="bg-cyber-green/20 text-cyber-green border-cyber-green/30">
+                          Save {savings}%
+                        </Badge>
                       )}
                     </div>
 
-                    <p className="text-sm text-cyber-blue/60">
+                    <p className="text-sm text-cyber-blue/60 mb-6">
                       {plan.highlight}
                     </p>
                   </div>
 
                   <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center space-x-3">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li
+                        key={featureIndex}
+                        className="flex items-center space-x-3"
+                      >
                         <CheckCircle className="h-5 w-5 text-cyber-green flex-shrink-0" />
-                        <span className="text-white/90">{feature}</span>
-                      </li>
-                    ))}
-                    {plan.limits.map((limit, idx) => (
-                      <li key={idx} className="flex items-center space-x-3">
-                        <X className="h-5 w-5 text-cyber-red/60 flex-shrink-0" />
-                        <span className="text-white/60">{limit}</span>
+                        <span className="text-white/90 text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
 
+                  {plan.limits.length > 0 && (
+                    <>
+                      <Separator className="my-6" />
+                      <ul className="space-y-2 mb-8">
+                        {plan.limits.map((limit, limitIndex) => (
+                          <li
+                            key={limitIndex}
+                            className="flex items-center space-x-3"
+                          >
+                            <X className="h-4 w-4 text-red-400 flex-shrink-0" />
+                            <span className="text-white/60 text-sm">
+                              {limit}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
                   <Button
-                    onClick={() => handleSelectPlan(plan.name)}
+                    onClick={() => handlePlanSelect(plan.name)}
                     className={cn(
                       "w-full py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105",
                       plan.popular
                         ? "bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white shadow-lg shadow-cyber-blue/25"
-                        : "bg-white/10 hover:bg-white/20 border border-cyber-blue/30 hover:border-cyber-blue/60 text-white",
+                        : `bg-${plan.color}/20 border border-${plan.color}/30 text-${plan.color} hover:bg-${plan.color}/30`,
                     )}
                   >
                     {plan.cta}
@@ -582,222 +551,134 @@ const Pricing = () => {
           })}
         </div>
 
-        {/* Payment Form Modal */}
-        {showPaymentForm && (
+        {/* Feature Comparison */}
+        <section className="mb-20">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowPaymentForm(false)}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-cyber-dark border border-cyber-blue/30 rounded-3xl p-8 max-w-md w-full shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-white">
-                  Complete Your Purchase
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowPaymentForm(false)}
-                  className="text-white/70 hover:text-white"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-
-              {/* Plan Summary */}
-              <div className="bg-white/5 border border-cyber-blue/20 rounded-2xl p-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="text-white font-semibold">
-                      {selectedPlan} Plan
-                    </h4>
-                    <p className="text-cyber-blue/70 text-sm">
-                      {isAnnual ? "Annual billing" : "Monthly billing"}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-white">
-                      ${isAnnual ? "23.20" : "29.00"}
-                    </p>
-                    <p className="text-cyber-green text-sm">
-                      {isAnnual ? "Save 20%" : ""}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payment Method Selection */}
-              <div className="mb-6">
-                <Label className="text-white font-semibold mb-3 block">
-                  Payment Method
-                </Label>
-                <div className="grid grid-cols-3 gap-3">
-                  <Button
-                    variant={paymentMethod === "card" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPaymentMethod("card")}
-                    className={cn(
-                      "flex flex-col items-center p-4 h-auto",
-                      paymentMethod === "card"
-                        ? "bg-cyber-blue text-white"
-                        : "bg-white/10 text-white/70 border-cyber-blue/30",
-                    )}
-                  >
-                    <CreditCard className="h-6 w-6 mb-2" />
-                    <span className="text-xs">Card</span>
-                  </Button>
-                  <Button
-                    variant={paymentMethod === "upi" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPaymentMethod("upi")}
-                    className={cn(
-                      "flex flex-col items-center p-4 h-auto",
-                      paymentMethod === "upi"
-                        ? "bg-cyber-blue text-white"
-                        : "bg-white/10 text-white/70 border-cyber-blue/30",
-                    )}
-                  >
-                    <Smartphone className="h-6 w-6 mb-2" />
-                    <span className="text-xs">UPI</span>
-                  </Button>
-                  <Button
-                    variant={paymentMethod === "bank" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPaymentMethod("bank")}
-                    className={cn(
-                      "flex flex-col items-center p-4 h-auto",
-                      paymentMethod === "bank"
-                        ? "bg-cyber-blue text-white"
-                        : "bg-white/10 text-white/70 border-cyber-blue/30",
-                    )}
-                  >
-                    <Banknote className="h-6 w-6 mb-2" />
-                    <span className="text-xs">Bank</span>
-                  </Button>
-                </div>
-              </div>
-
-              {/* Payment Form */}
-              <div className="space-y-4">
-                {paymentMethod === "card" && (
-                  <>
-                    <div>
-                      <Label className="text-white text-sm mb-2 block">
-                        Card Number
-                      </Label>
-                      <Input
-                        placeholder="1234 5678 9012 3456"
-                        className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-white text-sm mb-2 block">
-                          Expiry Date
-                        </Label>
-                        <Input
-                          placeholder="MM/YY"
-                          className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-white text-sm mb-2 block">
-                          CVV
-                        </Label>
-                        <Input
-                          placeholder="123"
-                          className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label className="text-white text-sm mb-2 block">
-                        Cardholder Name
-                      </Label>
-                      <Input
-                        placeholder="John Doe"
-                        className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                      />
-                    </div>
-                  </>
-                )}
-
-                {paymentMethod === "upi" && (
-                  <div>
-                    <Label className="text-white text-sm mb-2 block">
-                      UPI ID
-                    </Label>
-                    <Input
-                      placeholder="yourname@upi"
-                      className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                    />
-                  </div>
-                )}
-
-                {paymentMethod === "bank" && (
-                  <>
-                    <div>
-                      <Label className="text-white text-sm mb-2 block">
-                        Account Number
-                      </Label>
-                      <Input
-                        placeholder="123456789012"
-                        className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-white text-sm mb-2 block">
-                        IFSC Code
-                      </Label>
-                      <Input
-                        placeholder="ABCD0123456"
-                        className="bg-white/10 border-cyber-blue/30 text-white placeholder-white/50"
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <Separator className="my-6" />
-
-              {/* Security Notice */}
-              <div className="flex items-center space-x-2 text-sm text-cyber-green mb-6">
-                <Lock className="h-4 w-4" />
-                <span>Secured by Razorpay with 256-bit SSL encryption</span>
-              </div>
-
-              {/* Complete Payment Button */}
-              <Button className="w-full bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white py-3 rounded-2xl font-semibold shadow-lg">
-                <Shield className="mr-2 h-5 w-5" />
-                Complete Payment
-              </Button>
-            </motion.div>
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Compare All Features
+            </h2>
+            <p className="text-cyber-blue/80 max-w-2xl mx-auto">
+              See exactly what's included in each plan to make the best choice
+              for your trading needs
+            </p>
           </motion.div>
-        )}
 
-        {/* Contact Options Modal */}
+          <Card className="bg-white/10 backdrop-blur-md border border-cyber-blue/20 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="px-6 py-4 text-left">
+                      <span className="text-lg font-bold text-white">
+                        Features
+                      </span>
+                    </th>
+                    <th className="px-6 py-4 text-center">
+                      <div className="text-lg font-bold text-cyber-green">
+                        Basic
+                      </div>
+                      <div className="text-sm text-gray-500">$9.99/month</div>
+                    </th>
+                    <th className="px-6 py-4 text-center bg-cyber-blue/10 border-l border-r border-cyber-blue/30">
+                      <div className="text-lg font-bold text-cyber-blue flex items-center justify-center gap-2">
+                        Pro
+                        <Badge className="bg-cyber-blue text-white text-xs">
+                          Popular
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-gray-500">$29.99/month</div>
+                    </th>
+                    <th className="px-6 py-4 text-center">
+                      <div className="text-lg font-bold text-cyber-purple">
+                        Elite
+                      </div>
+                      <div className="text-sm text-gray-500">$99.99/month</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {features.map((category, categoryIndex) => (
+                    <React.Fragment key={category.category}>
+                      <tr className="border-b border-white/5">
+                        <td colSpan={4} className="px-6 py-4">
+                          <div className="flex items-center space-x-3">
+                            <category.icon className="h-5 w-5 text-cyber-blue" />
+                            <span className="font-semibold text-white text-lg">
+                              {category.category}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      {category.items.map((item, itemIndex) => (
+                        <tr
+                          key={itemIndex}
+                          className="border-b border-white/5 hover:bg-white/5"
+                        >
+                          <td className="px-6 py-4">
+                            <span className="text-white font-medium">
+                              {item.name}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-center text-gray-600">
+                            {typeof item.basic === "boolean" ? (
+                              item.basic ? (
+                                <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
+                              ) : (
+                                <X className="h-5 w-5 text-gray-400 mx-auto" />
+                              )
+                            ) : (
+                              <span className="text-sm">{item.basic}</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-center text-gray-600 bg-cyber-blue/5">
+                            {typeof item.pro === "boolean" ? (
+                              item.pro ? (
+                                <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
+                              ) : (
+                                <X className="h-5 w-5 text-gray-400 mx-auto" />
+                              )
+                            ) : (
+                              <span className="text-sm font-medium text-cyber-blue">
+                                {item.pro}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-center text-gray-600">
+                            {typeof item.elite === "boolean" ? (
+                              item.elite ? (
+                                <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
+                              ) : (
+                                <X className="h-5 w-5 text-gray-400 mx-auto" />
+                              )
+                            ) : (
+                              <span className="text-sm">{item.elite}</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </section>
+
+        {/* Contact Options */}
         {showContactOptions && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowContactOptions(false)}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-cyber-dark border border-cyber-blue/30 rounded-3xl p-8 max-w-2xl w-full shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
+            <Card className="bg-cyber-dark border border-cyber-blue/30 p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold text-white">
-                  Get in Touch with Our Sales Team
+                  Contact Our Sales Team
                 </h3>
                 <Button
                   variant="ghost"
@@ -809,11 +690,6 @@ const Pricing = () => {
                 </Button>
               </div>
 
-              <p className="text-cyber-blue/80 mb-8 text-center">
-                Choose your preferred way to connect with us. Our team is ready
-                to help you find the perfect plan.
-              </p>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {contactOptions.map((option, index) => {
                   const Icon = option.icon;
@@ -823,53 +699,46 @@ const Pricing = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="relative"
                     >
-                      {option.popular && (
-                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                          <Badge className="bg-cyber-green text-black px-3 py-1 text-xs font-semibold">
-                            Most Popular
+                      <Card className="p-6 bg-white/5 border border-cyber-blue/20 hover:border-cyber-blue/40 transition-all duration-300 group relative">
+                        {option.popular && (
+                          <Badge className="absolute -top-2 -right-2 bg-cyber-green text-white text-xs">
+                            Recommended
                           </Badge>
-                        </div>
-                      )}
-                      <Card
-                        className={`p-6 bg-cyber-dark border-2 hover:bg-cyber-dark/80 transition-all duration-300 cursor-pointer group relative ${
-                          option.popular
-                            ? "border-cyber-green"
-                            : "border-gray-600"
-                        }`}
-                      >
-                        <div className="text-center">
+                        )}
+
+                        <div className="flex items-center space-x-3 mb-4">
                           <div
-                            className={`p-3 bg-${option.color}/20 rounded-xl w-fit mx-auto mb-4 group-hover:bg-${option.color}/30 transition-colors`}
+                            className={`p-3 bg-${option.color}/20 rounded-xl`}
                           >
-                            <Icon
-                              className={`h-8 w-8 text-${option.color === "amber" ? "amber-500" : option.color}`}
-                            />
+                            <Icon className={`h-6 w-6 text-${option.color}`} />
                           </div>
-                          <h4 className="text-xl font-bold text-white mb-2">
-                            {option.title}
-                          </h4>
-                          <p className="text-cyber-blue text-sm mb-4">
-                            {option.description}
-                          </p>
-                          <div className="space-y-2 mb-6">
-                            <Badge
-                              className={`bg-${option.color === "amber" ? "amber" : option.color}/20 text-${option.color === "amber" ? "amber-300" : option.color} border-${option.color === "amber" ? "amber" : option.color}/30`}
-                            >
+                          <div>
+                            <h4 className="text-lg font-semibold text-white">
+                              {option.title}
+                            </h4>
+                            <p className="text-cyber-blue/70 text-sm">
                               {option.availability}
-                            </Badge>
-                            <p className="text-gray-400 text-sm">
-                              {option.responseTime}
                             </p>
                           </div>
-                          <Button
-                            onClick={option.action}
-                            className={`w-full ${option.buttonColor} text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-105`}
-                          >
-                            {option.buttonText}
-                          </Button>
                         </div>
+
+                        <p className="text-white/80 mb-4">
+                          {option.description}
+                        </p>
+                        <p className="text-cyber-blue/60 text-sm mb-6">
+                          {option.responseTime}
+                        </p>
+
+                        <Button
+                          onClick={option.action}
+                          className={cn(
+                            "w-full text-white transition-all duration-300",
+                            option.buttonColor,
+                          )}
+                        >
+                          {option.buttonText}
+                        </Button>
                       </Card>
                     </motion.div>
                   );
@@ -881,107 +750,11 @@ const Pricing = () => {
                   Our sales team is available Monday-Friday, 9 AM - 6 PM EST
                 </p>
               </div>
-            </motion.div>
+            </Card>
           </motion.div>
         )}
 
-        {/* Feature Comparison */}
-        <section className="mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Compare All Features
-            </h2>
-            <p className="text-cyber-blue/70 text-lg">
-              Detailed breakdown of what's included in each plan
-            </p>
-          </motion.div>
-
-          <Card className="p-8 bg-white/5 backdrop-blur-md border border-cyber-blue/20 overflow-x-auto">
-            {features.map((category, categoryIndex) => {
-              const CategoryIcon = category.icon;
-              return (
-                <div key={categoryIndex} className="mb-8 last:mb-0">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="p-2 bg-cyber-blue/20 rounded-lg">
-                      <CategoryIcon className="h-5 w-5 text-cyber-blue" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white">
-                      {category.category}
-                    </h3>
-                  </div>
-
-                  <div className="grid grid-cols-4 gap-4 min-w-[600px]">
-                    <div className="font-semibold text-cyber-blue/80 pb-4 border-b border-cyber-blue/20">
-                      Feature
-                    </div>
-                    <div className="font-semibold text-center text-cyber-blue/80 pb-4 border-b border-cyber-blue/20">
-                      Starter
-                    </div>
-                    <div className="font-semibold text-center text-cyber-purple/80 pb-4 border-b border-cyber-purple/20">
-                      Professional
-                    </div>
-                    <div className="font-semibold text-center text-cyber-green/80 pb-4 border-b border-cyber-green/20">
-                      Enterprise
-                    </div>
-
-                    {category.items.map((item, itemIndex) => (
-                      <React.Fragment key={itemIndex}>
-                        <div className="py-3 text-white font-medium">
-                          {item.name}
-                        </div>
-                        <div className="py-3 text-center">
-                          {typeof item.starter === "boolean" ? (
-                            item.starter ? (
-                              <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-cyber-red/60 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-cyber-blue/80">
-                              {item.starter}
-                            </span>
-                          )}
-                        </div>
-                        <div className="py-3 text-center">
-                          {typeof item.pro === "boolean" ? (
-                            item.pro ? (
-                              <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-cyber-red/60 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-cyber-purple/80">
-                              {item.pro}
-                            </span>
-                          )}
-                        </div>
-                        <div className="py-3 text-center">
-                          {typeof item.enterprise === "boolean" ? (
-                            item.enterprise ? (
-                              <CheckCircle className="h-5 w-5 text-cyber-green mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-cyber-red/60 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-cyber-green/80">
-                              {item.enterprise}
-                            </span>
-                          )}
-                        </div>
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </Card>
-        </section>
-
-        {/* FAQ */}
+        {/* FAQ Section */}
         <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -991,67 +764,94 @@ const Pricing = () => {
             <h2 className="text-4xl font-bold text-white mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-cyber-blue/70 text-lg">
-              Everything you need to know about our pricing
+            <p className="text-cyber-blue/80 max-w-2xl mx-auto">
+              Get answers to common questions about our pricing and features
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="p-6 bg-white/5 backdrop-blur-md border border-cyber-blue/20 hover:bg-white/10 hover:border-cyber-blue/40 transition-all duration-300">
-                  <h3 className="text-lg font-bold text-white mb-3">
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-6">
+              {[
+                {
+                  question: "Can I switch between plans anytime?",
+                  answer:
+                    "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately for upgrades, or at the next billing cycle for downgrades.",
+                },
+                {
+                  question: "Is there a free trial available?",
+                  answer:
+                    "We offer a 14-day free trial for Pro and Elite plans. No credit card required to start your trial.",
+                },
+                {
+                  question: "What payment methods do you accept?",
+                  answer:
+                    "We accept all major credit cards, PayPal, and bank transfers for annual plans. Enterprise customers can also pay via wire transfer.",
+                },
+                {
+                  question: "Do you offer refunds?",
+                  answer:
+                    "Yes, we offer a 30-day money-back guarantee for all paid plans. If you're not satisfied, contact our support team for a full refund.",
+                },
+                {
+                  question: "How accurate are the AI predictions?",
+                  answer:
+                    "Our AI models achieve 85-92% accuracy across different market conditions. Pro and Elite plans include confidence intervals and risk assessments for each prediction.",
+                },
+              ].map((faq, index) => (
+                <Card
+                  key={index}
+                  className="p-6 bg-white/10 backdrop-blur-md border border-cyber-blue/20"
+                >
+                  <h3 className="text-lg font-semibold text-white mb-3">
                     {faq.question}
                   </h3>
                   <p className="text-cyber-blue/80">{faq.answer}</p>
                 </Card>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <Card className="p-12 bg-gradient-to-br from-cyber-blue/20 to-cyber-purple/20 border border-cyber-blue/30">
-            <h2 className="text-4xl font-bold text-white mb-6">
+        <section className="text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-cyber-blue/20 to-cyber-purple/20 border border-cyber-blue/30 rounded-3xl p-12 max-w-4xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold text-white mb-4">
               Ready to Start Trading Smarter?
             </h2>
             <p className="text-cyber-blue/80 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of successful traders who trust StockVision for
-              their investment decisions.
+              Join thousands of successful traders who trust StockVision's AI
+              predictions to make better investment decisions.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
-                >
-                  <Zap className="mr-2 h-5 w-5" />
-                  Start Free Trial
-                </Button>
-              </Link>
-              <Link to="/features">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-cyber-blue/30 text-cyber-blue hover:bg-cyber-blue/10"
-                >
-                  View All Features
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              <Button
+                onClick={() => handlePlanSelect("Pro")}
+                size="lg"
+                className="bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white px-8 py-4 text-lg"
+              >
+                <Star className="mr-2 h-5 w-5" />
+                Start Pro Trial
+              </Button>
+              <Button
+                onClick={() => setShowContactOptions(true)}
+                variant="outline"
+                size="lg"
+                className="border-cyber-blue/30 text-cyber-blue hover:bg-cyber-blue/10 px-8 py-4 text-lg"
+              >
+                <MessageCircle className="mr-2 h-5 w-5" />
+                Talk to Sales
+              </Button>
             </div>
-          </Card>
-        </motion.div>
+
+            <p className="text-cyber-blue/60 text-sm mt-6">
+              No credit card required • 30-day money-back guarantee
+            </p>
+          </motion.div>
+        </section>
       </div>
     </div>
   );
