@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
+import { apiService } from "@/lib/api-service";
 import {
   Brain,
   TrendingUp,
@@ -44,10 +45,11 @@ const StockPrediction = () => {
     try {
       // Fetch real historical data
       const { from, to } = generateDateRange(30);
-      const [candles, quote, profile] = await Promise.all([
+
+      // Fetch data with proper error handling
+      const [candles, quote] = await Promise.all([
         finnhubAPI.getCandles(symbol, "D", from, to),
-        finnhubAPI.getQuote(symbol),
-        finnhubAPI.getCompanyProfile(symbol),
+        finnhubAPI.getQuote(symbol)
       ]);
 
       const historicalData = formatChartData(candles);
@@ -57,12 +59,11 @@ const StockPrediction = () => {
       }
 
       // Generate AI predictions using real historical data
-      const prices = historicalData.map((d) => d.price);
+      const prices = historicalData.map(d => d.price);
       const prediction = finnhubAPI.generatePrediction(prices, symbol);
 
       const allData = [...historicalData, ...prediction.predictions];
-      const currentPrice =
-        quote.c || historicalData[historicalData.length - 1].price;
+      const currentPrice = quote.c || historicalData[historicalData.length - 1].price;
 
       setPredictionData({
         symbol,
@@ -70,61 +71,53 @@ const StockPrediction = () => {
         currentPrice,
         predictedPrice: prediction.targetPrice,
         predictedChange: prediction.targetPrice - currentPrice,
-        predictedChangePercent:
-          ((prediction.targetPrice - currentPrice) / currentPrice) * 100,
+        predictedChangePercent: ((prediction.targetPrice - currentPrice) / currentPrice) * 100,
         confidence: prediction.confidence,
         targetPrice: prediction.targetPrice,
         support: prediction.support,
         resistance: prediction.resistance,
         timeframe: "7 days",
         quote,
-        profile,
+        profile: { name: apiService.generateMockStockData(symbol).profile.name },
       });
+
     } catch (error) {
       console.error("Error fetching stock data:", error);
 
-      // Fallback to mock data if API fails
-      const mockPrediction = {
-        symbol,
-        data: [],
-        currentPrice: 150,
-        predictedPrice: 155,
-        predictedChange: 5,
-        predictedChangePercent: 3.33,
-        confidence: 0.85,
-        targetPrice: 155,
-        support: 142.5,
-        resistance: 162,
-        timeframe: "7 days",
-      };
+      // Use improved mock data service
+      if (apiService.shouldUseMockData(error as Error)) {
+        const mockData = apiService.generateMockStockData(symbol);
+        const historicalData = formatChartData(mockData.candles);
 
-      // Generate mock historical and prediction data
-      const historicalData = [];
-      for (let i = 30; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        historicalData.push({
-          date: date.toLocaleDateString(),
-          price: 150 + (Math.random() - 0.5) * 20,
-          predicted: false,
+        // Generate AI predictions using mock historical data
+        const prices = historicalData.map(d => d.price);
+        const prediction = finnhubAPI.generatePrediction(prices, symbol);
+
+        const allData = [...historicalData, ...prediction.predictions];
+        const currentPrice = mockData.quote.c;
+
+        setPredictionData({
+          symbol,
+          data: allData,
+          currentPrice,
+          predictedPrice: prediction.targetPrice,
+          predictedChange: prediction.targetPrice - currentPrice,
+          predictedChangePercent: ((prediction.targetPrice - currentPrice) / currentPrice) * 100,
+          confidence: prediction.confidence,
+          targetPrice: prediction.targetPrice,
+          support: prediction.support,
+          resistance: prediction.resistance,
+          timeframe: "7 days",
+          quote: mockData.quote,
+          profile: mockData.profile,
         });
+      } else {
+        // Re-throw if it's not an API access issue
+        throw error;
       }
-
-      const predictedData = [];
-      for (let i = 1; i <= 7; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
-        predictedData.push({
-          date: date.toLocaleDateString(),
-          price: 150 + i * 0.7 + (Math.random() - 0.5) * 3,
-          predicted: true,
-        });
-      }
-
-      mockPrediction.data = [...historicalData, ...predictedData];
-      setPredictionData(mockPrediction);
     } finally {
       setIsLoading(false);
+    }
     }
   };
 
