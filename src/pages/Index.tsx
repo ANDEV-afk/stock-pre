@@ -130,8 +130,17 @@ const Index = () => {
       <HeroSection />
 
       {/* Benefits Section */}
-      <section className="py-24 bg-apple-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gradient-to-br from-cyber-black via-cyber-dark to-cyber-black relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cyber-blue/30 rounded-full blur-3xl animate-pulse" />
+          <div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-cyber-purple/20 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -139,10 +148,10 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-apple-gray-700 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-cyber-blue to-cyber-purple bg-clip-text text-transparent mb-6">
               Why Choose StockVision?
             </h2>
-            <p className="text-xl text-apple-gray-500 max-w-3xl mx-auto">
+            <p className="text-xl text-cyber-blue/90 max-w-3xl mx-auto">
               Experience the future of stock trading with our cutting-edge AI
               technology
             </p>
@@ -160,17 +169,17 @@ const Index = () => {
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.02, y: -4 }}
-                  className="bg-white rounded-3xl p-8 shadow-apple hover:shadow-apple-lg transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-cyber-blue/20 rounded-3xl p-8 hover:bg-white/15 hover:border-cyber-blue/40 transition-all duration-300 group"
                 >
-                  <div className="bg-gradient-to-br from-apple-blue to-apple-purple p-4 rounded-2xl w-fit mb-6">
+                  <div className="bg-gradient-to-br from-cyber-blue to-cyber-purple p-4 rounded-2xl w-fit mb-6 group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
                     <Icon className="h-8 w-8 text-white" />
                   </div>
 
-                  <h3 className="text-2xl font-bold text-apple-gray-700 mb-4">
+                  <h3 className="text-2xl font-bold text-white mb-4">
                     {benefit.title}
                   </h3>
 
-                  <p className="text-apple-gray-500 mb-6 leading-relaxed">
+                  <p className="text-cyber-blue/80 mb-6 leading-relaxed">
                     {benefit.description}
                   </p>
 
@@ -180,8 +189,8 @@ const Index = () => {
                         key={featureIndex}
                         className="flex items-center space-x-3"
                       >
-                        <CheckCircle className="h-5 w-5 text-apple-green flex-shrink-0" />
-                        <span className="text-apple-gray-600">{feature}</span>
+                        <CheckCircle className="h-5 w-5 text-cyber-green flex-shrink-0" />
+                        <span className="text-white/90">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -193,8 +202,13 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gradient-to-br from-cyber-dark via-cyber-black to-cyber-dark relative">
+        {/* Animated background grid */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="cyber-grid h-full w-full" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -202,10 +216,10 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-apple-gray-700 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyber-purple via-white to-cyber-blue bg-clip-text text-transparent mb-6">
               Trusted by Traders Worldwide
             </h2>
-            <p className="text-xl text-apple-gray-500 max-w-3xl mx-auto">
+            <p className="text-xl text-cyber-purple/90 max-w-3xl mx-auto">
               See what our users are saying about their success with StockVision
             </p>
           </motion.div>
@@ -218,32 +232,32 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-apple-gray-50 rounded-3xl p-8 hover:shadow-apple transition-all duration-300"
+                className="bg-white/5 backdrop-blur-md border border-cyber-purple/20 rounded-3xl p-8 hover:bg-white/10 hover:border-cyber-purple/40 hover:shadow-lg hover:shadow-cyber-purple/20 transition-all duration-300 group"
               >
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="h-5 w-5 fill-yellow-400 text-yellow-400"
+                      className="h-5 w-5 fill-cyber-green text-cyber-green"
                     />
                   ))}
                 </div>
 
-                <p className="text-apple-gray-600 mb-6 leading-relaxed italic">
+                <p className="text-white/90 mb-6 leading-relaxed italic">
                   "{testimonial.text}"
                 </p>
 
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-apple-blue to-apple-purple rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-cyber-blue/25 transition-all duration-300">
                     <span className="text-white font-bold">
                       {testimonial.avatar}
                     </span>
                   </div>
                   <div>
-                    <p className="font-semibold text-apple-gray-700">
+                    <p className="font-semibold text-white">
                       {testimonial.name}
                     </p>
-                    <p className="text-sm text-apple-gray-500">
+                    <p className="text-sm text-cyber-blue/80">
                       {testimonial.role}
                     </p>
                   </div>
@@ -255,8 +269,17 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-24 bg-apple-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gradient-to-br from-cyber-black via-cyber-dark to-cyber-black relative overflow-hidden">
+        {/* Floating elements */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-32 left-1/4 w-64 h-64 bg-cyber-blue/20 rounded-full blur-3xl animate-float" />
+          <div
+            className="absolute bottom-32 right-1/4 w-80 h-80 bg-cyber-purple/15 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "2s" }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -264,10 +287,10 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-apple-gray-700 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent mb-6">
               Choose Your Plan
             </h2>
-            <p className="text-xl text-apple-gray-500 max-w-3xl mx-auto">
+            <p className="text-xl text-cyber-blue/90 max-w-3xl mx-auto">
               Start free and upgrade as your trading needs grow
             </p>
           </motion.div>
@@ -280,29 +303,31 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`relative bg-white rounded-3xl p-8 shadow-apple hover:shadow-apple-lg transition-all duration-300 ${
-                  plan.popular ? "ring-2 ring-apple-blue scale-105" : ""
+                className={`relative bg-white/10 backdrop-blur-md border rounded-3xl p-8 hover:bg-white/15 transition-all duration-300 group ${
+                  plan.popular
+                    ? "border-cyber-blue bg-cyber-blue/10 ring-2 ring-cyber-blue/50 scale-105 shadow-lg shadow-cyber-blue/25"
+                    : "border-cyber-purple/20 hover:border-cyber-purple/40"
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-apple-blue text-white px-4 py-2 rounded-xl text-sm font-semibold">
+                    <div className="bg-gradient-to-r from-cyber-blue to-cyber-purple text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg">
                       Most Popular
                     </div>
                   </div>
                 )}
 
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-apple-gray-700 mb-2">
+                  <h3 className="text-2xl font-bold text-white mb-2">
                     {plan.name}
                   </h3>
-                  <p className="text-apple-gray-500 mb-4">{plan.description}</p>
+                  <p className="text-cyber-blue/80 mb-4">{plan.description}</p>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-apple-gray-700">
+                    <span className="text-4xl font-bold bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
                       {plan.price}
                     </span>
                     {plan.price !== "Free" && plan.price !== "Custom" && (
-                      <span className="text-apple-gray-500">/month</span>
+                      <span className="text-white/70">/month</span>
                     )}
                   </div>
                 </div>
@@ -313,18 +338,18 @@ const Index = () => {
                       key={featureIndex}
                       className="flex items-center space-x-3"
                     >
-                      <CheckCircle className="h-5 w-5 text-apple-green flex-shrink-0" />
-                      <span className="text-apple-gray-600">{feature}</span>
+                      <CheckCircle className="h-5 w-5 text-cyber-green flex-shrink-0" />
+                      <span className="text-white/90">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Link to="/register">
                   <Button
-                    className={`w-full py-3 rounded-2xl font-semibold transition-all duration-200 ${
+                    className={`w-full py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
                       plan.popular
-                        ? "bg-apple-blue hover:bg-apple-blue-dark text-white shadow-apple"
-                        : "bg-apple-gray-100 hover:bg-apple-gray-200 text-apple-gray-700"
+                        ? "bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white shadow-lg shadow-cyber-blue/25"
+                        : "bg-white/10 hover:bg-white/20 border border-cyber-purple/30 hover:border-cyber-purple/60 text-white"
                     }`}
                   >
                     {plan.cta}
@@ -381,32 +406,34 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-apple-gray-700 text-white py-12">
+      <footer className="bg-gradient-to-br from-cyber-dark to-cyber-black border-t border-cyber-blue/20 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-gradient-to-br from-apple-blue to-apple-purple p-2 rounded-xl">
+                <div className="bg-gradient-to-br from-cyber-blue to-cyber-purple p-2 rounded-xl shadow-lg shadow-cyber-blue/25">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold">StockVision</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-cyber-blue to-cyber-purple bg-clip-text text-transparent">
+                  StockVision
+                </span>
               </div>
-              <p className="text-apple-gray-300 mb-4 max-w-md">
+              <p className="text-cyber-blue/80 mb-4 max-w-md">
                 Empowering traders with AI-driven stock predictions and
                 real-time market insights.
               </p>
-              <p className="text-sm text-apple-gray-400">
+              <p className="text-sm text-white/60">
                 © 2024 StockVision. All rights reserved.
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-apple-gray-300">
+              <h4 className="font-semibold mb-4 text-cyber-purple">Product</h4>
+              <ul className="space-y-2 text-cyber-blue/80">
                 <li>
                   <Link
                     to="/features"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Features
                   </Link>
@@ -414,7 +441,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/pricing"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Pricing
                   </Link>
@@ -422,7 +449,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/api"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     API
                   </Link>
@@ -430,7 +457,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/support"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Support
                   </Link>
@@ -439,12 +466,12 @@ const Index = () => {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-apple-gray-300">
+              <h4 className="font-semibold mb-4 text-cyber-purple">Company</h4>
+              <ul className="space-y-2 text-cyber-blue/80">
                 <li>
                   <Link
                     to="/about"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     About
                   </Link>
@@ -452,7 +479,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/careers"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Careers
                   </Link>
@@ -460,7 +487,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/privacy"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Privacy
                   </Link>
@@ -468,7 +495,7 @@ const Index = () => {
                 <li>
                   <Link
                     to="/terms"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white hover:text-cyber-blue transition-colors"
                   >
                     Terms
                   </Link>

@@ -14,19 +14,85 @@ export class DemoDataService {
   // Generate realistic stock data for any symbol
   generateStockData(symbol: string) {
     const stockPrices: Record<string, number> = {
+      // Tech Giants
       AAPL: 175.43,
       GOOGL: 138.21,
       MSFT: 378.85,
-      TSLA: 242.68,
-      NVDA: 721.33,
       AMZN: 144.78,
       META: 303.67,
+
+      // Electric & Auto
+      TSLA: 242.68,
+      F: 12.45,
+      GM: 28.67,
+      RIVN: 15.23,
+      LCID: 4.89,
+
+      // AI & Semiconductors
+      NVDA: 721.33,
+      AMD: 98.45,
+      INTC: 35.67,
+      AVGO: 892.34,
+      QCOM: 123.45,
+
+      // Streaming & Entertainment
       NFLX: 445.92,
+      DIS: 89.45,
+      PARA: 15.67,
+      WBD: 10.23,
+
+      // Finance & Banking
+      JPM: 165.78,
+      BAC: 32.45,
+      WFC: 45.67,
+      GS: 387.23,
+      MS: 78.9,
+
+      // Healthcare & Biotech
+      JNJ: 156.78,
+      PFE: 28.45,
+      UNH: 523.67,
+      ABBV: 145.23,
+      BMY: 52.34,
+
+      // Energy
+      XOM: 98.76,
+      CVX: 145.67,
+      COP: 112.34,
+
+      // Retail & Consumer
+      WMT: 156.78,
+      COST: 567.89,
+      TGT: 134.56,
+      HD: 345.67,
+
+      // ETFs & Indices
       QQQ: 385.5,
       SPY: 455.2,
       DIA: 345.8,
       IWM: 198.3,
       VXX: 23.45,
+
+      // Crypto Related
+      COIN: 89.45,
+      MSTR: 456.78,
+
+      // Airlines & Travel
+      AAL: 12.34,
+      DAL: 45.67,
+      UAL: 34.56,
+
+      // Real Estate
+      REIT: 78.9,
+
+      // Communications
+      VZ: 34.56,
+      T: 18.9,
+
+      // Industrial
+      CAT: 234.56,
+      BA: 187.45,
+      GE: 98.76,
     };
 
     const basePrice = stockPrices[symbol] || this.generateRandomPrice(symbol);
@@ -106,19 +172,85 @@ export class DemoDataService {
 
   private getCompanyName(symbol: string): string {
     const companies: Record<string, string> = {
+      // Tech Giants
       AAPL: "Apple Inc.",
       GOOGL: "Alphabet Inc.",
       MSFT: "Microsoft Corporation",
-      TSLA: "Tesla, Inc.",
-      NVDA: "NVIDIA Corporation",
       AMZN: "Amazon.com, Inc.",
       META: "Meta Platforms, Inc.",
+
+      // Electric & Auto
+      TSLA: "Tesla, Inc.",
+      F: "Ford Motor Company",
+      GM: "General Motors Company",
+      RIVN: "Rivian Automotive, Inc.",
+      LCID: "Lucid Group, Inc.",
+
+      // AI & Semiconductors
+      NVDA: "NVIDIA Corporation",
+      AMD: "Advanced Micro Devices, Inc.",
+      INTC: "Intel Corporation",
+      AVGO: "Broadcom Inc.",
+      QCOM: "QUALCOMM Incorporated",
+
+      // Streaming & Entertainment
       NFLX: "Netflix, Inc.",
+      DIS: "The Walt Disney Company",
+      PARA: "Paramount Global",
+      WBD: "Warner Bros. Discovery, Inc.",
+
+      // Finance & Banking
+      JPM: "JPMorgan Chase & Co.",
+      BAC: "Bank of America Corporation",
+      WFC: "Wells Fargo & Company",
+      GS: "The Goldman Sachs Group, Inc.",
+      MS: "Morgan Stanley",
+
+      // Healthcare & Biotech
+      JNJ: "Johnson & Johnson",
+      PFE: "Pfizer Inc.",
+      UNH: "UnitedHealth Group Incorporated",
+      ABBV: "AbbVie Inc.",
+      BMY: "Bristol-Myers Squibb Company",
+
+      // Energy
+      XOM: "Exxon Mobil Corporation",
+      CVX: "Chevron Corporation",
+      COP: "ConocoPhillips",
+
+      // Retail & Consumer
+      WMT: "Walmart Inc.",
+      COST: "Costco Wholesale Corporation",
+      TGT: "Target Corporation",
+      HD: "The Home Depot, Inc.",
+
+      // ETFs & Indices
       QQQ: "Invesco QQQ Trust",
       SPY: "SPDR S&P 500 ETF Trust",
       DIA: "SPDR Dow Jones Industrial Average ETF",
       IWM: "iShares Russell 2000 ETF",
       VXX: "iPath Series B S&P 500 VIX Short-Term Futures ETN",
+
+      // Crypto Related
+      COIN: "Coinbase Global, Inc.",
+      MSTR: "MicroStrategy Incorporated",
+
+      // Airlines & Travel
+      AAL: "American Airlines Group Inc.",
+      DAL: "Delta Air Lines, Inc.",
+      UAL: "United Airlines Holdings, Inc.",
+
+      // Real Estate
+      REIT: "Real Estate Investment Trust",
+
+      // Communications
+      VZ: "Verizon Communications Inc.",
+      T: "AT&T Inc.",
+
+      // Industrial
+      CAT: "Caterpillar Inc.",
+      BA: "The Boeing Company",
+      GE: "General Electric Company",
     };
 
     return companies[symbol] || `${symbol} Corporation`;
@@ -132,6 +264,11 @@ export class DemoDataService {
       { symbol: "MSFT", name: "Microsoft Corp." },
       { symbol: "TSLA", name: "Tesla Inc." },
       { symbol: "NVDA", name: "NVIDIA Corp." },
+      { symbol: "AMZN", name: "Amazon.com Inc." },
+      { symbol: "META", name: "Meta Platforms Inc." },
+      { symbol: "NFLX", name: "Netflix Inc." },
+      { symbol: "AMD", name: "Advanced Micro Devices" },
+      { symbol: "COIN", name: "Coinbase Global Inc." },
     ];
 
     return indices.map((index) => {
