@@ -184,15 +184,12 @@ const StockSearchBar = ({
         className="relative"
       >
         {/* Search Input */}
-        <motion.div
-          className="relative"
-          whileFocus={{ scale: 1.02 }}
-        >
+        <motion.div className="relative" whileFocus={{ scale: 1.02 }}>
           <motion.div
             className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10"
             animate={{
               color: isOpen ? "#007aff" : "#6b7280",
-              scale: isOpen ? 1.1 : 1
+              scale: isOpen ? 1.1 : 1,
             }}
             transition={{ duration: 0.2 }}
           >
@@ -211,7 +208,7 @@ const StockSearchBar = ({
             animate={{
               boxShadow: isOpen
                 ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(0, 122, 255, 0.3)"
-                : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
             }}
             transition={{ duration: 0.3 }}
           />
@@ -259,7 +256,7 @@ const StockSearchBar = ({
               )}
             </Button>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Suggestions Dropdown */}
         <AnimatePresence>
@@ -271,7 +268,8 @@ const StockSearchBar = ({
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-gray-200 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-50"
               style={{
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 122, 255, 0.15)"
+                boxShadow:
+                  "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 122, 255, 0.15)",
               }}
             >
               {query.length === 0 && (
@@ -292,14 +290,15 @@ const StockSearchBar = ({
                     whileHover={{
                       backgroundColor: "#f8fafc",
                       x: 4,
-                      transition: { duration: 0.2 }
+                      transition: { duration: 0.2 },
                     }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ delay: index * 0.05 }}
                     onClick={() => handleSelectStock(stock)}
                     className={cn(
                       "w-full px-6 py-4 text-left transition-all duration-200 flex items-center justify-between border-l-4 border-transparent",
-                      selectedIndex === index && "bg-blue-50 border-l-cyber-blue",
+                      selectedIndex === index &&
+                        "bg-blue-50 border-l-cyber-blue",
                     )}
                   >
                     <div className="flex-1">
