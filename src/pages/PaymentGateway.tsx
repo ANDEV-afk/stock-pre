@@ -27,6 +27,10 @@ import {
   Key,
   Phone,
   Mail,
+  Copy,
+  Download,
+  Banknote,
+  Coins,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -84,6 +88,15 @@ const PaymentGateway = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
+
+  // Generate QR Code data for UPI payment
+  const generateUPIQRData = () => {
+    const amount = selectedPlan.price;
+    const merchantId = "stockvision@paytm";
+    const transactionNote = `Payment for ${selectedPlan.name}`;
+    return `upi://pay?pa=${merchantId}&pn=StockVision&am=${amount}&cu=USD&tn=${encodeURIComponent(transactionNote)}`;
+  };
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -113,9 +126,9 @@ const PaymentGateway = () => {
     },
     {
       id: "upi",
-      name: "UPI",
+      name: "UPI Payment",
       icon: Smartphone,
-      description: "Google Pay, PhonePe, Paytm",
+      description: "Google Pay, PhonePe, Paytm, BHIM",
       processingTime: "Instant",
       fees: "Free",
       popular: true,
@@ -126,13 +139,13 @@ const PaymentGateway = () => {
       icon: Building2,
       description: "All major banks supported",
       processingTime: "1-2 minutes",
-      fees: "₹10 + GST",
+      fees: "$1.50",
     },
     {
-      id: "wallet",
-      name: "Digital Wallet",
+      id: "digital_wallet",
+      name: "Digital Wallets",
       icon: Wallet,
-      description: "PayPal, Razorpay Wallet",
+      description: "PayPal, Apple Pay, Google Pay",
       processingTime: "Instant",
       fees: "3.5%",
     },
@@ -140,7 +153,7 @@ const PaymentGateway = () => {
       id: "crypto",
       name: "Cryptocurrency",
       icon: DollarSign,
-      description: "Bitcoin, Ethereum, USDT",
+      description: "Bitcoin, Ethereum, USDT, BNB",
       processingTime: "5-10 minutes",
       fees: "1%",
     },
@@ -169,6 +182,11 @@ const PaymentGateway = () => {
       return v.substring(0, 2) + "/" + v.substring(2, 4);
     }
     return v;
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    // Could add a toast notification here
   };
 
   if (paymentSuccess) {
@@ -253,7 +271,7 @@ const PaymentGateway = () => {
     <div className="min-h-screen bg-cyber-black cyber-grid">
       <Navigation />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -428,30 +446,73 @@ const PaymentGateway = () => {
                       <h3 className="text-lg font-semibold text-white mb-4">
                         UPI Payment
                       </h3>
-                      <div className="space-y-4">
-                        <div>
-                          <Label className="text-white text-sm mb-2 block">
-                            UPI ID
-                          </Label>
-                          <Input
-                            placeholder="yourname@paytm"
-                            value={upiForm.id}
-                            onChange={(e) => setUpiForm({ id: e.target.value })}
-                            className="bg-black/50 border-cyber-blue/30 text-white placeholder-white/50"
-                          />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* UPI ID Form */}
+                        <div className="space-y-4">
+                          <div>
+                            <Label className="text-white text-sm mb-2 block">
+                              UPI ID
+                            </Label>
+                            <Input
+                              placeholder="yourname@paytm"
+                              value={upiForm.id}
+                              onChange={(e) =>
+                                setUpiForm({ id: e.target.value })
+                              }
+                              className="bg-black/50 border-cyber-blue/30 text-white placeholder-white/50"
+                            />
+                          </div>
+
+                          <div className="p-4 bg-cyber-blue/10 rounded-lg border border-cyber-blue/20">
+                            <h4 className="text-white font-medium mb-2">
+                              Popular UPI Apps
+                            </h4>
+                            <div className="grid grid-cols-2 gap-2">
+                              {["Google Pay", "PhonePe", "Paytm", "BHIM"].map(
+                                (app) => (
+                                  <Button
+                                    key={app}
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-cyber-blue/30 text-cyber-blue hover:bg-cyber-blue/10"
+                                  >
+                                    {app}
+                                  </Button>
+                                ),
+                              )}
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="p-4 bg-cyber-blue/10 rounded-lg border border-cyber-blue/20">
-                          <div className="flex items-center space-x-3">
-                            <QrCode className="h-6 w-6 text-cyber-blue" />
-                            <div>
-                              <h4 className="text-white font-medium">
-                                Scan QR Code
-                              </h4>
-                              <p className="text-white/60 text-sm">
-                                Use any UPI app to scan and pay
-                              </p>
-                            </div>
+                        {/* QR Code Section */}
+                        <div className="text-center">
+                          <h4 className="text-white font-medium mb-4">
+                            Scan QR Code to Pay
+                          </h4>
+                          <div className="bg-white p-4 rounded-lg inline-block mb-4">
+                            {/* Real QR Code - Using QR Code API */}
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(generateUPIQRData())}`}
+                              alt="UPI Payment QR Code"
+                              className="w-48 h-48"
+                            />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-cyber-blue/80 text-sm mb-2">
+                              Amount: ${selectedPlan.price}
+                            </p>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                copyToClipboard(generateUPIQRData())
+                              }
+                              className="border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10"
+                            >
+                              <Copy className="h-4 w-4 mr-2" />
+                              Copy UPI Link
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -469,6 +530,20 @@ const PaymentGateway = () => {
                         Net Banking Details
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-white text-sm mb-2 block">
+                            Select Bank
+                          </Label>
+                          <select className="w-full px-3 py-2 bg-black/50 border border-cyber-blue/30 rounded-md text-white">
+                            <option>State Bank of India</option>
+                            <option>HDFC Bank</option>
+                            <option>ICICI Bank</option>
+                            <option>Axis Bank</option>
+                            <option>Punjab National Bank</option>
+                            <option>Bank of Baroda</option>
+                          </select>
+                        </div>
+
                         <div>
                           <Label className="text-white text-sm mb-2 block">
                             Account Number
@@ -506,7 +581,7 @@ const PaymentGateway = () => {
                           />
                         </div>
 
-                        <div className="md:col-span-2">
+                        <div>
                           <Label className="text-white text-sm mb-2 block">
                             Account Holder Name
                           </Label>
@@ -526,7 +601,7 @@ const PaymentGateway = () => {
                     </motion.div>
                   )}
 
-                  {selectedMethod === "wallet" && (
+                  {selectedMethod === "digital_wallet" && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -534,22 +609,50 @@ const PaymentGateway = () => {
                       key="wallet-form"
                     >
                       <h3 className="text-lg font-semibold text-white mb-4">
-                        Digital Wallet
+                        Digital Wallets
                       </h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <Button
                           variant="outline"
-                          className="bg-black/50 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 h-16"
+                          className="bg-blue-600/20 border-blue-500/30 text-blue-400 hover:bg-blue-500/30 h-20 flex flex-col items-center justify-center"
                         >
-                          <Globe className="h-6 w-6 mr-2" />
+                          <Globe className="h-8 w-8 mb-2" />
                           PayPal
                         </Button>
                         <Button
                           variant="outline"
-                          className="bg-black/50 border-purple-500/30 text-purple-400 hover:bg-purple-500/10 h-16"
+                          className="bg-black border-white/30 text-white hover:bg-white/10 h-20 flex flex-col items-center justify-center"
                         >
-                          <Wallet className="h-6 w-6 mr-2" />
+                          <Phone className="h-8 w-8 mb-2" />
+                          Apple Pay
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="bg-green-600/20 border-green-500/30 text-green-400 hover:bg-green-500/30 h-20 flex flex-col items-center justify-center"
+                        >
+                          <Globe className="h-8 w-8 mb-2" />
+                          Google Pay
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="bg-purple-600/20 border-purple-500/30 text-purple-400 hover:bg-purple-500/30 h-20 flex flex-col items-center justify-center"
+                        >
+                          <Wallet className="h-8 w-8 mb-2" />
+                          Stripe
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="bg-indigo-600/20 border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/30 h-20 flex flex-col items-center justify-center"
+                        >
+                          <Banknote className="h-8 w-8 mb-2" />
                           Razorpay
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="bg-cyan-600/20 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30 h-20 flex flex-col items-center justify-center"
+                        >
+                          <Coins className="h-8 w-8 mb-2" />
+                          Amazon Pay
                         </Button>
                       </div>
                     </motion.div>
@@ -563,27 +666,52 @@ const PaymentGateway = () => {
                       key="crypto-form"
                     >
                       <h3 className="text-lg font-semibold text-white mb-4">
-                        Cryptocurrency
+                        Cryptocurrency Payment
                       </h3>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <Button
                           variant="outline"
-                          className="bg-black/50 border-orange-500/30 text-orange-400 hover:bg-orange-500/10 h-16"
+                          className="bg-orange-600/20 border-orange-500/30 text-orange-400 hover:bg-orange-500/30 h-20 flex flex-col items-center justify-center"
                         >
-                          ₿ Bitcoin
+                          <div className="text-2xl mb-1">₿</div>
+                          <span className="text-sm">Bitcoin</span>
                         </Button>
                         <Button
                           variant="outline"
-                          className="bg-black/50 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 h-16"
+                          className="bg-blue-600/20 border-blue-500/30 text-blue-400 hover:bg-blue-500/30 h-20 flex flex-col items-center justify-center"
                         >
-                          Ξ Ethereum
+                          <div className="text-2xl mb-1">Ξ</div>
+                          <span className="text-sm">Ethereum</span>
                         </Button>
                         <Button
                           variant="outline"
-                          className="bg-black/50 border-green-500/30 text-green-400 hover:bg-green-500/10 h-16"
+                          className="bg-green-600/20 border-green-500/30 text-green-400 hover:bg-green-500/30 h-20 flex flex-col items-center justify-center"
                         >
-                          ₮ USDT
+                          <div className="text-2xl mb-1">₮</div>
+                          <span className="text-sm">USDT</span>
                         </Button>
+                        <Button
+                          variant="outline"
+                          className="bg-yellow-600/20 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/30 h-20 flex flex-col items-center justify-center"
+                        >
+                          <div className="text-2xl mb-1">⬣</div>
+                          <span className="text-sm">BNB</span>
+                        </Button>
+                      </div>
+
+                      <div className="mt-6 p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                        <div className="flex items-center space-x-3">
+                          <AlertTriangle className="h-5 w-5 text-amber-400" />
+                          <div>
+                            <h4 className="text-amber-400 font-medium">
+                              Important Note
+                            </h4>
+                            <p className="text-amber-300/80 text-sm">
+                              Cryptocurrency payments may take 5-10 minutes to
+                              confirm
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -596,7 +724,8 @@ const PaymentGateway = () => {
                     <div>
                       <h4 className="text-white font-medium">Secure Payment</h4>
                       <p className="text-white/60 text-sm">
-                        256-bit SSL encryption • PCI DSS compliant
+                        256-bit SSL encryption • PCI DSS compliant • SOC 2
+                        certified
                       </p>
                     </div>
                   </div>

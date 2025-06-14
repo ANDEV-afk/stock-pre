@@ -214,8 +214,8 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
           </div>
         </div>
 
-        {/* Controls */}
-        <div className="flex items-center justify-between">
+        {/* Top Controls Row */}
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-1">
             {timeframes.map((tf) => (
               <Button
@@ -270,9 +270,9 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
         </div>
       </div>
 
-      {/* Chart Area */}
-      <div className="relative h-96 p-4">
-        <div className="absolute inset-4">
+      {/* Chart Area - Responsive Height */}
+      <div className="relative h-64 sm:h-80 md:h-96 p-2 sm:p-4">
+        <div className="absolute inset-2 sm:inset-4">
           {/* Price Grid Lines */}
           {Array.from({ length: 6 }).map((_, i) => (
             <div
@@ -532,8 +532,31 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
         </div>
       )}
 
-      {/* Chart Footer */}
+      {/* Chart Footer with Time Intervals */}
       <div className="p-4 border-t border-white/10">
+        {/* Inner Time Interval Controls - Matching Image Design */}
+        <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center space-x-1 bg-white/5 rounded-lg p-1">
+            {timeframes.map((tf) => (
+              <Button
+                key={`bottom-${tf.id}`}
+                size="sm"
+                variant={timeframe === tf.id ? "default" : "ghost"}
+                onClick={() => setTimeframe(tf.id)}
+                className={cn(
+                  "h-8 px-3 text-xs rounded-md",
+                  timeframe === tf.id
+                    ? "bg-cyber-blue text-white shadow-lg"
+                    : "text-white/70 hover:text-white hover:bg-white/10",
+                )}
+              >
+                {tf.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Market Info */}
         <div className="flex items-center justify-between text-xs text-white/60">
           <div className="flex items-center space-x-4">
             <span>Market Hours: 9:15 AM - 3:30 PM IST</span>

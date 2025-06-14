@@ -44,6 +44,7 @@ import {
   Calculator,
   AlertTriangle,
   Check,
+  CheckCircle,
   X,
   Edit3,
   Trash2,

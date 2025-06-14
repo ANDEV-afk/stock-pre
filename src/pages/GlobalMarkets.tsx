@@ -34,6 +34,7 @@ import {
   LineChart,
   X,
   CreditCard,
+  ThumbsUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePayment } from "@/contexts/PaymentContext";
@@ -92,6 +93,7 @@ const GlobalMarkets = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showOnlyOpen, setShowOnlyOpen] = useState(false);
   const [watchlist, setWatchlist] = useState<Set<string>>(new Set());
+  const [likedStocks, setLikedStocks] = useState<Set<string>>(new Set());
   const [showChartModal, setShowChartModal] = useState(false);
   const [selectedCompanyForChart, setSelectedCompanyForChart] =
     useState<TopCompany | null>(null);
@@ -470,7 +472,7 @@ const GlobalMarkets = () => {
     });
 
   const toggleWatchlist = (companyId: string) => {
-    setWatchedStocks((prev) => {
+    setWatchlist((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(companyId)) {
         newSet.delete(companyId);
@@ -479,6 +481,27 @@ const GlobalMarkets = () => {
       }
       return newSet;
     });
+  };
+
+  const toggleLike = (companyId: string) => {
+    setLikedStocks((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(companyId)) {
+        newSet.delete(companyId);
+      } else {
+        newSet.add(companyId);
+      }
+      return newSet;
+    });
+  };
+
+  const addAllToWatchlist = () => {
+    const allCompanyIds = filteredCompanies.map((company) => company.id);
+    setWatchlist(new Set(allCompanyIds));
+  };
+
+  const removeAllFromWatchlist = () => {
+    setWatchlist(new Set());
   };
 
   const formatTimeAgo = (date: Date) => {
@@ -907,14 +930,26 @@ const GlobalMarkets = () => {
                 <Badge className="bg-cyber-purple/20 text-cyber-purple border-cyber-purple/30">
                   {filteredCompanies.length} companies
                 </Badge>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add All to Watchlist
-                </Button>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={addAllToWatchlist}
+                    className="border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add All to Watchlist
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={removeAllFromWatchlist}
+                    className="border-cyber-red/30 text-cyber-red hover:bg-cyber-red/10"
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Clear Watchlist
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -1134,12 +1169,40 @@ const GlobalMarkets = () => {
                                     ? "text-cyber-yellow"
                                     : "text-white/70 hover:text-cyber-yellow",
                                 )}
-                                title="Add to Watchlist"
+                                title={
+                                  isWatched
+                                    ? "Remove from Watchlist"
+                                    : "Add to Watchlist"
+                                }
                               >
                                 <Star
                                   className={cn(
                                     "h-4 w-4",
                                     isWatched && "fill-current",
+                                  )}
+                                />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => toggleLike(company.id)}
+                                className={cn(
+                                  "p-2",
+                                  likedStocks.has(company.id)
+                                    ? "text-cyber-red"
+                                    : "text-white/70 hover:text-cyber-red",
+                                )}
+                                title={
+                                  likedStocks.has(company.id)
+                                    ? "Unlike"
+                                    : "Like"
+                                }
+                              >
+                                <ThumbsUp
+                                  className={cn(
+                                    "h-4 w-4",
+                                    likedStocks.has(company.id) &&
+                                      "fill-current",
                                   )}
                                 />
                               </Button>
@@ -1175,32 +1238,33 @@ const GlobalMarkets = () => {
           </Card>
         </section>
 
-        {/* Chart Modal */}
+        {/* Chart Modal - Fixed Sizing */}
         {showChartModal && selectedCompanyForChart && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
             onClick={() => setShowChartModal(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-cyber-dark border border-cyber-blue/30 rounded-3xl p-8 max-w-4xl w-full shadow-2xl"
+              className="bg-cyber-dark border border-cyber-blue/30 rounded-2xl overflow-hidden w-full max-w-6xl h-[90vh] max-h-[800px] shadow-2xl flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
+              {/* Header - Fixed Height */}
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10 bg-cyber-dark/50 backdrop-blur-sm">
+                <div className="flex items-center space-x-3">
                   <CompanyLogo
                     symbol={selectedCompanyForChart.symbol}
                     companyName={selectedCompanyForChart.name}
-                    size="lg"
+                    size="md"
                   />
                   <div>
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-lg sm:text-xl font-bold text-white">
                       {selectedCompanyForChart.symbol}
                     </h3>
-                    <p className="text-cyber-blue/80">
+                    <p className="text-cyber-blue/80 text-sm">
                       {selectedCompanyForChart.name}
                     </p>
                   </div>
@@ -1215,60 +1279,65 @@ const GlobalMarkets = () => {
                 </Button>
               </div>
 
-              {/* Stock Price Info */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-cyber-blue/70 text-sm">Current Price</p>
-                  <p className="text-2xl font-bold text-white">
-                    ${selectedCompanyForChart.price.toFixed(2)}
-                  </p>
+              {/* Main Content - Scrollable */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                {/* Stock Price Info - Compact */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                  <div className="bg-white/5 rounded-xl p-3">
+                    <p className="text-cyber-blue/70 text-xs">Current Price</p>
+                    <p className="text-lg font-bold text-white">
+                      ${selectedCompanyForChart.price.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-3">
+                    <p className="text-cyber-blue/70 text-xs">Change</p>
+                    <p
+                      className={`text-sm font-bold ${
+                        selectedCompanyForChart.change >= 0
+                          ? "text-cyber-green"
+                          : "text-cyber-red"
+                      }`}
+                    >
+                      {selectedCompanyForChart.change >= 0 ? "+" : ""}$
+                      {selectedCompanyForChart.change.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-3">
+                    <p className="text-cyber-blue/70 text-xs">Change %</p>
+                    <p
+                      className={`text-sm font-bold ${
+                        selectedCompanyForChart.changePercent >= 0
+                          ? "text-cyber-green"
+                          : "text-cyber-red"
+                      }`}
+                    >
+                      {selectedCompanyForChart.changePercent >= 0 ? "+" : ""}
+                      {selectedCompanyForChart.changePercent.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-3">
+                    <p className="text-cyber-blue/70 text-xs">Market Cap</p>
+                    <p className="text-sm font-bold text-white">
+                      {selectedCompanyForChart.marketCap}
+                    </p>
+                  </div>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-cyber-blue/70 text-sm">Change</p>
-                  <p
-                    className={`text-xl font-bold ${
-                      selectedCompanyForChart.change >= 0
-                        ? "text-cyber-green"
-                        : "text-cyber-red"
-                    }`}
-                  >
-                    {selectedCompanyForChart.change >= 0 ? "+" : ""}$
-                    {selectedCompanyForChart.change.toFixed(2)}
-                  </p>
-                </div>
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-cyber-blue/70 text-sm">Change %</p>
-                  <p
-                    className={`text-xl font-bold ${
-                      selectedCompanyForChart.changePercent >= 0
-                        ? "text-cyber-green"
-                        : "text-cyber-red"
-                    }`}
-                  >
-                    {selectedCompanyForChart.changePercent >= 0 ? "+" : ""}
-                    {selectedCompanyForChart.changePercent.toFixed(2)}%
-                  </p>
-                </div>
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-cyber-blue/70 text-sm">Market Cap</p>
-                  <p className="text-xl font-bold text-white">
-                    {selectedCompanyForChart.marketCap}
-                  </p>
+
+                {/* Professional Trading Chart - Responsive Container */}
+                <div className="bg-cyber-black/50 rounded-xl p-2 mb-4">
+                  <ProfessionalChart
+                    symbol={selectedCompanyForChart.symbol}
+                    companyName={selectedCompanyForChart.name}
+                    currentPrice={selectedCompanyForChart.price}
+                    change={selectedCompanyForChart.change}
+                    changePercent={selectedCompanyForChart.changePercent}
+                    className="bg-transparent border-0 h-[300px] sm:h-[400px]"
+                  />
                 </div>
               </div>
 
-              {/* Professional Trading Chart */}
-              <ProfessionalChart
-                symbol={selectedCompanyForChart.symbol}
-                companyName={selectedCompanyForChart.name}
-                currentPrice={selectedCompanyForChart.price}
-                change={selectedCompanyForChart.change}
-                changePercent={selectedCompanyForChart.changePercent}
-                className="bg-transparent border-0"
-              />
-
-              {/* Action Buttons */}
-              <div className="flex justify-center space-x-4 mt-6">
+              {/* Footer - Action Buttons */}
+              <div className="flex justify-center space-x-3 p-4 sm:p-6 border-t border-white/10 bg-cyber-dark/50 backdrop-blur-sm">
                 <Button
                   onClick={() => toggleWatchlist(selectedCompanyForChart.id)}
                   className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
