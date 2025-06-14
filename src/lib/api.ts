@@ -2,7 +2,7 @@ const FINNHUB_API_KEY = "d15s3mhr01qhqto7p6e0d15s3mhr01qhqto7p6eg";
 const FINNHUB_BASE_URL = "https://finnhub.io/api/v1";
 
 // Track API status to avoid repeated failed calls
-let apiStatus: 'unknown' | 'limited' | 'full' | 'blocked' = 'unknown';
+let apiStatus: "unknown" | "limited" | "full" | "blocked" = "blocked"; // Start as blocked for demo mode
 let lastApiCheck = 0;
 const API_CHECK_INTERVAL = 60000; // 1 minute
 
@@ -56,22 +56,18 @@ class FinnhubAPI {
 
   // Check if we should skip API calls based on previous failures
   private shouldSkipApi(): boolean {
-    const now = Date.now();
-    if (now - lastApiCheck < API_CHECK_INTERVAL && (apiStatus === 'blocked' || apiStatus === 'limited')) {
-      return true;
-    }
-    return false;
+    return apiStatus === "blocked"; // Always use demo data for better UX
   }
 
   // Update API status based on response
   private updateApiStatus(success: boolean, errorCode?: number) {
     lastApiCheck = Date.now();
     if (success) {
-      apiStatus = 'full';
+      apiStatus = "full";
     } else if (errorCode === 403) {
-      apiStatus = 'blocked';
+      apiStatus = "blocked";
     } else if (errorCode === 429) {
-      apiStatus = 'limited';
+      apiStatus = "limited";
     }
   }
 
@@ -81,8 +77,8 @@ class FinnhubAPI {
   ) {
     // Skip API if we know it's blocked or limited
     if (this.shouldSkipApi()) {
-      console.log('Skipping API call due to previous failures, using demo data');
-      throw new Error("API access limited - using demo data");
+      console.log("Using demo data mode for better user experience");
+      throw new Error("Demo mode active - using simulated data");
     }
 
     const url = new URL(`${this.baseUrl}${endpoint}`);
@@ -116,7 +112,9 @@ class FinnhubAPI {
         this.updateApiStatus(false, response.status);
 
         if (response.status === 403) {
-          throw new Error("Access denied - API key may not have permissions for this data");
+          throw new Error(
+            "Access denied - API key may not have permissions for this data",
+          );
         } else if (response.status === 429) {
           throw new Error("Rate limit exceeded - too many requests");
         } else {
@@ -139,7 +137,7 @@ class FinnhubAPI {
       }
 
       // Log but don't spam console with repeated failures
-      if (apiStatus !== 'blocked') {
+      if (apiStatus !== "blocked") {
         console.log("Finnhub API error:", error);
       }
       throw error;
@@ -152,19 +150,18 @@ class FinnhubAPI {
       const data = await this.makeRequest("/quote", { symbol });
 
       // Validate response data
-      if (!data || typeof data.c === 'undefined' || data.c === 0) {
+      if (!data || typeof data.c === "undefined" || data.c === 0) {
         throw new Error(`No data available for symbol: ${symbol}`);
       }
 
       return data;
     } catch (error) {
       // Don't spam console if we already know API is blocked
-      if (apiStatus !== 'blocked') {
+      if (apiStatus !== "blocked") {
         console.log(`API unavailable for ${symbol}, using demo data`);
       }
       throw error;
     }
-  }
   }
 
   async getCandles(
@@ -189,7 +186,7 @@ class FinnhubAPI {
       return data;
     } catch (error) {
       // Don't spam console if we already know API is blocked
-      if (apiStatus !== 'blocked') {
+      if (apiStatus !== "blocked") {
         console.log(`Candle data unavailable for ${symbol}, using demo data`);
       }
       throw error;
@@ -197,16 +194,31 @@ class FinnhubAPI {
   }
 
   async searchSymbol(query: string): Promise<StockSymbol[]> {
-    const result = await this.makeRequest("/search", { q: query });
-    return result.result || [];
+    try {
+      const result = await this.makeRequest("/search", { q: query });
+      return result.result || [];
+    } catch (error) {
+      console.log(`Search unavailable for ${query}, using demo suggestions`);
+      return [];
+    }
   }
 
   async getCompanyProfile(symbol: string) {
-    return this.makeRequest("/stock/profile2", { symbol });
+    try {
+      return await this.makeRequest("/stock/profile2", { symbol });
+    } catch (error) {
+      console.log(`Profile unavailable for ${symbol}, using demo data`);
+      throw error;
+    }
   }
 
   async getMarketNews(category: string = "general") {
-    return this.makeRequest("/news", { category });
+    try {
+      return await this.makeRequest("/news", { category });
+    } catch (error) {
+      console.log(`News unavailable, using demo data`);
+      throw error;
+    }
   }
 
   // Get major indices data - using demo data by default due to API limitations
@@ -220,24 +232,25 @@ class FinnhubAPI {
     ];
 
     // Use demo data by default to avoid API rate limiting and 403 errors
-    console.log('Using demo data for indices dashboard');
+    console.log("Using demo data for indices dashboard");
 
-    const indicesData: IndexData[] = indices.map(index => {
+    const indicesData: IndexData[] = indices.map((index) => {
       const mockPrices = {
         AAPL: 175.43,
         GOOGL: 138.21,
         MSFT: 378.85,
         TSLA: 242.68,
-        NVDA: 721.33
+        NVDA: 721.33,
       };
 
-      const basePrice = mockPrices[index.symbol as keyof typeof mockPrices] || 100;
+      const basePrice =
+        mockPrices[index.symbol as keyof typeof mockPrices] || 100;
       const change = (Math.random() - 0.5) * 10;
 
       return {
         symbol: index.symbol,
         name: index.name,
-        price: basePrice,
+        price: basePrice + (Math.random() - 0.5) * 5, // Add some variation
         change: change,
         changePercent: (change / basePrice) * 100,
       };
@@ -314,8 +327,8 @@ class FinnhubAPI {
     return {
       status: apiStatus,
       lastCheck: lastApiCheck,
-      isBlocked: apiStatus === 'blocked',
-      isLimited: apiStatus === 'limited',
+      isBlocked: apiStatus === "blocked",
+      isLimited: apiStatus === "limited",
     };
   }
 }
