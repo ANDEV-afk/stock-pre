@@ -170,6 +170,23 @@ export class DemoDataService {
     return candles;
   }
 
+  private generateMarketCap(type: string): string {
+    switch (type) {
+      case "index":
+        return `${(Math.random() * 50 + 10).toFixed(1)}T`;
+      case "stock":
+        return `${(Math.random() * 2000 + 100).toFixed(0)}B`;
+      case "sector":
+        return `${(Math.random() * 500 + 50).toFixed(0)}B`;
+      case "global":
+        return `${(Math.random() * 1000 + 200).toFixed(0)}B`;
+      case "commodity":
+        return `${(Math.random() * 100 + 10).toFixed(0)}B`;
+      default:
+        return `${(Math.random() * 500 + 50).toFixed(0)}B`;
+    }
+  }
+
   private getCompanyName(symbol: string): string {
     const companies: Record<string, string> = {
       // Tech Giants
@@ -256,19 +273,42 @@ export class DemoDataService {
     return companies[symbol] || `${symbol} Corporation`;
   }
 
-  // Generate indices data
+  // Generate comprehensive global indices data
   generateIndicesData() {
     const indices = [
-      { symbol: "AAPL", name: "Apple Inc." },
-      { symbol: "GOOGL", name: "Alphabet Inc." },
-      { symbol: "MSFT", name: "Microsoft Corp." },
-      { symbol: "TSLA", name: "Tesla Inc." },
-      { symbol: "NVDA", name: "NVIDIA Corp." },
-      { symbol: "AMZN", name: "Amazon.com Inc." },
-      { symbol: "META", name: "Meta Platforms Inc." },
-      { symbol: "NFLX", name: "Netflix Inc." },
-      { symbol: "AMD", name: "Advanced Micro Devices" },
-      { symbol: "COIN", name: "Coinbase Global Inc." },
+      // Major US Indices
+      { symbol: "SPY", name: "S&P 500 ETF", type: "index" },
+      { symbol: "QQQ", name: "NASDAQ 100 ETF", type: "index" },
+      { symbol: "DIA", name: "Dow Jones ETF", type: "index" },
+      { symbol: "IWM", name: "Russell 2000 ETF", type: "index" },
+      { symbol: "VTI", name: "Total Stock Market ETF", type: "index" },
+
+      // Global Indices
+      { symbol: "EWJ", name: "Japan ETF (Nikkei)", type: "global" },
+      { symbol: "FXI", name: "China Large-Cap ETF", type: "global" },
+      { symbol: "EWG", name: "Germany ETF (DAX)", type: "global" },
+      { symbol: "EWU", name: "United Kingdom ETF", type: "global" },
+      { symbol: "EWZ", name: "Brazil ETF", type: "global" },
+      { symbol: "INDA", name: "India ETF", type: "global" },
+
+      // Top Individual Stocks
+      { symbol: "AAPL", name: "Apple Inc.", type: "stock" },
+      { symbol: "GOOGL", name: "Alphabet Inc.", type: "stock" },
+      { symbol: "MSFT", name: "Microsoft Corp.", type: "stock" },
+      { symbol: "TSLA", name: "Tesla Inc.", type: "stock" },
+      { symbol: "NVDA", name: "NVIDIA Corp.", type: "stock" },
+      { symbol: "AMZN", name: "Amazon.com Inc.", type: "stock" },
+
+      // Sector ETFs
+      { symbol: "XLK", name: "Technology Select Sector", type: "sector" },
+      { symbol: "XLF", name: "Financial Select Sector", type: "sector" },
+      { symbol: "XLV", name: "Health Care Select Sector", type: "sector" },
+      { symbol: "XLE", name: "Energy Select Sector", type: "sector" },
+
+      // Volatility & Alternative
+      { symbol: "VXX", name: "Volatility Index", type: "volatility" },
+      { symbol: "GLD", name: "Gold ETF", type: "commodity" },
+      { symbol: "SLV", name: "Silver ETF", type: "commodity" },
     ];
 
     return indices.map((index) => {
@@ -279,6 +319,9 @@ export class DemoDataService {
         price: stockData.quote.c,
         change: stockData.quote.d,
         changePercent: stockData.quote.dp,
+        type: (index as any).type || "stock",
+        volume: Math.floor(Math.random() * 100000000),
+        marketCap: this.generateMarketCap((index as any).type),
       };
     });
   }
