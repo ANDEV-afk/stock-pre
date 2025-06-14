@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Eye,
   EyeOff,
@@ -17,6 +18,7 @@ import {
   Github,
   Chrome,
   CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +32,15 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { register, isLoading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -38,13 +48,24 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setError("");
 
-    // Simulate registration
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect would happen here
-    }, 2000);
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      await register(formData);
+      navigate("/dashboard");
+    } catch (error: any) {
+      setError(error.message || "Registration failed. Please try again.");
+    }
   };
 
   const socialProviders = [
@@ -78,7 +99,7 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-apple-gray-50 via-white to-apple-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-cyber-black cyber-grid flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-apple-blue/5 rounded-full blur-3xl" />
@@ -175,7 +196,7 @@ const Register = () => {
               </p>
             </div>
 
-            <Card className="bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple-lg p-8">
+            <Card className="dark-card neon-border p-8 backdrop-blur-xl">
               {/* Social Registration */}
               <div className="mb-8">
                 <div className="grid grid-cols-3 gap-3">
@@ -212,6 +233,18 @@ const Register = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-3 bg-cyber-red/10 border border-cyber-red/30 rounded-xl flex items-center space-x-2"
+                >
+                  <AlertCircle className="h-4 w-4 text-cyber-red" />
+                  <span className="text-sm text-cyber-red">{error}</span>
+                </motion.div>
+              )}
 
               {/* Registration Form */}
               <form onSubmit={handleSubmit} className="space-y-6">

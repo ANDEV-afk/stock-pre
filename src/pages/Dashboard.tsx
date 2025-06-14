@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
+import IndicesDashboard from "@/components/IndicesDashboard";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
 import {
   TrendingUp,
   TrendingDown,
@@ -14,14 +18,26 @@ import {
   Eye,
   Plus,
   MoreHorizontal,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("AAPL");
   const [timeframe, setTimeframe] = useState("1M");
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [isLoadingChart, setIsLoadingChart] = useState(false);
+  const [stockQuote, setStockQuote] = useState<any>(null);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  // Mock data for demonstration
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Mock data for demonstration (replace with real portfolio data)
   const portfolioValue = 125847.32;
   const dailyChange = 2847.18;
   const dailyChangePercent = 2.31;
@@ -116,33 +132,48 @@ const Dashboard = () => {
     },
   ];
 
-  // Generate mock chart data
-  const generateChartData = (symbol: string) => {
-    const data = [];
-    const basePrice = watchlist.find((w) => w.symbol === symbol)?.price || 100;
+  // Fetch real stock data
+  const fetchStockData = async (symbol: string) => {
+    setIsLoadingChart(true);
+    try {
+      const { from, to } = generateDateRange(30); // Last 30 days
+      const [candles, quote] = await Promise.all([
+        finnhubAPI.getCandles(symbol, "D", from, to),
+        finnhubAPI.getQuote(symbol),
+      ]);
 
-    for (let i = 30; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-
-      const volatility = 0.02;
-      const trend = (Math.random() - 0.5) * volatility;
-      const price = basePrice * (1 + trend * (i / 30));
-
-      data.push({
-        date: date.toLocaleDateString(),
-        price: parseFloat(price.toFixed(2)),
-        predicted: false,
-      });
+      const formattedData = formatChartData(candles);
+      setChartData(formattedData);
+      setStockQuote(quote);
+    } catch (error) {
+      console.error("Error fetching stock data:", error);
+      // Fallback to mock data
+      const mockData = [];
+      const basePrice = 150;
+      for (let i = 30; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const volatility = 0.02;
+        const trend = (Math.random() - 0.5) * volatility;
+        const price = basePrice * (1 + trend * (i / 30));
+        mockData.push({
+          date: date.toLocaleDateString(),
+          price: parseFloat(price.toFixed(2)),
+          predicted: false,
+        });
+      }
+      setChartData(mockData);
+    } finally {
+      setIsLoadingChart(false);
     }
-
-    return data;
   };
 
-  const chartData = generateChartData(selectedStock);
+  useEffect(() => {
+    fetchStockData(selectedStock);
+  }, [selectedStock]);
 
   return (
-    <div className="min-h-screen bg-apple-gray-50">
+    <div className="min-h-screen bg-cyber-black cyber-grid">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -270,7 +301,10 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Indices Dashboard */}
+        <IndicesDashboard />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           {/* Main Chart */}
           <div className="lg:col-span-2">
             <motion.div
