@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Eye,
   EyeOff,
@@ -15,6 +16,7 @@ import {
   Apple,
   Github,
   Chrome,
+  AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,17 +24,26 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { login, isLoading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setError("");
 
-    // Simulate login
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect would happen here
-    }, 2000);
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (error: any) {
+      setError(error.message || "Login failed. Please try again.");
+    }
   };
 
   const socialProviders = [
@@ -46,11 +57,12 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-apple-gray-50 via-white to-apple-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-cyber-black cyber-grid flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-apple-blue/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-apple-purple/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyber-blue/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-purple/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-cyber-blue/5 to-transparent rounded-full" />
       </div>
 
       <motion.div
@@ -95,7 +107,7 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="bg-white/90 apple-blur border border-apple-gray-200/50 shadow-apple-lg p-8">
+          <Card className="dark-card neon-border p-8 backdrop-blur-xl">
             {/* Social Login */}
             <div className="mb-8">
               <div className="grid grid-cols-3 gap-3">
@@ -132,6 +144,18 @@ const Login = () => {
                 </div>
               </div>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-3 bg-cyber-red/10 border border-cyber-red/30 rounded-xl flex items-center space-x-2"
+              >
+                <AlertCircle className="h-4 w-4 text-cyber-red" />
+                <span className="text-sm text-cyber-red">{error}</span>
+              </motion.div>
+            )}
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
