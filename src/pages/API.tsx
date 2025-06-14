@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navigation from "@/components/Navigation";
+import ApiDocumentation from "@/components/ApiDocumentation";
+import BasicApiDocumentation from "@/components/BasicApiDocumentation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +36,8 @@ import {
   Bookmark,
   Settings,
   AlertCircle,
+  Bell,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -474,7 +478,7 @@ const API = () => {
           onValueChange={setActiveTab}
           className="space-y-8"
         >
-          <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-md border border-cyber-blue/20">
+          <TabsList className="grid w-full grid-cols-5 bg-white/10 backdrop-blur-md border border-cyber-blue/20">
             <TabsTrigger
               value="overview"
               className="data-[state=active]:bg-cyber-blue data-[state=active]:text-white"
@@ -483,15 +487,22 @@ const API = () => {
               Overview
             </TabsTrigger>
             <TabsTrigger
+              value="documentation"
+              className="data-[state=active]:bg-cyber-purple data-[state=active]:text-white"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Full Docs
+            </TabsTrigger>
+            <TabsTrigger
               value="endpoints"
-              className="data-[state=active]:bg-cyber-blue data-[state=active]:text-white"
+              className="data-[state=active]:bg-cyber-green data-[state=active]:text-white"
             >
               <Code className="h-4 w-4 mr-2" />
               Endpoints
             </TabsTrigger>
             <TabsTrigger
               value="authentication"
-              className="data-[state=active]:bg-cyber-blue data-[state=active]:text-white"
+              className="data-[state=active]:bg-cyber-yellow data-[state=active]:text-white"
             >
               <Key className="h-4 w-4 mr-2" />
               Authentication
@@ -507,141 +518,14 @@ const API = () => {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Card className="p-8 bg-white/10 backdrop-blur-md border border-cyber-blue/20">
-                <h3 className="text-2xl font-bold text-white mb-6">
-                  Quick Start Guide
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cyber-blue rounded-full flex items-center justify-center text-white text-xs font-bold">
-                      1
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold">
-                        Get Your API Key
-                      </h4>
-                      <p className="text-white/70 text-sm">
-                        Sign up and generate your API key from the dashboard
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cyber-blue rounded-full flex items-center justify-center text-white text-xs font-bold">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold">
-                        Make Your First Request
-                      </h4>
-                      <p className="text-white/70 text-sm">
-                        Use our endpoints to fetch real-time market data
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cyber-blue rounded-full flex items-center justify-center text-white text-xs font-bold">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold">
-                        Build Amazing Apps
-                      </h4>
-                      <p className="text-white/70 text-sm">
-                        Create trading bots, analytics dashboards, and more
-                      </p>
-                    </div>
-                  </div>
-                </div>
+            <BasicApiDocumentation
+              onViewFullDocs={() => setActiveTab("documentation")}
+            />
+          </TabsContent>
 
-                <div className="mt-8 p-4 bg-cyber-blue/10 rounded-lg">
-                  <h5 className="text-cyber-blue font-semibold mb-2">
-                    Example Request
-                  </h5>
-                  <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-cyber-green">
-                    <div className="flex justify-between items-start">
-                      <code>
-                        curl -X GET
-                        "https://api.stockvision.com/v1/stocks/AAPL/price"
-                      </code>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          copyToClipboard(
-                            'curl -X GET "https://api.stockvision.com/v1/stocks/AAPL/price"',
-                            "example-request",
-                          )
-                        }
-                        className="text-white/70 hover:text-white ml-2"
-                      >
-                        {copiedStates["example-request"] ? (
-                          <CheckCircle className="h-4 w-4" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-8 bg-white/10 backdrop-blur-md border border-cyber-blue/20">
-                <h3 className="text-2xl font-bold text-white mb-6">
-                  API Features
-                </h3>
-                <div className="space-y-6">
-                  {[
-                    {
-                      icon: TrendingUp,
-                      title: "Real-time Data",
-                      description:
-                        "Live stock prices, market data, and trading volumes",
-                    },
-                    {
-                      icon: Activity,
-                      title: "AI Predictions",
-                      description:
-                        "Machine learning powered stock predictions and analysis",
-                    },
-                    {
-                      icon: BarChart3,
-                      title: "Historical Data",
-                      description:
-                        "Years of historical market data with customizable intervals",
-                    },
-                    {
-                      icon: DollarSign,
-                      title: "Trading API",
-                      description:
-                        "Execute trades, manage portfolios, and track performance",
-                    },
-                  ].map((feature, index) => {
-                    const Icon = feature.icon;
-                    return (
-                      <div key={index} className="flex items-start space-x-3">
-                        <Icon className="h-6 w-6 text-cyber-blue mt-1 flex-shrink-0" />
-                        <div>
-                          <h4 className="text-white font-semibold">
-                            {feature.title}
-                          </h4>
-                          <p className="text-white/70 text-sm">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-8">
-                  <Button className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    View Full Documentation
-                  </Button>
-                </div>
-              </Card>
-            </div>
+          {/* Full Documentation Tab */}
+          <TabsContent value="documentation" className="space-y-8">
+            <ApiDocumentation />
           </TabsContent>
 
           {/* Endpoints Tab */}

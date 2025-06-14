@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import ProfessionalChart from "@/components/ProfessionalChart";
+import StockPriceAlertModal from "@/components/StockPriceAlertModal";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,8 @@ import {
   Bookmark,
   Download,
   RefreshCw,
+  Bell,
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TOP_50_COMPANIES } from "@/lib/companies-data";
@@ -80,6 +83,7 @@ const CompanyPrediction = () => {
   >({});
   const [newsImpacts, setNewsImpacts] = useState<NewsImpact[]>([]);
   const [activeTab, setActiveTab] = useState("prediction");
+  const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
 
   // Find company data
   const company = TOP_50_COMPANIES.find(
@@ -298,6 +302,13 @@ const CompanyPrediction = () => {
             </div>
 
             <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => setShowPriceAlertModal(true)}
+                className="bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white"
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                Set Price Alert
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -574,23 +585,34 @@ const CompanyPrediction = () => {
                                 )}
                               </div>
 
-                              <div className="mt-6 p-4 bg-white/5 rounded-xl border border-cyber-blue/20">
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className="text-white/80 text-sm">
-                                    AI Model
-                                  </span>
-                                  <span className="text-cyber-blue text-sm">
-                                    {currentPrediction.aiModel}
-                                  </span>
+                              <div className="mt-6 space-y-4">
+                                <div className="p-4 bg-white/5 rounded-xl border border-cyber-blue/20">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-white/80 text-sm">
+                                      AI Model
+                                    </span>
+                                    <span className="text-cyber-blue text-sm">
+                                      {currentPrediction.aiModel}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-white/80 text-sm">
+                                      Accuracy Rate
+                                    </span>
+                                    <span className="text-cyber-green text-sm font-medium">
+                                      {currentPrediction.accuracy}%
+                                    </span>
+                                  </div>
                                 </div>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-white/80 text-sm">
-                                    Accuracy Rate
-                                  </span>
-                                  <span className="text-cyber-green text-sm font-medium">
-                                    {currentPrediction.accuracy}%
-                                  </span>
-                                </div>
+
+                                <Button
+                                  onClick={() => setShowPriceAlertModal(true)}
+                                  className="w-full bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-blue-dark hover:to-cyber-purple-dark text-white"
+                                >
+                                  <Bell className="h-4 w-4 mr-2" />
+                                  Set Alert for $
+                                  {currentPrediction.targetPrice.toFixed(2)}
+                                </Button>
                               </div>
                             </div>
                           </div>
@@ -871,6 +893,16 @@ const CompanyPrediction = () => {
           </div>
         </div>
       </div>
+
+      {/* Price Alert Modal */}
+      <StockPriceAlertModal
+        symbol={company.symbol}
+        currentPrice={company.price}
+        companyName={company.name}
+        isOpen={showPriceAlertModal}
+        onClose={() => setShowPriceAlertModal(false)}
+        predictedPrice={currentPrediction?.targetPrice}
+      />
     </div>
   );
 };
