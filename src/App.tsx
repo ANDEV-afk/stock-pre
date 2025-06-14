@@ -7,11 +7,15 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import StockPrediction from "./pages/StockPrediction";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
+import Dashboard from "@/pages/Dashboard";
+import Index from "@/pages/Index";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import StockPrediction from "@/pages/StockPrediction";
+import Features from "@/pages/Features";
+import Pricing from "@/pages/Pricing";
+import API from "@/pages/API";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -23,32 +27,31 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <Dashboard />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/predict"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <StockPrediction />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/api" element={<API />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/predict"
+              element={
+                <ProtectedRoute>
+                  <StockPrediction />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
