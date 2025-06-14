@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import StockTicker from "@/components/StockTicker";
-import VideoTutorials from "@/components/VideoTutorials";
+import MobileAppDownload from "@/components/MobileAppDownload";
 import FeatureShowcase from "@/components/FeatureShowcase";
 import GlobalAnimatedBackground from "@/components/GlobalAnimatedBackground";
 import BackgroundVideoOverlay from "@/components/BackgroundVideoOverlay";
 import CommunityLinks from "@/components/CommunityLinks";
+import DemoContactModal from "@/components/DemoContactModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -21,10 +23,13 @@ import {
   TrendingUp,
   BarChart3,
   DollarSign,
+  Phone,
+  Mail,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
+  const [showContactModal, setShowContactModal] = useState(false);
   const benefits = [
     {
       icon: Brain,
@@ -102,8 +107,8 @@ const Index = () => {
       {/* Community Links */}
       <CommunityLinks />
 
-      {/* Video Tutorials */}
-      <VideoTutorials />
+      {/* Mobile App Download */}
+      <MobileAppDownload />
 
       {/* Benefits Section */}
       <section className="py-24 relative overflow-hidden">
@@ -578,6 +583,61 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Contact Action Buttons */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col space-y-3">
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1 }}
+        >
+          <Button
+            onClick={() => setShowContactModal(true)}
+            className="bg-cyber-blue hover:bg-cyber-blue-dark text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-cyber-blue/25 transition-all duration-300"
+          >
+            <Phone className="h-4 w-4 mr-2" />
+            Get in Touch
+          </Button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.2 }}
+        >
+          <Button
+            onClick={() => {
+              const message = `Hello StockVision Sales Team,
+
+I am interested in discussing StockVision for my trading/business needs and would like to learn more about:
+
+- Enterprise pricing plans
+- API integration options
+- Custom dashboard solutions
+- Advanced AI prediction features
+- Team collaboration tools
+
+Please contact me to schedule a consultation.
+
+Best regards`;
+
+              const subject = "Sales Inquiry - StockVision Enterprise";
+              const mailtoUrl = `mailto:sales@stockvision.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+              window.open(mailtoUrl, "_blank");
+            }}
+            className="bg-cyber-green hover:bg-cyber-green-dark text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-cyber-green/25 transition-all duration-300"
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            Contact Sales
+          </Button>
+        </motion.div>
+      </div>
+
+      {/* Contact Modal */}
+      <DemoContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </GlobalAnimatedBackground>
   );
 };

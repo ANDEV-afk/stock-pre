@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
 import StockSearchBar from "@/components/StockSearchBar";
@@ -26,7 +26,10 @@ import {
 import { cn } from "@/lib/utils";
 
 const StockPrediction = () => {
-  const [selectedStock, setSelectedStock] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const urlSymbol = searchParams.get("symbol");
+
+  const [selectedStock, setSelectedStock] = useState<string | null>(urlSymbol);
   const [isLoading, setIsLoading] = useState(false);
   const [predictionData, setPredictionData] = useState<any>(null);
   const { isAuthenticated } = useAuth();
@@ -37,6 +40,13 @@ const StockPrediction = () => {
       navigate("/login");
     }
   }, [isAuthenticated, navigate]);
+
+  // Auto-load prediction if symbol is provided in URL
+  useEffect(() => {
+    if (urlSymbol && !predictionData) {
+      handleStockSearch(urlSymbol);
+    }
+  }, [urlSymbol]);
 
   const handleStockSearch = async (symbol: string) => {
     setIsLoading(true);

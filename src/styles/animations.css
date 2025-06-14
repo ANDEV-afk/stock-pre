@@ -82,7 +82,7 @@
 
 /* Stock Ticker Animations */
 .stock-ticker-scroll {
-  animation: ticker-scroll 60s linear infinite;
+  animation: ticker-scroll 30s linear infinite;
 }
 
 @keyframes ticker-scroll {

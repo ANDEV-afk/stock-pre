@@ -88,28 +88,92 @@ const DemoContactModal = ({ isOpen, onClose }: DemoContactModalProps) => {
   ];
 
   const handleSubmit = async () => {
+    // Basic validation
+    if (!formData.name.trim() || !formData.email.trim()) {
+      alert("Please fill in all required fields (Name and Email)");
+      return;
+    }
+
+    if (selectedType === "call" || selectedType === "video") {
+      if (!formData.phone.trim()) {
+        alert("Phone number is required for video calls and phone calls");
+        return;
+      }
+    }
+
+    if (selectedType === "email" && !formData.message.trim()) {
+      alert("Please provide a message for email contact");
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Simulate API call with realistic delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      // In real implementation, you would send the data to your backend
+      const contactData = {
+        type: selectedType,
+        ...formData,
+        timestamp: new Date().toISOString(),
+        source: "community_links_modal",
+      };
 
-    // Auto close after success
-    setTimeout(() => {
-      setIsSuccess(false);
-      onClose();
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        message: "",
-        preferredTime: "",
-        timezone: "UTC-8",
-      });
-    }, 3000);
+      // Log for demo purposes (in real app, this would be sent to your API)
+      console.log("Contact form submitted:", contactData);
+
+      // For different contact types, trigger different actions
+      switch (selectedType) {
+        case "email":
+          // Send email
+          const emailSubject = `Contact Request from ${formData.name} - ${formData.company || "Individual"}`;
+          const emailBody = `Name: ${formData.name}
+Email: ${formData.email}
+Company: ${formData.company || "Not specified"}
+Message: ${formData.message}
+
+Submitted via StockVision Contact Form`;
+          window.open(
+            `mailto:support@stockvision.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`,
+            "_blank",
+          );
+          break;
+
+        case "video":
+        case "call":
+          // For calls, you could integrate with a scheduling system
+          window.open("https://calendly.com/stockvision-demo", "_blank");
+          break;
+
+        case "schedule":
+          // Open calendar booking
+          window.open("https://calendly.com/stockvision-demo", "_blank");
+          break;
+      }
+
+      setIsSubmitting(false);
+      setIsSuccess(true);
+
+      // Auto close after success
+      setTimeout(() => {
+        setIsSuccess(false);
+        onClose();
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          message: "",
+          preferredTime: "",
+          timezone: "UTC-8",
+        });
+      }, 3000);
+    } catch (error) {
+      setIsSubmitting(false);
+      alert("There was an error submitting your request. Please try again.");
+      console.error("Contact form error:", error);
+    }
   };
 
   if (!isOpen) return null;

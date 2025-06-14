@@ -489,34 +489,128 @@ const StockChart = ({
 
         {/* Volume Chart */}
         {showVolume && (
-          <div className="h-24 mt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={historicalData}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(59, 130, 246, 0.1)"
-                />
-                <XAxis dataKey="date" hide />
-                <YAxis stroke="rgba(255, 255, 255, 0.5)" fontSize={10} />
-                <Tooltip
-                  formatter={(value: any) => [
-                    `${(value / 1000000).toFixed(1)}M`,
-                    "Volume",
-                  ]}
-                  labelStyle={{ color: "#ffffff" }}
-                  contentStyle={{
-                    backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: "1px solid rgba(59, 130, 246, 0.3)",
-                    borderRadius: "8px",
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-white/80">
+                Volume Analysis
+              </h4>
+              <div className="flex items-center space-x-3">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    const totalVolume = historicalData.reduce(
+                      (sum, item) => sum + (item.volume || 0),
+                      0,
+                    );
+                    const avgVolume = totalVolume / historicalData.length;
+                    const maxVolume = Math.max(
+                      ...historicalData.map((d) => d.volume || 0),
+                    );
+                    const minVolume = Math.min(
+                      ...historicalData.map((d) => d.volume || 0),
+                    );
+                    alert(
+                      `Volume Statistics:\n\nTotal Volume: ${(totalVolume / 1000000).toFixed(1)}M\nAverage: ${(avgVolume / 1000000).toFixed(1)}M\nPeak: ${(maxVolume / 1000000).toFixed(1)}M\nLowest: ${(minVolume / 1000000).toFixed(1)}M\n\nClick on individual bars to see detailed information.`,
+                    );
                   }}
-                />
-                <Bar
-                  dataKey="volume"
-                  fill="rgba(59, 130, 246, 0.6)"
-                  radius={[1, 1, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+                  className="text-xs text-cyber-blue hover:text-cyber-blue-light"
+                >
+                  <Volume2 className="h-3 w-3 mr-1" />
+                  Stats
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    // Simulate volume spike analysis
+                    const avgVolume =
+                      historicalData.reduce(
+                        (sum, item) => sum + (item.volume || 0),
+                        0,
+                      ) / historicalData.length;
+                    const spikes = historicalData.filter(
+                      (item) => (item.volume || 0) > avgVolume * 1.5,
+                    );
+                    alert(
+                      `Volume Spike Analysis:\n\nAverage Volume: ${(avgVolume / 1000000).toFixed(1)}M\nSpikes (>1.5x avg): ${spikes.length} days\n\nHigh volume days often indicate significant price movements or news events.`,
+                    );
+                  }}
+                  className="text-xs text-cyber-purple hover:text-cyber-purple-light"
+                >
+                  <Target className="h-3 w-3 mr-1" />
+                  Analyze
+                </Button>
+              </div>
+            </div>
+            <div className="h-24">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={historicalData}
+                  onClick={(data) => {
+                    if (data && data.activePayload && data.activePayload[0]) {
+                      const item = data.activePayload[0].payload;
+                      const volume = item.volume || 0;
+                      const price = item.price || 0;
+                      const date = item.date;
+
+                      // Calculate volume relative to average
+                      const avgVolume =
+                        historicalData.reduce(
+                          (sum, d) => sum + (d.volume || 0),
+                          0,
+                        ) / historicalData.length;
+                      const volumeRatio = volume / avgVolume;
+                      const interpretation =
+                        volumeRatio > 1.5
+                          ? "High activity day"
+                          : volumeRatio > 1.2
+                            ? "Above average activity"
+                            : volumeRatio < 0.8
+                              ? "Low activity day"
+                              : "Normal activity";
+
+                      alert(
+                        `Volume Details - ${date}\n\nVolume: ${(volume / 1000000).toFixed(2)}M\nPrice: $${price.toFixed(2)}\nVs Average: ${(volumeRatio * 100).toFixed(0)}%\n\nInterpretation: ${interpretation}\n\nHigh volume often indicates strong interest and can signal potential price movements.`,
+                      );
+                    }
+                  }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(59, 130, 246, 0.1)"
+                  />
+                  <XAxis dataKey="date" hide />
+                  <YAxis stroke="rgba(255, 255, 255, 0.5)" fontSize={10} />
+                  <Tooltip
+                    formatter={(value: any, name: string, props: any) => {
+                      const avgVolume =
+                        historicalData.reduce(
+                          (sum, item) => sum + (item.volume || 0),
+                          0,
+                        ) / historicalData.length;
+                      const ratio = value / avgVolume;
+                      return [
+                        `${(value / 1000000).toFixed(1)}M (${(ratio * 100).toFixed(0)}% of avg)`,
+                        "Volume",
+                      ];
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    contentStyle={{
+                      backgroundColor: "rgba(0, 0, 0, 0.9)",
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                      borderRadius: "8px",
+                    }}
+                  />
+                  <Bar
+                    dataKey="volume"
+                    fill="rgba(59, 130, 246, 0.6)"
+                    radius={[1, 1, 0, 0]}
+                    cursor="pointer"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         )}
 

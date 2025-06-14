@@ -70,7 +70,21 @@ interface Position {
 }
 
 const Dashboard = () => {
-  const [selectedStock, setSelectedStock] = useState("AAPL");
+  // Companies to rotate through in overview section
+  const featuredCompanies = [
+    { symbol: "AAPL", name: "Apple Inc." },
+    { symbol: "TSLA", name: "Tesla Inc." },
+    { symbol: "NVDA", name: "NVIDIA Corporation" },
+    { symbol: "MSFT", name: "Microsoft Corporation" },
+    { symbol: "GOOGL", name: "Alphabet Inc." },
+    { symbol: "AMZN", name: "Amazon.com Inc." },
+    { symbol: "META", name: "Meta Platforms Inc." },
+  ];
+
+  const [currentCompanyIndex, setCurrentCompanyIndex] = useState(0);
+  const [selectedStock, setSelectedStock] = useState(
+    featuredCompanies[0].symbol,
+  );
   const [timeframe, setTimeframe] = useState<
     | "1m"
     | "5m"
@@ -115,6 +129,19 @@ const Dashboard = () => {
 
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Rotate through companies every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCompanyIndex((prev) => {
+        const newIndex = (prev + 1) % featuredCompanies.length;
+        setSelectedStock(featuredCompanies[newIndex].symbol);
+        return newIndex;
+      });
+    }, 8000); // 8 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -758,7 +785,19 @@ const Dashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <div className="mb-4">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <h3 className="text-xl font-bold text-white">
+                          {featuredCompanies[currentCompanyIndex].name}
+                        </h3>
+                        <Badge className="bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30">
+                          {selectedStock}
+                        </Badge>
+                        <div className="text-xs text-white/60 flex items-center space-x-1">
+                          <Activity className="h-3 w-3" />
+                          <span>Auto-rotating every 8s</span>
+                        </div>
+                      </div>
                       <TimeIntervalSelector
                         selectedInterval={timeframe}
                         onIntervalChange={handleTimeframeChange}
@@ -771,6 +810,35 @@ const Dashboard = () => {
                       showPredictions={false}
                       className="mb-6"
                     />
+
+                    {/* Company Selector */}
+                    <div className="mt-4">
+                      <div className="flex flex-wrap gap-2">
+                        {featuredCompanies.map((company, index) => (
+                          <Button
+                            key={company.symbol}
+                            size="sm"
+                            variant={
+                              selectedStock === company.symbol
+                                ? "default"
+                                : "outline"
+                            }
+                            onClick={() => {
+                              setSelectedStock(company.symbol);
+                              setCurrentCompanyIndex(index);
+                            }}
+                            className={cn(
+                              "text-xs",
+                              selectedStock === company.symbol
+                                ? "bg-cyber-blue text-white"
+                                : "border-cyber-blue/30 text-cyber-blue hover:bg-cyber-blue/10",
+                            )}
+                          >
+                            {company.symbol}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
                   </motion.div>
                 </div>
 
@@ -784,7 +852,6 @@ const Dashboard = () => {
                       console.log("Add to watchlist:", selectedStock);
                     }}
                   />
-                  <StockNews compact={true} />
                 </div>
               </div>
             </TabsContent>

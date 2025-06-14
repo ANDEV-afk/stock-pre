@@ -155,7 +155,7 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
             <div className="flex items-center space-x-4">
               <div className="text-right">
                 <p className="text-2xl font-bold text-white">
-                  ₹{currentPrice.toFixed(2)}
+                  ${currentPrice.toFixed(2)}
                 </p>
                 <div
                   className={cn(
@@ -260,7 +260,9 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
             {/* AI Prediction Button */}
             <Button
               size="sm"
-              onClick={() => (window.location.href = `/prediction/${symbol}`)}
+              onClick={() =>
+                (window.location.href = `/stock-prediction?symbol=${symbol}`)
+              }
               className="h-8 px-3 text-xs bg-gradient-to-r from-cyber-green to-cyber-blue hover:from-cyber-green-dark hover:to-cyber-blue-dark text-white"
             >
               <Activity className="h-3 w-3 mr-1" />
@@ -297,7 +299,7 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
               const price = maxPrice - (i * priceRange) / 5;
               return (
                 <span key={`price-label-${i}`} className="-mt-2">
-                  ₹{price.toFixed(2)}
+                  ${price.toFixed(2)}
                 </span>
               );
             })}
@@ -465,7 +467,16 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
                     height={`${height}%`}
                     fill={isGreen ? "#10B981" : "#EF4444"}
                     opacity="0.8"
-                    className="hover:opacity-100 transition-opacity cursor-pointer"
+                    className="hover:opacity-100 transition-all duration-200 cursor-pointer hover:stroke-white hover:stroke-1"
+                    onClick={() => {
+                      // Show detailed volume information for this time period
+                      const date = new Date(
+                        candle.timestamp,
+                      ).toLocaleDateString();
+                      alert(
+                        `${date}\nVolume: ${(candle.volume / 1000000).toFixed(2)}M\nPrice: $${candle.close.toFixed(2)}\nChange: ${isGreen ? "+" : ""}${(((candle.close - candle.open) / candle.open) * 100).toFixed(2)}%`,
+                      );
+                    }}
                   >
                     <title>
                       Volume: {(candle.volume / 1000000).toFixed(2)}M | Price: $
@@ -559,9 +570,9 @@ const ProfessionalChart: React.FC<ProfessionalChartProps> = ({
         {/* Market Info */}
         <div className="flex items-center justify-between text-xs text-white/60">
           <div className="flex items-center space-x-4">
-            <span>Market Hours: 9:15 AM - 3:30 PM IST</span>
+            <span>Market Hours: 9:30 AM - 4:00 PM EST</span>
             <span>•</span>
-            <span>Data provided by NSE</span>
+            <span>Data provided by NYSE</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>

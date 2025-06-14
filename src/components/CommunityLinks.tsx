@@ -74,14 +74,56 @@ const CommunityLinks = () => {
       description: "Contact our support team",
       icon: Headphones,
       variant: "primary",
-      action: () => window.open("mailto:support@stockvision.com", "_blank"),
+      action: () => {
+        // Create a comprehensive contact form
+        const message = `Hello StockVision Support Team,
+
+I am interested in learning more about your platform and would like to discuss:
+
+- AI-powered stock predictions
+- Real-time market data
+- Portfolio management tools
+- Integration options
+
+Please reach out to me at your earliest convenience.
+
+Best regards`;
+
+        const subject = "General Inquiry - StockVision Platform";
+        const mailtoUrl = `mailto:support@stockvision.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+        window.open(mailtoUrl, "_blank");
+      },
     },
     {
       title: "Contact Sales",
       description: "Speak with our sales team",
       icon: MessageSquare,
       variant: "secondary",
-      action: () => window.open("mailto:sales@stockvision.com", "_blank"),
+      action: () => {
+        // Create a sales-focused contact form
+        const message = `Hello StockVision Sales Team,
+
+I am interested in discussing StockVision for my trading/business needs:
+
+- Company/Organization: [Your Company]
+- Trading Volume: [Approximate monthly volume]
+- Team Size: [Number of traders/users]
+- Key Requirements:
+  • Advanced AI predictions
+  • Real-time data feeds
+  • API integration
+  • Custom dashboard solutions
+
+I would like to schedule a call to discuss pricing and implementation.
+
+Looking forward to hearing from you.
+
+Best regards`;
+
+        const subject = "Sales Inquiry - StockVision Enterprise Solutions";
+        const mailtoUrl = `mailto:sales@stockvision.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+        window.open(mailtoUrl, "_blank");
+      },
     },
     {
       title: "Book a Demo",

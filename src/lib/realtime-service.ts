@@ -62,13 +62,15 @@ export class RealtimeDataService {
     this.currentData = this.currentData.map((company) => {
       // Market hours simulation (more volatile during market hours)
       const now = new Date();
-      const hour = now.getHours();
-      const isMarketHours = hour >= 9 && hour <= 16; // 9 AM to 4 PM
+      const estHour = new Date(
+        now.toLocaleString("en-US", { timeZone: "America/New_York" }),
+      ).getHours();
+      const isMarketHours = estHour >= 9 && estHour <= 16; // 9:30 AM to 4:00 PM EST (simplified to 9-4)
 
       // Base volatility
       let volatility = 0.001; // 0.1% base volatility
 
-      // Increase volatility during market hours
+      // Increase volatility during US market hours
       if (isMarketHours) {
         volatility *= 2;
       }

@@ -18,6 +18,7 @@ import {
   DollarSign,
   Code,
   MessageCircle,
+  Newspaper,
   ChevronDown,
   Zap,
   Shield,
@@ -45,6 +46,7 @@ const Navigation = () => {
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/markets", label: "Markets", icon: Activity },
+    { href: "/news", label: "News", icon: Newspaper },
     {
       href: "/dashboard",
       label: "Dashboard",

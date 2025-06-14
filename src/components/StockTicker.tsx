@@ -171,7 +171,7 @@ const StockTicker = () => {
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 60,
+              duration: 30,
               ease: "linear",
             },
           }}
@@ -251,15 +251,15 @@ const StockTicker = () => {
         </motion.div>
       </div>
 
-      {/* Live Indicator */}
-      <div className="absolute top-2 right-4 flex items-center space-x-2 text-xs text-cyber-green">
-        <div className="w-2 h-2 bg-cyber-green rounded-full animate-pulse" />
-        <span className="font-medium">LIVE MARKET DATA</span>
-      </div>
-
       {/* Gradient Overlays for seamless effect */}
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-cyber-dark to-transparent z-20 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-cyber-dark to-transparent z-20 pointer-events-none" />
+
+      {/* Live Indicator */}
+      <div className="absolute top-1 right-6 flex items-center space-x-2 text-xs text-cyber-green z-30 bg-cyber-dark/80 backdrop-blur-sm px-3 py-1 rounded-full border border-cyber-green/20">
+        <div className="w-2 h-2 bg-cyber-green rounded-full animate-pulse" />
+        <span className="font-medium">LIVE MARKET DATA</span>
+      </div>
     </div>
   );
 };

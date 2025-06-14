@@ -242,9 +242,9 @@ const BackgroundVideoOverlay = ({
                   y: (window.innerHeight || 800) + 50,
                 }}
                 transition={{
-                  duration: Math.random() * 10 + 10,
+                  duration: Math.random() * 6 + 6,
                   repeat: Infinity,
-                  delay: Math.random() * 5,
+                  delay: Math.random() * 3,
                   ease: "linear",
                 }}
               >
