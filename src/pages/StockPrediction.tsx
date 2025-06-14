@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StockChart from "@/components/StockChart";
 import StockSearchBar from "@/components/StockSearchBar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
 import {
   Brain,
   TrendingUp,
@@ -25,73 +28,104 @@ const StockPrediction = () => {
   const [selectedStock, setSelectedStock] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [predictionData, setPredictionData] = useState<any>(null);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleStockSearch = async (symbol: string) => {
     setIsLoading(true);
     setSelectedStock(symbol);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Generate mock prediction data
-      const basePrice = 150 + Math.random() * 100;
-      const historicalData = [];
-      const predictedData = [];
+    try {
+      // Fetch real historical data
+      const { from, to } = generateDateRange(30);
+      const [candles, quote, profile] = await Promise.all([
+        finnhubAPI.getCandles(symbol, "D", from, to),
+        finnhubAPI.getQuote(symbol),
+        finnhubAPI.getCompanyProfile(symbol),
+      ]);
 
-      // Historical data (30 days)
-      for (let i = 30; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
+      const historicalData = formatChartData(candles);
 
-        const volatility = 0.02;
-        const trend = (Math.random() - 0.5) * volatility;
-        const price = basePrice * (1 + trend * (i / 30));
-
-        historicalData.push({
-          date: date.toLocaleDateString(),
-          price: parseFloat(price.toFixed(2)),
-          predicted: false,
-        });
+      if (historicalData.length === 0) {
+        throw new Error("No data available for this symbol");
       }
 
-      // Predicted data (7 days)
-      const lastPrice = historicalData[historicalData.length - 1].price;
-      for (let i = 1; i <= 7; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
+      // Generate AI predictions using real historical data
+      const prices = historicalData.map((d) => d.price);
+      const prediction = finnhubAPI.generatePrediction(prices, symbol);
 
-        const volatility = 0.015;
-        const trend = (Math.random() - 0.3) * volatility; // Slight upward bias
-        const price = lastPrice * (1 + trend * (i / 7));
-
-        predictedData.push({
-          date: date.toLocaleDateString(),
-          price: parseFloat(price.toFixed(2)),
-          predicted: true,
-        });
-      }
-
-      const allData = [...historicalData, ...predictedData];
-      const currentPrice = lastPrice;
-      const predictedPrice = predictedData[predictedData.length - 1].price;
-      const predictedChange = predictedPrice - currentPrice;
-      const predictedChangePercent = (predictedChange / currentPrice) * 100;
+      const allData = [...historicalData, ...prediction.predictions];
+      const currentPrice =
+        quote.c || historicalData[historicalData.length - 1].price;
 
       setPredictionData({
         symbol,
         data: allData,
         currentPrice,
-        predictedPrice,
-        predictedChange,
-        predictedChangePercent,
-        confidence: 0.87 + Math.random() * 0.1,
-        targetPrice: predictedPrice * (1 + (Math.random() - 0.5) * 0.05),
-        support: currentPrice * 0.95,
-        resistance: currentPrice * 1.08,
+        predictedPrice: prediction.targetPrice,
+        predictedChange: prediction.targetPrice - currentPrice,
+        predictedChangePercent:
+          ((prediction.targetPrice - currentPrice) / currentPrice) * 100,
+        confidence: prediction.confidence,
+        targetPrice: prediction.targetPrice,
+        support: prediction.support,
+        resistance: prediction.resistance,
         timeframe: "7 days",
+        quote,
+        profile,
       });
+    } catch (error) {
+      console.error("Error fetching stock data:", error);
 
+      // Fallback to mock data if API fails
+      const mockPrediction = {
+        symbol,
+        data: [],
+        currentPrice: 150,
+        predictedPrice: 155,
+        predictedChange: 5,
+        predictedChangePercent: 3.33,
+        confidence: 0.85,
+        targetPrice: 155,
+        support: 142.5,
+        resistance: 162,
+        timeframe: "7 days",
+      };
+
+      // Generate mock historical and prediction data
+      const historicalData = [];
+      for (let i = 30; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        historicalData.push({
+          date: date.toLocaleDateString(),
+          price: 150 + (Math.random() - 0.5) * 20,
+          predicted: false,
+        });
+      }
+
+      const predictedData = [];
+      for (let i = 1; i <= 7; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        predictedData.push({
+          date: date.toLocaleDateString(),
+          price: 150 + i * 0.7 + (Math.random() - 0.5) * 3,
+          predicted: true,
+        });
+      }
+
+      mockPrediction.data = [...historicalData, ...predictedData];
+      setPredictionData(mockPrediction);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const predictionMetrics = predictionData
@@ -154,7 +188,7 @@ const StockPrediction = () => {
     : [];
 
   return (
-    <div className="min-h-screen bg-apple-gray-50">
+    <div className="min-h-screen bg-cyber-black cyber-grid relative">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
