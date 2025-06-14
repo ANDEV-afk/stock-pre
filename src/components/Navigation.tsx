@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   TrendingUp,
   BarChart3,
@@ -11,6 +12,8 @@ import {
   Home,
   LogIn,
   UserPlus,
+  LogOut,
+  Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +21,8 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,14 +35,24 @@ const Navigation = () => {
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/predict", label: "Predict", icon: TrendingUp },
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: BarChart3,
+      authRequired: true,
+    },
+    {
+      href: "/predict",
+      label: "Predict",
+      icon: TrendingUp,
+      authRequired: true,
+    },
   ];
 
-  const authItems = [
-    { href: "/login", label: "Sign In", icon: LogIn },
-    { href: "/register", label: "Sign Up", icon: UserPlus },
-  ];
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <>
@@ -47,7 +62,7 @@ const Navigation = () => {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           isScrolled
-            ? "apple-blur border-b border-apple-gray-200 shadow-apple"
+            ? "dark-blur border-b border-white/10 shadow-dark"
             : "bg-transparent",
         )}
       >
@@ -58,11 +73,11 @@ const Navigation = () => {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-br from-apple-blue to-apple-purple p-2 rounded-xl shadow-apple"
+                className="bg-gradient-to-br from-cyber-blue to-cyber-purple p-2 rounded-xl glow-blue"
               >
                 <TrendingUp className="h-6 w-6 text-white" />
               </motion.div>
-              <span className="text-xl font-semibold text-apple-gray-700 group-hover:text-apple-blue transition-colors">
+              <span className="text-xl font-semibold neon-text group-hover:animate-pulse-neon transition-all">
                 StockVision
               </span>
             </Link>
@@ -70,6 +85,8 @@ const Navigation = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
               {navItems.map((item) => {
+                if (item.authRequired && !isAuthenticated) return null;
+
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
 
@@ -81,8 +98,8 @@ const Navigation = () => {
                       className={cn(
                         "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center space-x-2",
                         isActive
-                          ? "bg-apple-blue text-white shadow-apple"
-                          : "text-apple-gray-600 hover:text-apple-blue hover:bg-apple-gray-100",
+                          ? "bg-cyber-blue text-white glow-blue neon-border"
+                          : "text-cyber-gray-300 hover:text-cyber-blue hover:bg-cyber-gray-800/50",
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -93,29 +110,56 @@ const Navigation = () => {
               })}
             </div>
 
-            {/* Auth Buttons */}
+            {/* Auth Section */}
             <div className="hidden md:flex items-center space-x-3">
-              {authItems.map((item, index) => {
-                const Icon = item.icon;
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 text-cyber-gray-300">
+                    <div className="w-8 h-8 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-semibold">
+                        {user?.firstName?.charAt(0)}
+                        {user?.lastName?.charAt(0)}
+                      </span>
+                    </div>
+                    <span className="text-sm">
+                      {user?.firstName} {user?.lastName}
+                    </span>
+                  </div>
 
-                return (
-                  <Link key={item.href} to={item.href}>
+                  <Button
+                    onClick={handleLogout}
+                    variant="ghost"
+                    size="sm"
+                    className="text-cyber-gray-300 hover:text-cyber-red hover:bg-cyber-red/10"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Link to="/login">
                     <Button
-                      variant={index === 1 ? "default" : "ghost"}
+                      variant="ghost"
                       size="sm"
-                      className={cn(
-                        "transition-all duration-200",
-                        index === 1
-                          ? "bg-apple-blue hover:bg-apple-blue-dark text-white shadow-apple"
-                          : "text-apple-gray-600 hover:text-apple-blue hover:bg-apple-gray-100",
-                      )}
+                      className="text-cyber-gray-300 hover:text-cyber-blue hover:bg-cyber-blue/10"
                     >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {item.label}
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Sign In
                     </Button>
                   </Link>
-                );
-              })}
+
+                  <Link to="/register">
+                    <Button
+                      size="sm"
+                      className="bg-cyber-blue hover:bg-cyber-blue-dark text-white glow-blue"
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
