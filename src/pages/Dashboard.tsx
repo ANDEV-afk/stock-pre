@@ -8,8 +8,8 @@ import ApiStatusNotification from "@/components/ApiStatusNotification";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { finnhubAPI, formatChartData, generateDateRange } from "@/lib/api";
-import { apiService } from "@/lib/api-service";
+import { formatChartData } from "@/lib/api";
+import { demoDataService } from "@/lib/demo-data-service";
 import {
   TrendingUp,
   TrendingDown,
@@ -223,7 +223,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchStockData(selectedStock);
+    if (selectedStock) {
+      fetchStockData(selectedStock);
+    }
   }, [selectedStock]);
 
   return (

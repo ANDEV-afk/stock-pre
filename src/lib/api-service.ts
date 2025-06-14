@@ -136,7 +136,8 @@ export class ApiService {
       errorMessage.includes("rate limit") ||
       errorMessage.includes("429") ||
       errorMessage.includes("body stream") ||
-      errorMessage.includes("network")
+      errorMessage.includes("network") ||
+      errorMessage.includes("demo mode active")
     );
   }
 }
