@@ -145,7 +145,6 @@ class FinnhubAPI {
       throw error;
     }
   }
-  }
 
   async getQuote(symbol: string): Promise<StockQuote> {
     try {
