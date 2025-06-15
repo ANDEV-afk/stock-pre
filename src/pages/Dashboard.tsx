@@ -12,6 +12,7 @@ import TimeIntervalSelector from "@/components/TimeIntervalSelector";
 import StockNews from "@/components/StockNews";
 import Settings from "@/components/Settings";
 import RiskAssessment from "@/components/RiskAssessment";
+import DashboardFooter from "@/components/DashboardFooter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
