@@ -1427,6 +1427,9 @@ const Dashboard = () => {
         onClose={() => setShowWatchlistModal(false)}
         selectedSymbol={selectedStock}
       />
+
+      {/* Footer */}
+      <DashboardFooter />
     </div>
   );
 };
