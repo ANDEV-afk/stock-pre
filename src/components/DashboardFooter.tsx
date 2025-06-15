@@ -109,7 +109,7 @@ const DashboardFooter = ({ className }: DashboardFooterProps) => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold bg-gradient-to-r from-cyber-blue via-white to-cyber-purple bg-clip-text text-transparent">
-                    Fusion Trading
+                    Stock Vision
                   </h3>
                   <p className="text-xs text-cyber-blue/60">
                     Professional Trading Platform
@@ -313,7 +313,7 @@ const DashboardFooter = ({ className }: DashboardFooterProps) => {
               ))}
             </div>
             <p className="text-xs text-white/40">
-              © {currentYear} Fusion Trading. All rights reserved.
+              © {currentYear} Stock Vision. All rights reserved.
               <span className="block sm:inline sm:ml-2">
                 Trading involves risk. Past performance does not guarantee
                 future results.
